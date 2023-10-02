@@ -1,0 +1,2 @@
+# agh-OOP
+Programowanie Obiektowe
