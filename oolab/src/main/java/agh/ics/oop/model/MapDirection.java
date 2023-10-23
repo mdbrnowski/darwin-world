@@ -3,6 +3,8 @@ package agh.ics.oop.model;
 public enum MapDirection {
     NORTH, WEST, SOUTH, EAST;
 
+    private static final MapDirection[] directions = values();
+
     public String toString() {
         return switch (this) {
             case NORTH -> "Północ";
@@ -13,21 +15,11 @@ public enum MapDirection {
     }
 
     public MapDirection next() {
-        return switch (this) {
-            case NORTH -> EAST;
-            case WEST -> NORTH;
-            case SOUTH -> WEST;
-            case EAST -> SOUTH;
-        };
+        return directions[(ordinal() - 1 + directions.length) % directions.length];
     }
 
     public MapDirection previous() {
-        return switch (this) {
-            case NORTH -> WEST;
-            case WEST -> SOUTH;
-            case SOUTH -> EAST;
-            case EAST -> NORTH;
-        };
+        return directions[(ordinal() + 1) % directions.length];
     }
 
     public Vector2d toUnitVector() {
