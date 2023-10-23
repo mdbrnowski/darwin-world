@@ -11,6 +11,6 @@ public class OptionsParserTest {
         String[] args = {"f", "b", "s", "r", "l"};
         MoveDirection[] result = {MoveDirection.FORWARD, MoveDirection.BACKWARD,
                 MoveDirection.RIGHT, MoveDirection.LEFT};
-        assertArrayEquals(OptionsParser.parse(args), result);
+        assertArrayEquals(OptionsParser.parse(args).toArray(), result);
     }
 }
