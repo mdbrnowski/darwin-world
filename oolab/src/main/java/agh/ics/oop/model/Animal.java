@@ -15,12 +15,16 @@ public class Animal {
         this(new Vector2d(2, 2));
     }
 
+    public MapDirection getOrientation() {
+        return orientation;
+    }
+
     public String toString() {
         return "%s -> %s".formatted(position.toString(), orientation.toString());
     }
 
     public boolean isAt(Vector2d position) {
-        return this.position == position;
+        return this.position.equals(position);
     }
 
     public void move(MoveDirection direction) {
