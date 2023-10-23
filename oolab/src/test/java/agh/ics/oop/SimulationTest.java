@@ -53,14 +53,33 @@ public class SimulationTest {
 
     @Test
     public void outOfMapTest() {
-        List<Vector2d> positions = List.of(new Vector2d(3, 3));
-        String[] args = {"f", "f", "f", "l"};
+        List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(3, 3));
+        String[] args = {"l", "f", "f", "f", "f", "f", "l", "l"};
         List<MoveDirection> directions = OptionsParser.parse(args);
         Simulation simulation = new Simulation(directions, positions);
         simulation.run();
 
         var a = simulation.getAnimals().get(0);
-        assertTrue(a.isAt(new Vector2d(3, 4)));
-        assertSame(MapDirection.WEST, a.getOrientation());
+        var b = simulation.getAnimals().get(1);
+        assertTrue(a.isAt(new Vector2d(0, 1)));
+        assertSame(MapDirection.SOUTH, a.getOrientation());
+        assertTrue(b.isAt(new Vector2d(3, 4)));
+        assertSame(MapDirection.WEST, b.getOrientation());
+    }
+
+    @Test
+    public void sampleTest() {
+        List<Vector2d> positions = List.of(new Vector2d(2, 2), new Vector2d(3, 4));
+        String[] args = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f", "f", "f", "f", "f"};
+        List<MoveDirection> directions = OptionsParser.parse(args);
+        Simulation simulation = new Simulation(directions, positions);
+        simulation.run();
+
+        var a = simulation.getAnimals().get(0);
+        var b = simulation.getAnimals().get(1);
+        assertTrue(a.isAt(new Vector2d(3, 0)));
+        assertSame(MapDirection.SOUTH, a.getOrientation());
+        assertTrue(b.isAt(new Vector2d(2, 4)));
+        assertSame(MapDirection.NORTH, b.getOrientation());
     }
 }
