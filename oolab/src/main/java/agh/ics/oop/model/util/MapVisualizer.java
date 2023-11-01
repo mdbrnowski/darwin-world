@@ -9,18 +9,18 @@ import agh.ics.oop.model.WorldMap;
  *
  * @author apohllo, idzik
  */
-public class MapVisualizer {
+public class MapVisualizer<T> {
     private static final String EMPTY_CELL = " ";
     private static final String FRAME_SEGMENT = "-";
     private static final String CELL_SEGMENT = "|";
-    private final WorldMap map;
+    private final WorldMap<T, Vector2d> map;
 
     /**
      * Initializes the MapVisualizer with an instance of map to visualize.
      *
      * @param map Map
      */
-    public MapVisualizer(WorldMap map) {
+    public MapVisualizer(WorldMap<T, Vector2d> map) {
         this.map = map;
     }
 
