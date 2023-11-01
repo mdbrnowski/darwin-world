@@ -18,8 +18,10 @@ public class Simulation {
         this.animals = new ArrayList<>();
         for (Vector2d position : positions) {
             Animal a = new Animal(position);
-            animals.add(a);
-            map.place(a);
+            if (map.place(a))
+                animals.add(a);
+            else
+                System.out.println("Zwierzak nie został dodany.");
         }
     }
 
