@@ -17,8 +17,8 @@ public class RectangularMap implements WorldMap<Animal, Vector2d> {
     }
 
     public boolean canMoveTo(Vector2d position) {
-        return 0 <= position.getX() && position.getX() <= width && 0 <= position.getY() &&
-                position.getY() <= height && !isOccupied(position);
+        return position.follows(new Vector2d(0, 0)) && position.precedes(new Vector2d(width, height))
+                && !isOccupied(position);
     }
 
     public boolean place(Animal animal) {
