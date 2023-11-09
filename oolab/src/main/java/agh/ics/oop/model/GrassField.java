@@ -42,4 +42,11 @@ public class GrassField extends AbstractWorldMap {
         }
         return new MapVisualizer<>(this).draw(bottomLeft, topRight);
     }
+
+    @Override
+    public Collection<WorldElement> getElements() {
+        Collection<WorldElement> result = new ArrayList<>(animals.values());
+        result.addAll(grasses.values());
+        return result;
+    }
 }

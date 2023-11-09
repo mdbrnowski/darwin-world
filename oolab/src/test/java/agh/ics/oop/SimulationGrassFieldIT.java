@@ -3,10 +3,10 @@ package agh.ics.oop;
 import agh.ics.oop.model.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SimulationGrassFieldIT {
     @Test
@@ -41,5 +41,16 @@ public class SimulationGrassFieldIT {
         assertSame(MapDirection.SOUTH, a.getOrientation());
         assertTrue(b.isAt(new Vector2d(3, 7)));
         assertSame(MapDirection.NORTH, b.getOrientation());
+    }
+
+    @Test
+    public void getElementsTest() {
+        WorldMap<Animal, Vector2d> map = new GrassField(10);
+        List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(2, 2));
+        Simulation simulation = new Simulation(map, positions, new ArrayList<>());
+        simulation.run();
+
+        assertNotEquals(simulation.getAnimals(), map.getElements());
+        assertEquals(12, map.getElements().size());
     }
 }

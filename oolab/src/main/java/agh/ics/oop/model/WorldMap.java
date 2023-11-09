@@ -1,6 +1,6 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.MoveDirection;
+import java.util.Collection;
 
 /**
  * The interface responsible for interacting with the map of the world.
@@ -41,4 +41,9 @@ public interface WorldMap<T, P> extends MoveValidator<P> {
      * @return animal or null if the position is not occupied.
      */
     WorldElement objectAt(P position);
+
+    /**
+     * Return list of elements.
+     */
+    Collection<WorldElement> getElements();
 }
