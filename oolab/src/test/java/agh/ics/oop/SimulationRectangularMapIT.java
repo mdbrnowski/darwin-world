@@ -3,11 +3,11 @@ package agh.ics.oop;
 import agh.ics.oop.model.*;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SimulationIT {
+public class SimulationRectangularMapIT {
     @Test
     public void orientationTest() {
         WorldMap<Animal, Vector2d> map = new RectangularMap(4, 4);
@@ -101,5 +101,15 @@ public class SimulationIT {
         assertSame(MapDirection.EAST, a.getOrientation());
         assertTrue(b.isAt(new Vector2d(2, 2)));
         assertSame(MapDirection.WEST, b.getOrientation());
+    }
+
+    @Test
+    public void getElementsTest() {
+        WorldMap<Animal, Vector2d> map = new RectangularMap(4, 4);
+        List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(2, 2));
+        Simulation simulation = new Simulation(map, positions, new ArrayList<>());
+        simulation.run();
+
+        assertEquals(simulation.getAnimals(), map.getElements());
     }
 }
