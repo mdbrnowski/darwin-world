@@ -6,7 +6,7 @@ import agh.ics.oop.model.util.PositionAlreadyOccupiedException;
 
 import java.util.*;
 
-public abstract class AbstractWorldMap implements WorldMap<Animal, Vector2d> {
+public abstract class AbstractWorldMap implements WorldMap {
     protected Map<Vector2d, Animal> animals = new HashMap<>();
     private final List<MapChangeListener> listeners = new ArrayList<>();
 
@@ -54,7 +54,7 @@ public abstract class AbstractWorldMap implements WorldMap<Animal, Vector2d> {
     @Override
     public String toString() {
         Boundary b = getCurrentBounds();
-        return new MapVisualizer<>(this).draw(b.bottomLeft(), b.topRight());
+        return new MapVisualizer(this).draw(b.bottomLeft(), b.topRight());
     }
 
     private void mapChanged(String message) {

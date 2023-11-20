@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SimulationGrassFieldIT {
     @Test
     public void infiniteMapTest() {
-        WorldMap<Animal, Vector2d> map = new GrassField(10);
+        WorldMap map = new GrassField(10);
         List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(3, 3));
         String[] args = {"l", "f", "f", "f", "f", "f", "l", "l"};
         List<MoveDirection> directions = OptionsParser.parse(args);
@@ -28,7 +28,7 @@ public class SimulationGrassFieldIT {
 
     @Test
     public void sampleTest() {
-        WorldMap<Animal, Vector2d> map = new GrassField(10);
+        WorldMap map = new GrassField(10);
         List<Vector2d> positions = List.of(new Vector2d(2, 2), new Vector2d(3, 4));
         String[] args = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f", "f", "f", "f", "f"};
         List<MoveDirection> directions = OptionsParser.parse(args);
@@ -45,7 +45,7 @@ public class SimulationGrassFieldIT {
 
     @Test
     public void getElementsTest() {
-        WorldMap<Animal, Vector2d> map = new GrassField(10);
+        WorldMap map = new GrassField(10);
         List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(2, 2));
         Simulation simulation = new Simulation(map, positions, new ArrayList<>());
         simulation.run();

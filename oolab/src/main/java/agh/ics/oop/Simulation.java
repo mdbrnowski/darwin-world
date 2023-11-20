@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Simulation {
-    private final WorldMap<Animal, Vector2d> map;
+    private final WorldMap map;
     private final List<MoveDirection> directions;
     private final List<Animal> animals;
-    public Simulation(WorldMap<Animal, Vector2d> map, List<Vector2d> positions, List<MoveDirection> directions) {
+    public Simulation(WorldMap map, List<Vector2d> positions, List<MoveDirection> directions) {
         this.map = map;
         this.directions = directions;
         this.animals = new ArrayList<>();

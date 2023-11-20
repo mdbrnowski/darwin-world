@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SimulationRectangularMapIT {
     @Test
     public void orientationTest() {
-        WorldMap<Animal, Vector2d> map = new RectangularMap(4, 4);
+        WorldMap map = new RectangularMap(4, 4);
         List<Vector2d> positions = List.of(new Vector2d(0, 0));
         String[] args = {"l", "l", "l", "l", "l"};
         List<MoveDirection> directions = OptionsParser.parse(args);
@@ -23,7 +23,7 @@ public class SimulationRectangularMapIT {
 
     @Test
     public void multipleOrientationTest() {
-        WorldMap<Animal, Vector2d> map = new RectangularMap(4, 4);
+        WorldMap map = new RectangularMap(4, 4);
         List<Vector2d> positions = List.of(new Vector2d(0, 0), new Vector2d(4, 4));
         String[] args = {"r", "l", "l", "r", "r", "r", "l", "r"};
         List<MoveDirection> directions = OptionsParser.parse(args);
@@ -38,7 +38,7 @@ public class SimulationRectangularMapIT {
 
     @Test
     public void positionTest() {
-        WorldMap<Animal, Vector2d> map = new RectangularMap(4, 4);
+        WorldMap map = new RectangularMap(4, 4);
         List<Vector2d> positions = List.of(new Vector2d(0, 0), new Vector2d(2, 1));
         String[] args = {"f", "b", "r", "l", "f", "f", "f", "f"};
         List<MoveDirection> directions = OptionsParser.parse(args);
@@ -53,7 +53,7 @@ public class SimulationRectangularMapIT {
 
     @Test
     public void outOfMapTest() {
-        WorldMap<Animal, Vector2d> map = new RectangularMap(4, 4);
+        WorldMap map = new RectangularMap(4, 4);
         List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(3, 3));
         String[] args = {"l", "f", "f", "f", "f", "f", "l", "l"};
         List<MoveDirection> directions = OptionsParser.parse(args);
@@ -70,7 +70,7 @@ public class SimulationRectangularMapIT {
 
     @Test
     public void sampleTest() {
-        WorldMap<Animal, Vector2d> map = new RectangularMap(4, 4);
+        WorldMap map = new RectangularMap(4, 4);
         List<Vector2d> positions = List.of(new Vector2d(2, 2), new Vector2d(3, 4));
         String[] args = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f", "f", "f", "f", "f"};
         List<MoveDirection> directions = OptionsParser.parse(args);
@@ -87,7 +87,7 @@ public class SimulationRectangularMapIT {
 
     @Test
     public void placeAnimalTest() {
-        WorldMap<Animal, Vector2d> map = new RectangularMap(4, 4);
+        WorldMap map = new RectangularMap(4, 4);
         List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(2, 2), new Vector2d(1, 1));
         String[] args = {"f", "l", "r", "f", "f", "f"};
         List<MoveDirection> directions = OptionsParser.parse(args);
@@ -105,7 +105,7 @@ public class SimulationRectangularMapIT {
 
     @Test
     public void getElementsTest() {
-        WorldMap<Animal, Vector2d> map = new RectangularMap(4, 4);
+        WorldMap map = new RectangularMap(4, 4);
         List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(2, 2));
         Simulation simulation = new Simulation(map, positions, new ArrayList<>());
         simulation.run();

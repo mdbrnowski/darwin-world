@@ -37,7 +37,7 @@ public class Animal implements WorldElement {
         };
     }
 
-    public void move(MoveDirection direction, MoveValidator<Vector2d> validator) {
+    public void move(MoveDirection direction, MoveValidator validator) {
         switch (direction) {
             case RIGHT -> orientation = orientation.next();
             case LEFT -> orientation = orientation.previous();
