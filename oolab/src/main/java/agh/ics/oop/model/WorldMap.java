@@ -4,6 +4,7 @@ import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.PositionAlreadyOccupiedException;
 
 import java.util.Collection;
+import java.util.UUID;
 
 /**
  * The interface responsible for interacting with the map of the world.
@@ -45,9 +46,17 @@ public interface WorldMap extends MoveValidator {
     WorldElement objectAt(Vector2d position);
 
     /**
-     * Return list of elements.
+     * @return list of elements.
      */
     Collection<WorldElement> getElements();
 
+    /**
+     * @return current bounds (lower left and upper right corners)
+     */
     Boundary getCurrentBounds();
+
+    /**
+     * @return ID of a map
+     */
+    UUID getId();
 }
