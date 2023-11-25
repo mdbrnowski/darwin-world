@@ -26,7 +26,8 @@ public class World {
                 simulations.add(simulation);
             }
             SimulationEngine simulationEngine = new SimulationEngine(simulations);
-            simulationEngine.runAsync();
+//            simulationEngine.runAsync();
+            simulationEngine.runAsyncInThreadPool();
         } catch (IllegalArgumentException ex) {
             System.out.println(ex.getMessage());
             System.exit(1);
