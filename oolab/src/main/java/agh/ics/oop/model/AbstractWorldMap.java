@@ -9,6 +9,11 @@ import java.util.*;
 public abstract class AbstractWorldMap implements WorldMap {
     protected Map<Vector2d, Animal> animals = new HashMap<>();
     private final List<MapChangeListener> listeners = new ArrayList<>();
+    private final UUID id;
+
+    public AbstractWorldMap() {
+        id = UUID.randomUUID();
+    }
 
     @Override
     public boolean canMoveTo(Vector2d position) {
@@ -55,6 +60,11 @@ public abstract class AbstractWorldMap implements WorldMap {
     public String toString() {
         Boundary b = getCurrentBounds();
         return new MapVisualizer(this).draw(b.bottomLeft(), b.topRight());
+    }
+
+    @Override
+    public UUID getId() {
+        return id;
     }
 
     private void mapChanged(String message) {

@@ -11,6 +11,7 @@ public class GrassField extends AbstractWorldMap {
     private final Map<Vector2d, Grass> grasses = new HashMap<>();
 
     public GrassField(int numberOfElements) {
+        super();
         int max = (int) sqrt(numberOfElements * 10);
         for (Vector2d position : new RandomPositionGenerator(0, max, numberOfElements)) {
             grasses.put(position, new Grass(position));

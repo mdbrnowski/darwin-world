@@ -9,7 +9,7 @@ import agh.ics.oop.model.util.PositionAlreadyOccupiedException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Simulation {
+public class Simulation implements Runnable {
     private final WorldMap map;
     private final List<MoveDirection> directions;
     private final List<Animal> animals;
