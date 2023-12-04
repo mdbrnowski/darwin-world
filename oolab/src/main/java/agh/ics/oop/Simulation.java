@@ -13,6 +13,7 @@ public class Simulation implements Runnable {
     private final WorldMap map;
     private final List<MoveDirection> directions;
     private final List<Animal> animals;
+    private long sleepTime = 0;
     public Simulation(WorldMap map, List<Vector2d> positions, List<MoveDirection> directions) {
         this.map = map;
         this.directions = directions;
@@ -28,10 +29,22 @@ public class Simulation implements Runnable {
         }
     }
 
+    public Simulation(WorldMap map, List<Vector2d> positions, List<MoveDirection> directions, long sleepTime) {
+        this(map, positions, directions);
+        this.sleepTime = sleepTime;
+    }
+
+    @Override
     public void run() {
         int n = animals.size();
-        for (int i = 0; i < directions.size(); i++)
+        for (int i = 0; i < directions.size(); i++) {
             map.move(animals.get(i % n), directions.get(i));
+            try {
+                Thread.sleep(sleepTime);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public List<Animal> getAnimals() {
