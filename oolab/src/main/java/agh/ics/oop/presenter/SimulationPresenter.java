@@ -1,6 +1,5 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.OptionsParser;
 import agh.ics.oop.Simulation;
 import agh.ics.oop.SimulationEngine;
 import agh.ics.oop.model.*;
@@ -85,11 +84,10 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void onSimulationStartClicked() {
-        List<MoveDirection> directions = OptionsParser.parse(directionsTextField.getText().split(" "));
         List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(3, 2));
 
         Thread simulationThread = new Thread(() -> {
-            Simulation simulation = new Simulation(map, positions, directions, 500);
+            Simulation simulation = new Simulation(map, positions, 500);
             SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
             simulationEngine.runAsync();
         });
