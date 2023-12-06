@@ -1,10 +1,11 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.util;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+//generates random array of non-repeating numbers
 public class RandomGenerator implements  Iterable<Integer> {
     private List<Integer> unused=new ArrayList<Integer>();
     private Random random;

@@ -13,13 +13,13 @@ public abstract class AbstractVegetation {
     protected List<Vector2d> preferredFields;
     protected List<Vector2d> notPreferredFields;
 
-    private int numberOfElements;
+    private int numberOfElements; //number of plants to plant on a particular day
 
     public AbstractVegetation(int numberOfElements){
         this.numberOfElements=numberOfElements;
     }
 
-
+    //vegetate creates randomly 80% of plants to create on preferred fields and the other 20% on not preferred ones
     public Map<Vector2d, Grass> vegatate(int minY,int maxY){
         int preferred=min((int) round(0.8*numberOfElements), maxY-minY);
         Map<Vector2d, Grass> plants = new HashMap<>();

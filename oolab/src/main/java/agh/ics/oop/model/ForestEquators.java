@@ -2,6 +2,7 @@ package agh.ics.oop.model;
 
 import java.util.ArrayList;
 
+//preferredFields are only along the equator (middle row of the map)
 public class ForestEquators extends AbstractVegetation{
 
     public ForestEquators(int minX,int maxX,int minY,int maxY,int numberOfElements){

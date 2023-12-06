@@ -1,5 +1,7 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.util.RandomGenerator;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,7 +18,7 @@ public class Animal implements WorldElement {
     private AbstractGenome genome;
 
 
-
+    //extended constructor, in the future probably should contain energy
     public Animal(Vector2d position,MapDirection orientation,AbstractGenome genome) {
         this.orientation = orientation;
         this.genome=genome;
@@ -73,8 +75,13 @@ public class Animal implements WorldElement {
     public void setOrientation(MapDirection orientation) {
         this.orientation = orientation;
     }
+    public void incrementChildrenNum(){
+        childrenNum+=1;
+    }
 
     public Animal breed(Animal animal, int minMutations, int maxMutations){
+
+        //create basic genome, without mutations
         double energyPart= ((double)this.energy) /((double)(animal.getEnergy()+this.energy));
         int genomeSize=genome.genome.size();
         int firstGenome= (int) floor(energyPart*genomeSize);
@@ -90,7 +97,7 @@ public class Animal implements WorldElement {
             genomeList.add(animal.getGenome().genome.get(i));
         }
 
-
+        //mutate
         Random random=new Random();
         int mutationNumber=random.nextInt((maxMutations-minMutations))+minMutations;
 
@@ -104,7 +111,7 @@ public class Animal implements WorldElement {
             genomeList.set(position,(currentGene+mutation)%8);
         }
 
-
+        //create genome of the parents' type
         AbstractGenome newGenome;
         if(genome instanceof FullPredestinationGenome){
             newGenome=new FullPredestinationGenome(genomeList);
@@ -113,6 +120,10 @@ public class Animal implements WorldElement {
         }
 
         Animal newAnimal=new Animal(position,MapDirection.values()[random.nextInt(4)],newGenome);
+
+        //parents have one more child
+        this.childrenNum+=1;
+        animal.incrementChildrenNum();
 
         return newAnimal;
 

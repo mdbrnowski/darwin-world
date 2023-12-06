@@ -2,7 +2,7 @@ package agh.ics.oop.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//when at the end of the genome, goes back
 public class BackAndForthGenome extends AbstractGenome{
 
     public BackAndForthGenome(List<Integer> genome) {
