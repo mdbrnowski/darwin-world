@@ -19,6 +19,12 @@ public class RandomPositionGenerator implements Iterable<Vector2d> {
         Collections.shuffle(vectors);
     }
 
+    public RandomPositionGenerator(List<Vector2d> choice, int n) {
+        this.n = n;
+        vectors = choice;
+        Collections.shuffle(vectors);
+    }
+
     @Override
     public Iterator<Vector2d> iterator() {
         return new Iterator<>() {

@@ -1,12 +1,11 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.Animal;
-import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.WorldMap;
+import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.PositionAlreadyOccupiedException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Simulation implements Runnable {
     private final WorldMap map;
@@ -16,7 +15,7 @@ public class Simulation implements Runnable {
         this.map = map;
         this.animals = new ArrayList<>();
         for (Vector2d position : positions) {
-            Animal a = new Animal(position);
+            Animal a = new Animal(position, MapDirection.NORTH,new FullPredestinationGenome(List.of(1,2)));
             try {
                 map.place(a);
                 animals.add(a);
