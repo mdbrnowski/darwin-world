@@ -76,6 +76,7 @@ public class SimulationPresenter implements MapChangeListener {
 
         for (Node label : mapGrid.getChildren())
             GridPane.setHalignment(label, HPos.CENTER);
+
     }
 
     private void clearGrid() {

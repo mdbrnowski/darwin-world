@@ -3,10 +3,18 @@ package agh.ics.oop.model;
 public class Animal implements WorldElement {
     private MapDirection orientation;
     private Vector2d position;
+    private int energy;
+    private int childrenNum;
+    private int age;
+    private AbstractGenome genome;
+
+
 
     public Animal(Vector2d position) {
         this.orientation = MapDirection.NORTH;
         this.position = position;
+        this.childrenNum=0;
+        this.age=0;
     }
 
     public Animal() {
@@ -53,4 +61,23 @@ public class Animal implements WorldElement {
             }
         }
     }
+
+    public void incrementEnergy(int value){
+        energy+=value;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public AbstractGenome getGenome() {
+        return genome;
+    }
+
+//    public void breed(Animal animal){
+//        double energyPart= (double) this.energy /(animal.getEnergy()+this.energy);
+//        Animal newAnimal=new Animal(this.getPosition(),)
+//    }
+
+
 }
