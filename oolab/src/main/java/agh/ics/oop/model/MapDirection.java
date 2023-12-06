@@ -38,9 +38,7 @@ public enum MapDirection {
         };
     }
 
-//    public MapDirection reverse() {
-//        return directions[(ordinal() + (directions.length)/2) % directions.length];
-//    }
+
     public MapDirection reverse() {
         switch(this){
             case NORTHEAST : return SOUTHEAST;
@@ -51,7 +49,4 @@ public enum MapDirection {
         }
     }
 
-    public static MapDirection[] getDirections() {
-        return directions;
-    }
 }
