@@ -40,13 +40,16 @@ public enum MapDirection {
 
 
     public MapDirection reverse() {
-        switch(this){
-            case NORTHEAST : return SOUTHEAST;
-            case SOUTHEAST : return NORTHEAST;
-            case NORTHWEST : return SOUTHWEST;
-            case SOUTHWEST : return NORTHWEST;
-            default : return directions[(ordinal() + (directions.length)/2) % directions.length];
-        }
+        return switch (this) {
+            case NORTHEAST -> SOUTHEAST;
+            case SOUTHEAST -> NORTHEAST;
+            case NORTHWEST -> SOUTHWEST;
+            case SOUTHWEST -> NORTHWEST;
+            case SOUTH->NORTH;
+            case NORTH->SOUTH;
+            case EAST -> EAST;
+            case WEST -> WEST;
+        };
     }
 
 }
