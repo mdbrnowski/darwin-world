@@ -34,4 +34,6 @@ public abstract class AbstractVegetation {
         return plants;
 
     }
+
+    public abstract void actualizePreferred(WorldMap map);
 }
