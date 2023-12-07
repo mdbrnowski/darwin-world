@@ -2,7 +2,6 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.RandomPositionGenerator;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,7 @@ public abstract class AbstractVegetation {
     protected List<Vector2d> preferredFields;
     protected List<Vector2d> notPreferredFields;
 
-    private int numberOfElements; //number of plants to plant on a particular day
+    private final int numberOfElements; //number of plants to plant on a particular day
 
     public AbstractVegetation(int numberOfElements){
         this.numberOfElements=numberOfElements;
@@ -35,5 +34,7 @@ public abstract class AbstractVegetation {
 
     }
 
-    public abstract void actualizePreferred(WorldMap map);
+    public abstract List<Vector2d> getPreferred(WorldMap map);
+
+    public abstract List<Vector2d> getNotPreferred(WorldMap map);
 }

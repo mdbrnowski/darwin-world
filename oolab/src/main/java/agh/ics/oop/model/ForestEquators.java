@@ -1,8 +1,12 @@
 package agh.ics.oop.model;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
-//preferredFields are only along the equator (middle row of the map)
+/**
+ * preferredFields are only along the equator (middle row of the map)
+ */
 public class ForestEquators extends AbstractVegetation{
 
     public ForestEquators(int minX,int maxX,int minY,int maxY,int numberOfElements){
@@ -26,28 +30,14 @@ public class ForestEquators extends AbstractVegetation{
     }
 
     @Override
-    public void actualizePreferred(WorldMap map) {
+    public List<Vector2d> getPreferred(WorldMap map) {
+        return preferredFields.stream().filter(
+                (elem) -> !(map.objectAt(elem) instanceof Grass)).collect(Collectors.toList());
+    }
 
-        int minX=map.getCurrentBounds().bottomLeft().getX();
-        int maxX=map.getCurrentBounds().topRight().getX();
-        int minY=map.getCurrentBounds().bottomLeft().getY();
-        int maxY=map.getCurrentBounds().topRight().getY();
-        int meanY=(maxY+minY)/2;
-
-        preferredFields = new ArrayList<>();
-
-        for(int i=minX;i<=maxX;i++){
-            if(!(map.objectAt(new Vector2d(i,meanY)) instanceof Grass))
-                preferredFields.add(new Vector2d(i,meanY));
-        }
-
-        notPreferredFields = new ArrayList<>();
-        for (int i = minX; i <= maxX; i++) {
-            for (int j = minY; j <= maxY; j++) {
-                if(j!=meanY && !(map.objectAt(new Vector2d(i,j)) instanceof Grass))
-                    notPreferredFields.add(new Vector2d(i, j));
-            }
-        }
-
+    @Override
+    public List<Vector2d> getNotPreferred(WorldMap map) {
+        return notPreferredFields.stream().filter(
+                (elem) -> !(map.objectAt(elem) instanceof Grass)).collect(Collectors.toList());
     }
 }
