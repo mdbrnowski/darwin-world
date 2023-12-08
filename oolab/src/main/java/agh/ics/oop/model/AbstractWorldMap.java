@@ -33,7 +33,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public void move(Animal animal) {
         Vector2d old_position = animal.getPosition();
-        animal.move(this);
+        animal.move(this,animal.getPosition().add(animal.getOrientation().toUnitVector()));
         if (!animal.isAt(old_position)) {
             animals.remove(old_position);
             animals.put(animal.getPosition(), animal);
@@ -67,7 +67,11 @@ public abstract class AbstractWorldMap implements WorldMap {
         return id;
     }
 
-    private void mapChanged(String message) {
+    public Map<Vector2d, Animal> getAnimals() {
+        return animals;
+    }
+
+    protected void mapChanged(String message) {
         for (MapChangeListener listener : listeners) {
             listener.mapChanged(this, message);
         }
