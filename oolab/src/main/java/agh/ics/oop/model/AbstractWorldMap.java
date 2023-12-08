@@ -33,7 +33,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     public void move(Animal animal) {
         Vector2d old_position = animal.getPosition();
         animal.move(this, animal.getPosition().add(animal.getOrientation().toUnitVector()));
-        if (animal.isAt(old_position)) {
+        if (!animal.isAt(old_position)) {
             animals.remove(old_position);
             animals.put(animal.getPosition(), animal);
             mapChanged("Moved an animal to %s".formatted(animal.getPosition()));

@@ -51,7 +51,7 @@ public class EarthGlobe extends AbstractWorldMap {
         }
 
         animal.move(this, newPosition);
-        if (animal.isAt(old_position)) {
+        if (!animal.isAt(old_position)) {
             animals.remove(old_position);
             animals.put(animal.getPosition(), animal);
             mapChanged("Moved an animal to %s".formatted(animal.getPosition()));
