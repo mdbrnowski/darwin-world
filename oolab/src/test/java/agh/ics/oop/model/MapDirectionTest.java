@@ -21,5 +21,13 @@ public class MapDirectionTest {
         assertSame(MapDirection.SOUTHWEST.add(5), MapDirection.EAST);
         assertSame(MapDirection.NORTHWEST.add(2), MapDirection.NORTHEAST);
     }
+
+    @Test
+    public void reverseTest() {
+        assertSame(MapDirection.NORTH.reverse(), MapDirection.SOUTH);
+        assertSame(MapDirection.SOUTH.reverse(), MapDirection.NORTH);
+        assertSame(MapDirection.EAST.reverse(), MapDirection.EAST);
+        assertSame(MapDirection.WEST.reverse(), MapDirection.WEST);
+    }
 }
 

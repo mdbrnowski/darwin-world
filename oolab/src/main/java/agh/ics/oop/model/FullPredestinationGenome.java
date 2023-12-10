@@ -1,6 +1,5 @@
 package agh.ics.oop.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FullPredestinationGenome extends AbstractGenome {
@@ -11,6 +10,6 @@ public class FullPredestinationGenome extends AbstractGenome {
 
     @Override
     public int iterate(int day) {
-        return genome.get(day%genome.size());
+        return genome.get(day % genome.size());
     }
 }

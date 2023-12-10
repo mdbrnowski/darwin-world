@@ -2,7 +2,7 @@ package agh.ics.oop.model;
 
 import java.util.List;
 
-public class LifeGivingCorpses extends AbstractVegetation{
+public class LifeGivingCorpses extends AbstractVegetation {
     public LifeGivingCorpses(int numberOfElements) {
         super(numberOfElements);
     }
