@@ -33,6 +33,10 @@ public class GrassField extends AbstractWorldMap {
     }
 
     @Override
+    public void vegetate() {
+    }
+
+    @Override
     public Boundary getCurrentBounds() {
         Vector2d bottomLeft = new Vector2d(0, 0);
         Vector2d topRight = new Vector2d(0, 0);

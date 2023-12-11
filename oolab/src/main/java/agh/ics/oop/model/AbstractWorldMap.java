@@ -5,14 +5,24 @@ import agh.ics.oop.model.util.MapVisualizer;
 import agh.ics.oop.model.util.PositionAlreadyOccupiedException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class AbstractWorldMap implements WorldMap {
     protected Map<Vector2d, Animal> animals = new HashMap<>();
+    protected Map<Vector2d, Animal> recentlyDead = new HashMap<>();
     private final List<MapChangeListener> listeners = new ArrayList<>();
+    private AbstractVegetation vegetator;
     private final UUID id;
 
     public AbstractWorldMap() {
         id = UUID.randomUUID();
+    }
+
+    /*
+     * returns a hashmap of positions of recently dead animals
+     */
+    public Map<Vector2d, Animal> getRecentlyDead() {
+        return recentlyDead;
     }
 
     @Override
@@ -25,15 +35,15 @@ public abstract class AbstractWorldMap implements WorldMap {
         if (canMoveTo(animal.getPosition())) {
             animals.put(animal.getPosition(), animal);
             mapChanged("Added a new animal at %s".formatted(animal.getPosition()));
-        }
-        else
+        } else
             throw new PositionAlreadyOccupiedException(animal.getPosition());
     }
+
 
     @Override
     public void move(Animal animal) {
         Vector2d old_position = animal.getPosition();
-        animal.move(this,animal.getPosition().add(animal.getOrientation().toUnitVector()));
+        animal.move(this, animal.getPosition().add(animal.getOrientation().toUnitVector()));
         if (!animal.isAt(old_position)) {
             animals.remove(old_position);
             animals.put(animal.getPosition(), animal);
@@ -84,4 +94,21 @@ public abstract class AbstractWorldMap implements WorldMap {
     public void removeObserver(MapChangeListener listener) {
         listeners.remove(listener);
     }
+
+    /*
+     * removes dead animals from animals hashmap and actualizes the hashmap of recentlyDead animals
+     */
+    public void removeDead() {
+
+        recentlyDead = animals.entrySet().stream()
+                .filter(entry -> entry.getValue().getEnergy() == 0)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        animals = animals.entrySet().stream()
+                .filter(entry -> entry.getValue().getEnergy() > 0)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    public abstract void vegetate();
+
 }
