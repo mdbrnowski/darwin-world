@@ -12,7 +12,6 @@ public class ForestEquators extends AbstractVegetation {
     public ForestEquators(int minX, int maxX, int minY, int maxY, int numberOfElements) {
         super(numberOfElements);
 
-
         int meanY = (maxY + minY) / 2;
         preferredFields = new ArrayList<>();
 

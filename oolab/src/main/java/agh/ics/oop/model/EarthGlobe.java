@@ -8,11 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EarthGlobe extends AbstractWorldMap {
-
+ 
     private final int width;
     private final int height;
     private AbstractVegetation vegetator;
     private Map<Vector2d, Grass> plants = new HashMap<Vector2d, Grass>();
+
 
 
     public EarthGlobe(int width, int height, AbstractVegetation vegetator) {
@@ -20,6 +21,7 @@ public class EarthGlobe extends AbstractWorldMap {
         this.width = width;
         this.height = height;
         this.vegetator = vegetator;
+
         plants = vegetator.vegatate(this);
     }
 
@@ -32,11 +34,9 @@ public class EarthGlobe extends AbstractWorldMap {
 
     @Override
     public WorldElement objectAt(Vector2d position) {
-        if (super.isOccupied(position))
-            return animals.get(position);
+        if (super.isOccupied(position)) return animals.get(position);
         return plants.get(position);
     }
-
 
     @Override
     public void move(Animal animal) {

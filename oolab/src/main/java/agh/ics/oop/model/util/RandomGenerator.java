@@ -9,13 +9,13 @@ import java.util.Random;
  * generates random array of non-repeating numbers
  */
 public class RandomGenerator implements Iterable<Integer> {
-    private final List<Integer> unused = new ArrayList<>();
 
     private final List<Integer> used = new ArrayList<>();
 
 
     public RandomGenerator(int genomeSize, int mutationCount) {
         Random random = new Random();
+        List<Integer> unused = new ArrayList<>();
         for (int i = 0; i < genomeSize; i++) {
             unused.add(i);
         }

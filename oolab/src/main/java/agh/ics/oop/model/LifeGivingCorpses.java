@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 
 public class LifeGivingCorpses extends AbstractVegetation {
     public LifeGivingCorpses(int minX, int maxX, int minY, int maxY, int numberOfElements) {
+
         super(numberOfElements);
 
         notPreferredFields = new ArrayList<>();

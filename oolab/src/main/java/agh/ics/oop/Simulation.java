@@ -5,17 +5,17 @@ import agh.ics.oop.model.util.PositionAlreadyOccupiedException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Simulation implements Runnable {
     private final WorldMap map;
     private final List<Animal> animals;
     private long sleepTime = 0;
+
     public Simulation(WorldMap map, List<Vector2d> positions) {
         this.map = map;
         this.animals = new ArrayList<>();
         for (Vector2d position : positions) {
-            Animal a = new Animal(position, MapDirection.NORTH,new FullPredestinationGenome(List.of(1,2)));
+            Animal a = new Animal(position, MapDirection.NORTH, new FullPredestinationGenome(List.of(1, 2)));
             try {
                 map.place(a);
                 animals.add(a);
