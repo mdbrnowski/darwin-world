@@ -3,6 +3,7 @@ package agh.ics.oop.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,7 +26,7 @@ public class LifeGivingCorpses extends AbstractVegetation {
     @Override
     public List<Vector2d> getPreferred(AbstractWorldMap map) {
         List<Vector2d> recentlyDead = map.getRecentlyDead();
-        List<Vector2d> newPreferred = recentlyDead.stream()
+        Set<Vector2d> newPreferred = recentlyDead.stream()
                 .flatMap(key -> Stream.of(
                         key,
                         map.getNextPosition(key,new Vector2d(-1,-1)),
@@ -37,7 +38,7 @@ public class LifeGivingCorpses extends AbstractVegetation {
                         map.getNextPosition(key,new Vector2d(-1,1)),
                         map.getNextPosition(key,new Vector2d(1,-1))
                 ))
-                .collect(Collectors.toCollection(ArrayList::new));
+                .collect(Collectors.toSet());
 
         return newPreferred.stream().filter(
                 (elem) -> !(map.objectAt(elem) instanceof Grass)).collect(Collectors.toList());
