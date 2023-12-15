@@ -4,7 +4,6 @@ import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.PositionAlreadyOccupiedException;
 import javafx.application.Application;
 
-import java.rmi.AlreadyBoundException;
 import java.util.List;
 
 
@@ -29,6 +28,7 @@ public class World {
 
         EarthGlobe globe = new EarthGlobe(4, 5, vegetator);
 
+
         globe.addObserver(new ConsoleMapDisplay());
         System.out.println(globe);
         try {
@@ -49,7 +49,6 @@ public class World {
         globe.vegetate();
 
         System.out.println(globe);
-
 
     }
 }
