@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractWorldMap implements WorldMap {
     protected Map<Vector2d, Animal> animals = new HashMap<>();
-    protected Map<Vector2d, Animal> recentlyDead = new HashMap<>();
+    protected List<Vector2d> recentlyDead = new ArrayList<>();
     private final List<MapChangeListener> listeners = new ArrayList<>();
     private AbstractVegetation vegetator;
     private final UUID id;
@@ -19,9 +19,9 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     /*
-     * returns a hashmap of positions of recently dead animals
+     * returns a list of positions of recently dead animals
      */
-    public Map<Vector2d, Animal> getRecentlyDead() {
+    public List<Vector2d> getRecentlyDead() {
         return recentlyDead;
     }
 
@@ -102,7 +102,8 @@ public abstract class AbstractWorldMap implements WorldMap {
 
         recentlyDead = animals.entrySet().stream()
                 .filter(entry -> entry.getValue().getEnergy() == 0)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
 
         animals = animals.entrySet().stream()
                 .filter(entry -> entry.getValue().getEnergy() > 0)
@@ -110,5 +111,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     public abstract void vegetate();
+
+    public abstract Vector2d getNextPosition(Vector2d position, Vector2d move);
 
 }

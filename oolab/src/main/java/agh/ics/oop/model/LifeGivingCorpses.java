@@ -23,19 +23,20 @@ public class LifeGivingCorpses extends AbstractVegetation {
      */
     @Override
     public List<Vector2d> getPreferred(AbstractWorldMap map) {
-        Map<Vector2d, Animal> recentlyDead = map.getRecentlyDead();
-        List<Vector2d> newPreferred = recentlyDead.keySet().stream()
+        List<Vector2d> recentlyDead = map.getRecentlyDead();
+        List<Vector2d> newPreferred = recentlyDead.stream()
                 .flatMap(key -> Stream.of(
                         key,
-                        new Vector2d((key.getX() - 1), key.getY()),
-                        new Vector2d((key.getX() + 1), key.getY()),
-                        new Vector2d((key.getX()), key.getY() - 1),
-                        new Vector2d((key.getX()), key.getY() + 1),
-                        new Vector2d((key.getX() - 1), key.getY() - 1),
-                        new Vector2d((key.getX() - 1), key.getY() + 1),
-                        new Vector2d((key.getX() + 1), key.getY() - 1),
-                        new Vector2d((key.getX() + 1), key.getY() + 1)
-                )).collect(Collectors.toCollection(ArrayList::new));
+                        map.getNextPosition(key,new Vector2d(-1,-1)),
+                        map.getNextPosition(key,new Vector2d(-1,0)),
+                        map.getNextPosition(key,new Vector2d(0,-1)),
+                        map.getNextPosition(key,new Vector2d(0,1)),
+                        map.getNextPosition(key,new Vector2d(1,0)),
+                        map.getNextPosition(key,new Vector2d(1,1)),
+                        map.getNextPosition(key,new Vector2d(-1,1)),
+                        map.getNextPosition(key,new Vector2d(1,-1))
+                ))
+                .collect(Collectors.toCollection(ArrayList::new));
 
         return newPreferred.stream().filter(
                 (elem) -> !(map.objectAt(elem) instanceof Grass)).collect(Collectors.toList());

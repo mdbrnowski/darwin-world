@@ -72,4 +72,17 @@ public class EarthGlobe extends AbstractWorldMap {
     public Boundary getCurrentBounds() {
         return new Boundary(new Vector2d(0, 0), new Vector2d(width, height));
     }
+
+    @Override
+    public Vector2d getNextPosition(Vector2d position, Vector2d move){
+        Vector2d newCandidate = position.add(move);
+        Vector2d newPosition;
+        if (newCandidate.getY() > height || newCandidate.getY() < 0) {
+            newPosition = new Vector2d((newCandidate.getX() + width + 1) % (width + 1), position.getY());
+        } else {
+            newPosition = new Vector2d((newCandidate.getX() + width + 1) % (width + 1), newCandidate.getY());
+        }
+
+        return newPosition;
+    }
 }
