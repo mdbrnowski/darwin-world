@@ -5,14 +5,24 @@ import agh.ics.oop.model.util.MapVisualizer;
 import agh.ics.oop.model.util.PositionAlreadyOccupiedException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class AbstractWorldMap implements WorldMap {
     protected Map<Vector2d, Animal> animals = new HashMap<>();
+    protected List<Vector2d> recentlyDead = new ArrayList<>();
     private final List<MapChangeListener> listeners = new ArrayList<>();
+    private AbstractVegetation vegetator;
     private final UUID id;
 
     public AbstractWorldMap() {
         id = UUID.randomUUID();
+    }
+
+    /*
+     * returns a list of positions of recently dead animals
+     */
+    public List<Vector2d> getRecentlyDead() {
+        return recentlyDead;
     }
 
     @Override
@@ -28,6 +38,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         } else
             throw new PositionAlreadyOccupiedException(animal.getPosition());
     }
+
 
     @Override
     public void move(Animal animal) {
@@ -83,4 +94,24 @@ public abstract class AbstractWorldMap implements WorldMap {
     public void removeObserver(MapChangeListener listener) {
         listeners.remove(listener);
     }
+
+    /*
+     * removes dead animals from animals hashmap and actualizes the hashmap of recentlyDead animals
+     */
+    public void removeDead() {
+
+        recentlyDead = animals.entrySet().stream()
+                .filter(entry -> entry.getValue().getEnergy() == 0)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
+        animals = animals.entrySet().stream()
+                .filter(entry -> entry.getValue().getEnergy() > 0)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    public abstract void vegetate();
+
+    public abstract Vector2d getNextPosition(Vector2d position, Vector2d move);
+
 }

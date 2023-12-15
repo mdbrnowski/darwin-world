@@ -4,13 +4,17 @@ import agh.ics.oop.model.util.Boundary;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 public class EarthGlobe extends AbstractWorldMap {
+ 
     private final int width;
     private final int height;
-    private final AbstractVegetation vegetator;
-    private final Map<Vector2d, Grass> plants;
+    private AbstractVegetation vegetator;
+    private Map<Vector2d, Grass> plants = new HashMap<Vector2d, Grass>();
+
+
 
     public EarthGlobe(int width, int height, AbstractVegetation vegetator) {
         super();
@@ -18,8 +22,7 @@ public class EarthGlobe extends AbstractWorldMap {
         this.height = height;
         this.vegetator = vegetator;
 
-        plants = vegetator.vegetate(getCurrentBounds().bottomLeft().getY(), getCurrentBounds().topRight().getY());
-        System.out.println(plants);
+        plants = vegetator.vegatate(this);
     }
 
     @Override
@@ -58,8 +61,28 @@ public class EarthGlobe extends AbstractWorldMap {
         }
     }
 
+    /*
+     * Places plants on the map using attribute vegetator
+     */
+    public void vegetate() {
+        plants.putAll(vegetator.vegatate(this));
+    }
+
     @Override
     public Boundary getCurrentBounds() {
         return new Boundary(new Vector2d(0, 0), new Vector2d(width, height));
+    }
+
+    @Override
+    public Vector2d getNextPosition(Vector2d position, Vector2d move){
+        Vector2d newCandidate = position.add(move);
+        Vector2d newPosition;
+        if (newCandidate.getY() > height || newCandidate.getY() < 0) {
+            newPosition = new Vector2d((newCandidate.getX() + width + 1) % (width + 1), position.getY());
+        } else {
+            newPosition = new Vector2d((newCandidate.getX() + width + 1) % (width + 1), newCandidate.getY());
+        }
+
+        return newPosition;
     }
 }

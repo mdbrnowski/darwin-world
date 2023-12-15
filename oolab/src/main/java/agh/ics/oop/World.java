@@ -24,9 +24,11 @@ public class World {
 
         animal2.breed(animal1, 2, 5);
 
-        ForestEquators vegetator = new ForestEquators(0, 4, 0, 5, 8);
+        LifeGivingCorpses vegetator = new LifeGivingCorpses(0, 4, 0, 5, 8);
 
         EarthGlobe globe = new EarthGlobe(4, 5, vegetator);
+
+
         globe.addObserver(new ConsoleMapDisplay());
         System.out.println(globe);
         try {
@@ -35,10 +37,18 @@ public class World {
         } catch (PositionAlreadyOccupiedException e) {
             throw new RuntimeException(e);
         }
+
         globe.move(animal2);
         System.out.println(globe);
         System.out.println(globe.getAnimals());
 
+        animal1.setEnergy(0);
+        globe.removeDead();
+        System.out.println(globe);
+
+        globe.vegetate();
+
+        System.out.println(globe);
 
     }
 }
