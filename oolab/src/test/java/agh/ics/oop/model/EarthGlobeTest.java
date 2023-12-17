@@ -10,9 +10,7 @@ public class EarthGlobeTest {
     public void edgesTest() {
         int width = 2;
         int height = 3;
-        int n = 3;
-        AbstractVegetation vegetation = new ForestEquators(0, width, 0, height, n);
-        EarthGlobe globe = new EarthGlobe(width, height, vegetation);
+        EarthGlobe globe = new EarthGlobe(width, height);
         globe.addObserver(new ConsoleMapDisplay());
 
         FullPredestinationGenome genome = new FullPredestinationGenome(List.of(1, 2, 3));

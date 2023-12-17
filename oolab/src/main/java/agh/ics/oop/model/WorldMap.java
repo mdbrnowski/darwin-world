@@ -3,7 +3,7 @@ package agh.ics.oop.model;
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.PositionAlreadyOccupiedException;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -48,7 +48,12 @@ public interface WorldMap extends MoveValidator {
     /**
      * @return list of elements.
      */
-    Collection<WorldElement> getElements();
+    List<WorldElement> getElements();
+
+    /**
+     * @return list of animals.
+     */
+    List<Animal> getAnimals();
 
     /**
      * @return current bounds (lower left and upper right corners)
@@ -59,4 +64,9 @@ public interface WorldMap extends MoveValidator {
      * @return ID of a map
      */
     UUID getId();
+
+    /**
+     * Removes animals that have zero energy
+     */
+    void removeDead();
 }

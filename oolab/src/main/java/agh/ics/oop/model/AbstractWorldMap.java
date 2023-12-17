@@ -11,7 +11,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected Map<Vector2d, Animal> animals = new HashMap<>();
     protected List<Vector2d> recentlyDead = new ArrayList<>();
     private final List<MapChangeListener> listeners = new ArrayList<>();
-    private AbstractVegetation vegetator;
     private final UUID id;
 
     public AbstractWorldMap() {
@@ -62,7 +61,12 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public Collection<WorldElement> getElements() {
+    public List<WorldElement> getElements() {
+        return new ArrayList<>(animals.values());
+    }
+
+    @Override
+    public List<Animal> getAnimals() {
         return new ArrayList<>(animals.values());
     }
 
@@ -77,14 +81,11 @@ public abstract class AbstractWorldMap implements WorldMap {
         return id;
     }
 
-    public Map<Vector2d, Animal> getAnimals() {
-        return animals;
-    }
-
     protected void mapChanged(String message) {
         for (MapChangeListener listener : listeners) {
             listener.mapChanged(this, message);
         }
+        System.out.println("Listener: " + message);  // todo: it's only for debug
     }
 
     public void addObserver(MapChangeListener listener) {
@@ -95,11 +96,8 @@ public abstract class AbstractWorldMap implements WorldMap {
         listeners.remove(listener);
     }
 
-    /*
-     * removes dead animals from animals hashmap and actualizes the hashmap of recentlyDead animals
-     */
+    @Override
     public void removeDead() {
-
         recentlyDead = animals.entrySet().stream()
                 .filter(entry -> entry.getValue().getEnergy() == 0)
                 .map(Map.Entry::getKey)
@@ -108,9 +106,8 @@ public abstract class AbstractWorldMap implements WorldMap {
         animals = animals.entrySet().stream()
                 .filter(entry -> entry.getValue().getEnergy() > 0)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        mapChanged("Dead animals removed");
     }
-
-    public abstract void vegetate();
 
     public abstract Vector2d getNextPosition(Vector2d position, Vector2d move);
 

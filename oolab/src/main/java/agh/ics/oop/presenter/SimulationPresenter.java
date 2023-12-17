@@ -61,9 +61,9 @@ public class SimulationPresenter implements MapChangeListener {
 
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                if (map.objectAt(new Vector2d(x, y)) != null) {
+                if (map.isOccupied(new Vector2d(x, y))) {
                     var label = new Label(map.objectAt(new Vector2d(x, y)).toString());
-                    if (!Objects.equals(label.getText(), "*"))
+                    if (map.objectAt(new Vector2d(x, y)) instanceof Animal)
                         label.setTextFill(Color.color(1, 0, 0));
                     else
                         label.setTextFill(Color.color(0.2, 0.6, 0.3));
@@ -86,11 +86,8 @@ public class SimulationPresenter implements MapChangeListener {
     public void onSimulationStartClicked() {
         List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(3, 2));
 
-        Thread simulationThread = new Thread(() -> {
-            Simulation simulation = new Simulation(map, positions, 500);
-            SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
-            simulationEngine.runAsync();
-        });
-        simulationThread.start();
+        Simulation simulation = new Simulation(map, positions, 500);
+        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
+        simulationEngine.runAsync();
     }
 }
