@@ -69,6 +69,14 @@ public class Animal implements WorldElement {
         increaseEnergy(-1);
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public void incrementAge() {
+        age += 1;
+    }
+
     public AbstractGenome getGenome() {
         return genome;
     }

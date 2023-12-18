@@ -39,8 +39,9 @@ public class Simulation implements Runnable {
             map.removeDead();
             var animals = map.getAnimals();
             for (Animal animal : animals) {
-                animal.decrementEnergy();
                 map.move(animal);  // todo: should move and change direction
+                animal.decrementEnergy();
+                animal.incrementAge();
             }
             sleep();
         }
