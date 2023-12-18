@@ -17,13 +17,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         id = UUID.randomUUID();
     }
 
-    /*
-     * returns a list of positions of recently dead animals
-     */
-    public List<Vector2d> getRecentlyDead() {
-        return recentlyDead;
-    }
-
     @Override
     public boolean canMoveTo(Vector2d position) {
         return !isOccupied(position);
@@ -81,7 +74,8 @@ public abstract class AbstractWorldMap implements WorldMap {
         return id;
     }
 
-    protected void mapChanged(String message) {
+    @Override
+    public void mapChanged(String message) {
         for (MapChangeListener listener : listeners) {
             listener.mapChanged(this, message);
         }
@@ -90,10 +84,6 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public void addObserver(MapChangeListener listener) {
         listeners.add(listener);
-    }
-
-    public void removeObserver(MapChangeListener listener) {
-        listeners.remove(listener);
     }
 
     @Override
@@ -107,6 +97,10 @@ public abstract class AbstractWorldMap implements WorldMap {
                 .filter(entry -> entry.getValue().getEnergy() > 0)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         mapChanged("Dead animals removed");
+    }
+
+    public List<Vector2d> getRecentlyDead() {
+        return recentlyDead;
     }
 
     public abstract Vector2d getNextPosition(Vector2d position, Vector2d move);

@@ -8,7 +8,6 @@ import java.util.UUID;
 
 /**
  * The interface responsible for interacting with the map of the world.
- * Assumes that MoveDirection class is defined.
  *
  * @author apohllo, idzik
  */
@@ -64,6 +63,8 @@ public interface WorldMap extends MoveValidator {
      * @return ID of a map
      */
     UUID getId();
+
+    void mapChanged(String message);
 
     /**
      * Removes animals that have zero energy

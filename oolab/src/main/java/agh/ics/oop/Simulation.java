@@ -33,11 +33,12 @@ public class Simulation implements Runnable {
 
     @Override
     public void run() {
-
-    }
-
-    public List<Animal> getAnimals() {
-        return animals;
+        // todo: change this
+        map.removeDead();
+        for (int i = 0; i < 10; i++) {
+            map.move(map.getAnimals().get(0));
+            sleep();
+        }
     }
 
     private void sleep() {
