@@ -13,8 +13,8 @@ public class Simulation implements Runnable {
 
     public Simulation(WorldMap map, List<Vector2d> positions) {
         this.map = map;
-        this.vegetation = new ForestEquators(0, 10, 0, 10, 15);
-//        this.vegetation = new LifeGivingCorpses(0, 10, 0, 10, 15);
+        this.vegetation = new ForestEquators(10, 10, 15);  // todo: remove fixed values
+//        this.vegetation = new LifeGivingCorpses(10, 10, 15);
         for (Vector2d position : positions) {
             Animal a = new Animal(position, MapDirection.NORTH, new FullPredestinationGenome(List.of(1, 2)));
             a.setEnergy(2);
