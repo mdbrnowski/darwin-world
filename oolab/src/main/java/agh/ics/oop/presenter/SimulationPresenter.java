@@ -57,7 +57,7 @@ public class SimulationPresenter implements MapChangeListener {
 
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                if (map.isOccupied(new Vector2d(x, y))) {
+                if (map.objectAt(new Vector2d(x, y)) != null) {
                     var label = new Label(map.objectAt(new Vector2d(x, y)).toString());
                     if (map.objectAt(new Vector2d(x, y)) instanceof Animal)
                         label.setTextFill(Color.color(1, 0, 0));
