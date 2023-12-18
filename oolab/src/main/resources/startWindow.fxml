@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="agh.ics.oop.presenter.StartWindowPresenter"
+            minHeight="400.0" minWidth="600.0"
+            style="-fx-padding: 25;">
+    <top>
+        <TextField fx:id="argumentsInput" promptText="Enter arguments"/>
+    </top>
+
+    <bottom>
+        <Button onAction="#onSimulationStartClicked" text="Start"/>
+    </bottom>
+
+</BorderPane>

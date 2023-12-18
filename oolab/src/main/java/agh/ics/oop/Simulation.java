@@ -16,6 +16,7 @@ public class Simulation implements Runnable {
         this.animals = new ArrayList<>();
         for (Vector2d position : positions) {
             Animal a = new Animal(position, MapDirection.NORTH, new FullPredestinationGenome(List.of(1, 2)));
+            a.setEnergy(2);
             try {
                 map.place(a);
                 animals.add(a);
@@ -32,11 +33,19 @@ public class Simulation implements Runnable {
 
     @Override
     public void run() {
-        int n = animals.size();
-        // todo
+        // todo: change this
+        map.removeDead();
+        for (int i = 0; i < 10; i++) {
+            map.move(map.getAnimals().get(0));
+            sleep();
+        }
     }
 
-    public List<Animal> getAnimals() {
-        return animals;
+    private void sleep() {
+        try {
+            Thread.sleep(sleepTime);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -28,11 +28,6 @@ public class SimulationEngine {
             simulationThreads.add(simulationThread);
             simulationThread.start();
         }
-        try {
-            awaitSimulationEnd();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public void runAsyncInThreadPool() {
@@ -42,11 +37,6 @@ public class SimulationEngine {
             executorService.submit(simulationThread);
         }
         executorService.shutdown();
-        try {
-            awaitSimulationEnd();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public void awaitSimulationEnd() throws InterruptedException {

@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -17,7 +16,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.util.List;
-import java.util.Objects;
 
 public class SimulationPresenter implements MapChangeListener {
     private WorldMap map;
@@ -26,8 +24,6 @@ public class SimulationPresenter implements MapChangeListener {
     public GridPane mapGrid;
     @FXML
     private Label moveDescriptionLabel;
-    @FXML
-    public TextField directionsTextField;
 
 
     @Override
@@ -63,7 +59,7 @@ public class SimulationPresenter implements MapChangeListener {
             for (int y = minY; y <= maxY; y++) {
                 if (map.objectAt(new Vector2d(x, y)) != null) {
                     var label = new Label(map.objectAt(new Vector2d(x, y)).toString());
-                    if (!Objects.equals(label.getText(), "*"))
+                    if (map.objectAt(new Vector2d(x, y)) instanceof Animal)
                         label.setTextFill(Color.color(1, 0, 0));
                     else
                         label.setTextFill(Color.color(0.2, 0.6, 0.3));
@@ -83,14 +79,13 @@ public class SimulationPresenter implements MapChangeListener {
         mapGrid.getRowConstraints().clear();
     }
 
-    public void onSimulationStartClicked() {
-        List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(3, 2));
-
-        Thread simulationThread = new Thread(() -> {
-            Simulation simulation = new Simulation(map, positions, 500);
-            SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
-            simulationEngine.runAsync();
-        });
-        simulationThread.start();
+    public void runSimulation() {
+        EarthGlobe map = new EarthGlobe(10, 10);
+        setWorldMap(map);
+        map.addObserver(this);
+        List<Vector2d> positions = List.of(new Vector2d(2,2));
+        Simulation simulation = new Simulation(map, positions, 500);
+        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
+        simulationEngine.runAsync();
     }
 }

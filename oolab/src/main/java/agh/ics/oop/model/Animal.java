@@ -46,7 +46,7 @@ public class Animal implements WorldElement {
 
     @Override
     public String toString() {
-        return orientation.toString();
+        return orientation.toString() + "%s".formatted(this.energy);  // todo: undo
     }
 
     public void move(MoveValidator validator, Vector2d new_position) {
@@ -61,8 +61,12 @@ public class Animal implements WorldElement {
         this.energy = energy;
     }
 
-    public void incrementEnergy(int value) {
+    public void increaseEnergy(int value) {
         energy += value;
+    }
+
+    public void decrementEnergy() {
+        increaseEnergy(-1);
     }
 
     public AbstractGenome getGenome() {

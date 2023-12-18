@@ -2,32 +2,24 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.Boundary;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class EarthGlobe extends AbstractWorldMap {
- 
+
     private final int width;
     private final int height;
-    private AbstractVegetation vegetator;
-    private Map<Vector2d, Grass> plants = new HashMap<Vector2d, Grass>();
+    private Map<Vector2d, Grass> plants = new HashMap<>();
 
 
-
-    public EarthGlobe(int width, int height, AbstractVegetation vegetator) {
+    public EarthGlobe(int width, int height) {
         super();
         this.width = width;
         this.height = height;
-        this.vegetator = vegetator;
-
-        plants = vegetator.vegatate(this);
     }
 
     @Override
-    public Collection<WorldElement> getElements() {
-        Collection<WorldElement> result = new ArrayList<>(animals.values());
+    public List<WorldElement> getElements() {
+        List<WorldElement> result = new ArrayList<>(animals.values());
         result.addAll(plants.values());
         return result;
     }
@@ -61,20 +53,13 @@ public class EarthGlobe extends AbstractWorldMap {
         }
     }
 
-    /*
-     * Places plants on the map using attribute vegetator
-     */
-    public void vegetate() {
-        plants.putAll(vegetator.vegatate(this));
-    }
-
     @Override
     public Boundary getCurrentBounds() {
         return new Boundary(new Vector2d(0, 0), new Vector2d(width, height));
     }
 
     @Override
-    public Vector2d getNextPosition(Vector2d position, Vector2d move){
+    public Vector2d getNextPosition(Vector2d position, Vector2d move) {
         Vector2d newCandidate = position.add(move);
         Vector2d newPosition;
         if (newCandidate.getY() > height || newCandidate.getY() < 0) {
