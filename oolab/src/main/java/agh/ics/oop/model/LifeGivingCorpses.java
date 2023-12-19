@@ -8,13 +8,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LifeGivingCorpses extends AbstractVegetation {
-    public LifeGivingCorpses(int minX, int maxX, int minY, int maxY, int numberOfElements) {
+    public LifeGivingCorpses(int maxX, int maxY, int numberOfElements) {
 
         super(numberOfElements);
 
         notPreferredFields = new ArrayList<>();
-        for (int i = minX; i <= maxX; i++) {
-            for (int j = minY; j <= maxY; j++) {
+        for (int i = 0; i <= maxX; i++) {
+            for (int j = 0; j <= maxY; j++) {
                 notPreferredFields.add(new Vector2d(i, j));
             }
         }
@@ -29,14 +29,14 @@ public class LifeGivingCorpses extends AbstractVegetation {
         Set<Vector2d> newPreferred = recentlyDead.stream()
                 .flatMap(key -> Stream.of(
                         key,
-                        map.getNextPosition(key,new Vector2d(-1,-1)),
-                        map.getNextPosition(key,new Vector2d(-1,0)),
-                        map.getNextPosition(key,new Vector2d(0,-1)),
-                        map.getNextPosition(key,new Vector2d(0,1)),
-                        map.getNextPosition(key,new Vector2d(1,0)),
-                        map.getNextPosition(key,new Vector2d(1,1)),
-                        map.getNextPosition(key,new Vector2d(-1,1)),
-                        map.getNextPosition(key,new Vector2d(1,-1))
+                        map.getNextPosition(key, new Vector2d(-1, -1)),
+                        map.getNextPosition(key, new Vector2d(-1, 0)),
+                        map.getNextPosition(key, new Vector2d(0, -1)),
+                        map.getNextPosition(key, new Vector2d(0, 1)),
+                        map.getNextPosition(key, new Vector2d(1, 0)),
+                        map.getNextPosition(key, new Vector2d(1, 1)),
+                        map.getNextPosition(key, new Vector2d(-1, 1)),
+                        map.getNextPosition(key, new Vector2d(1, -1))
                 ))
                 .collect(Collectors.toSet());
 

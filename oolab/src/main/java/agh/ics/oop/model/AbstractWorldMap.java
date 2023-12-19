@@ -25,6 +25,8 @@ public abstract class AbstractWorldMap implements WorldMap {
         day += 1;
     }
 
+    public abstract void setPlants(Map<Vector2d, Grass> plants);
+
     @Override
     public boolean canMoveTo(Vector2d position) {
         return !isOccupied(position);

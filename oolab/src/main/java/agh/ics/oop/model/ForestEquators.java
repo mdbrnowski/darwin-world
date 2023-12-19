@@ -9,19 +9,19 @@ import java.util.stream.Collectors;
  */
 public class ForestEquators extends AbstractVegetation {
 
-    public ForestEquators(int minX, int maxX, int minY, int maxY, int numberOfElements) {
+    public ForestEquators(int maxX, int maxY, int numberOfElements) {
         super(numberOfElements);
 
-        int meanY = (maxY + minY) / 2;
+        int meanY = maxY / 2;
         preferredFields = new ArrayList<>();
 
-        for (int i = minX; i <= maxX; i++) {
+        for (int i = 0; i <= maxX; i++) {
             preferredFields.add(new Vector2d(i, meanY));
         }
 
         notPreferredFields = new ArrayList<>();
-        for (int i = minX; i <= maxX; i++) {
-            for (int j = minY; j <= maxY; j++) {
+        for (int i = 0; i <= maxX; i++) {
+            for (int j = 0; j <= maxY; j++) {
                 if (j != meanY)
                     notPreferredFields.add(new Vector2d(i, j));
             }

@@ -57,6 +57,12 @@ public class EarthGlobe extends AbstractWorldMap {
     }
 
     @Override
+    public void setPlants(Map<Vector2d, Grass> plants) {
+        this.plants = plants;
+        System.out.println(plants);
+    }
+
+    @Override
     public Boundary getCurrentBounds() {
         return new Boundary(new Vector2d(0, 0), new Vector2d(width, height));
     }
