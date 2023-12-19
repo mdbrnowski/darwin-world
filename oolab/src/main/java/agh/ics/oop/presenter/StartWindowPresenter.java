@@ -1,10 +1,10 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.SimulationParameters;
-import agh.ics.oop.model.EnergyParameters;
-import agh.ics.oop.model.GeneralParameters;
-import agh.ics.oop.model.MapParameters;
-import agh.ics.oop.model.MutationParameters;
+import agh.ics.oop.parameters.SimulationParameters;
+import agh.ics.oop.parameters.EnergyParameters;
+import agh.ics.oop.parameters.GeneralParameters;
+import agh.ics.oop.parameters.MapParameters;
+import agh.ics.oop.parameters.MutationParameters;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

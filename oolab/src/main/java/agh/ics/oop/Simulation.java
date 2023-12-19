@@ -3,6 +3,7 @@ package agh.ics.oop;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.PositionAlreadyOccupiedException;
 import agh.ics.oop.model.util.RandomPositionGenerator;
+import agh.ics.oop.parameters.SimulationParameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +29,10 @@ public class Simulation implements Runnable {
                 mapFields.add(new Vector2d(i, j));
             }
 
-        for (Vector2d position : new RandomPositionGenerator(mapFields, parameters.generalParameters().startAnimalsCount())) {
-            Animal a = makeNewAnimal(position, parameters.generalParameters().genome(), parameters.generalParameters().genomeLength());
+        for (Vector2d position : new RandomPositionGenerator(mapFields,
+                parameters.generalParameters().startAnimalsCount())) {
+            Animal a = makeNewAnimal(position, parameters.generalParameters().genome(),
+                    parameters.generalParameters().genomeLength());
             a.setEnergy(parameters.energyParameters().initialAnimalEnergy());
             try {
                 map.place(a);
@@ -39,7 +42,8 @@ public class Simulation implements Runnable {
             }
         }
 
-        setVegetation(parameters.generalParameters().vegetation(), map, parameters.generalParameters().startPlantsCount());
+        setVegetation(parameters.generalParameters().vegetation(), map,
+                parameters.generalParameters().startPlantsCount());
         vegetation.vegatate(map);
 
         System.out.println(map);
@@ -76,22 +80,17 @@ public class Simulation implements Runnable {
         MapDirection mapDirection = MapDirection.NORTH;
         mapDirection = mapDirection.add(random.nextInt(8));
 
-        AbstractGenome genome;
+
         List<Integer> randomList = new ArrayList<>();
         for (int i = 0; i < genomeLength; i++) {
             randomList.add(random.nextInt(8));
         }
 
-        switch (genomeType) {
-            case "FullPredestinationGenome":
-                genome = new FullPredestinationGenome(randomList);
-                break;
-            case "BackAndForthGenome":
-                genome = new BackAndForthGenome(randomList);
-                break;
-            default:
-                throw new IllegalArgumentException();
-        }
+        AbstractGenome genome=switch (genomeType) {
+            case "FullPredestinationGenome"->new FullPredestinationGenome(randomList);
+            case "BackAndForthGenome"-> new BackAndForthGenome(randomList);
+            default->throw new IllegalArgumentException();
+        };
         System.out.println(genome.getGenome());
 
         Animal animal = new Animal(position, mapDirection, genome);
@@ -99,18 +98,13 @@ public class Simulation implements Runnable {
     }
 
     private void setVegetation(String vegetationType, AbstractWorldMap map, int plantsCount) {
-        AbstractVegetation vegetation;
-
-        switch (vegetationType) {
-            case ("ForestEquators"):
-                vegetation = new ForestEquators(map.getCurrentBounds().topRight().getX(), map.getCurrentBounds().topRight().getY(), plantsCount);
-                break;
-            case ("LifeGivingCorpses"):
-                vegetation = new LifeGivingCorpses(map.getCurrentBounds().topRight().getX(), map.getCurrentBounds().topRight().getY(), plantsCount);
-                break;
-            default:
-                throw new IllegalArgumentException();
-        }
+        AbstractVegetation vegetation=switch (vegetationType) {
+            case ("ForestEquators")->new ForestEquators(map.getCurrentBounds().topRight().getX(),
+                    map.getCurrentBounds().topRight().getY(), plantsCount);
+            case ("LifeGivingCorpses")->new LifeGivingCorpses(map.getCurrentBounds().topRight().getX(),
+                    map.getCurrentBounds().topRight().getY(), plantsCount);
+            default-> throw new IllegalArgumentException();
+        };
 
         this.vegetation = vegetation;
     }
