@@ -10,7 +10,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -18,37 +17,35 @@ import java.io.IOException;
 
 public class StartWindowPresenter {
     @FXML
-    public TextField argumentsInput;
+    public ComboBox<String> genomeCombo;
     @FXML
-    public ComboBox genomeCombo;
+    public ComboBox<String> mapCombo;
     @FXML
-    public ComboBox mapCombo;
+    public Spinner<Integer> widthSpinner;
     @FXML
-    public Spinner widthSpinner;
+    public Spinner<Integer> heightSpinner;
     @FXML
-    public Spinner heightSpinner;
+    public ComboBox<String> vegetationCombo;
     @FXML
-    public ComboBox vegetationCombo;
+    public Spinner<Integer> plantsCountSpinner;
     @FXML
-    public Spinner plantsCountSpinner;
+    public Spinner<Integer> animalsCountSpinner;
     @FXML
-    public Spinner animalsCountSpinner;
+    public Spinner<Integer> plantsEnergySpinner;
     @FXML
-    public Spinner plantsEnergySpinner;
+    public Spinner<Integer> initialEnergySpinner;
     @FXML
-    public Spinner initialEnergySpinner;
+    public Spinner<Integer> minimumBreedSpinner;
     @FXML
-    public Spinner minimumBreedSpinner;
+    public Spinner<Integer> childEnergySpinner;
     @FXML
-    public Spinner childEnergySpinner;
+    public ComboBox<String> mutationTypeCombo;
     @FXML
-    public ComboBox mutationTypeCombo;
+    public Spinner<Integer> minMutationSpinner;
     @FXML
-    public Spinner minMutationSpinner;
+    public Spinner<Integer> maxMutationSpinner;
     @FXML
-    public Spinner maxMutationSpinner;
-    @FXML
-    public Spinner genomeLengthSpinner;
+    public Spinner<Integer> genomeLengthSpinner;
 
     public void onSimulationStartClicked() throws IOException {
         Stage newWindowStage = new Stage();
@@ -60,8 +57,8 @@ public class StartWindowPresenter {
         configureStage(newWindowStage, viewRoot);
         newWindowStage.show();
 
-        MapParameters mapParameters = new MapParameters((String) mapCombo.getValue(),
-                (int) widthSpinner.getValue(), (int) heightSpinner.getValue());
+        MapParameters mapParameters = new MapParameters(mapCombo.getValue(), widthSpinner.getValue(),
+                heightSpinner.getValue());
 
         SimulationParameters simulationParameters = getSimulationParameters();
 
@@ -69,19 +66,17 @@ public class StartWindowPresenter {
     }
 
     private SimulationParameters getSimulationParameters() {
-        GeneralParameters generalParameters = new GeneralParameters((String) genomeCombo.getValue(), (int) genomeLengthSpinner.getValue(),
-                (String) vegetationCombo.getValue(), (int) plantsCountSpinner.getValue(), (int) animalsCountSpinner.getValue());
+        GeneralParameters generalParameters = new GeneralParameters(genomeCombo.getValue(),
+                genomeLengthSpinner.getValue(), vegetationCombo.getValue(), plantsCountSpinner.getValue(),
+                animalsCountSpinner.getValue());
 
+        EnergyParameters energyParameters = new EnergyParameters(plantsEnergySpinner.getValue(),
+                initialEnergySpinner.getValue(), minimumBreedSpinner.getValue(), childEnergySpinner.getValue());
 
-        EnergyParameters energyParameters = new EnergyParameters((int) plantsEnergySpinner.getValue(),
-                (int) initialEnergySpinner.getValue(), (int) minimumBreedSpinner.getValue(), (int) childEnergySpinner.getValue());
+        MutationParameters mutationParameters = new MutationParameters(mutationTypeCombo.getValue(),
+                minMutationSpinner.getValue(), maxMutationSpinner.getValue());
 
-        MutationParameters mutationParameters = new MutationParameters((String) mutationTypeCombo.getValue(),
-                (int) minMutationSpinner.getValue(), (int) maxMutationSpinner.getValue());
-
-        SimulationParameters simulationParameters = new SimulationParameters
-                (generalParameters, energyParameters, mutationParameters);
-        return simulationParameters;
+        return new SimulationParameters(generalParameters, energyParameters, mutationParameters);
     }
 
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
