@@ -86,10 +86,10 @@ public class Simulation implements Runnable {
             randomList.add(random.nextInt(8));
         }
 
-        AbstractGenome genome=switch (genomeType) {
-            case "FullPredestinationGenome"->new FullPredestinationGenome(randomList);
-            case "BackAndForthGenome"-> new BackAndForthGenome(randomList);
-            default->throw new IllegalArgumentException();
+        AbstractGenome genome = switch (genomeType) {
+            case "FullPredestinationGenome" -> new FullPredestinationGenome(randomList);
+            case "BackAndForthGenome" -> new BackAndForthGenome(randomList);
+            default -> throw new IllegalArgumentException();
         };
         System.out.println(genome.getGenome());
 
@@ -98,12 +98,12 @@ public class Simulation implements Runnable {
     }
 
     private void setVegetation(String vegetationType, AbstractWorldMap map, int plantsCount) {
-        AbstractVegetation vegetation=switch (vegetationType) {
-            case ("ForestEquators")->new ForestEquators(map.getCurrentBounds().topRight().getX(),
+        AbstractVegetation vegetation = switch (vegetationType) {
+            case ("ForestEquators") -> new ForestEquators(map.getCurrentBounds().topRight().getX(),
                     map.getCurrentBounds().topRight().getY(), plantsCount);
-            case ("LifeGivingCorpses")->new LifeGivingCorpses(map.getCurrentBounds().topRight().getX(),
+            case ("LifeGivingCorpses") -> new LifeGivingCorpses(map.getCurrentBounds().topRight().getX(),
                     map.getCurrentBounds().topRight().getY(), plantsCount);
-            default-> throw new IllegalArgumentException();
+            default -> throw new IllegalArgumentException();
         };
 
         this.vegetation = vegetation;

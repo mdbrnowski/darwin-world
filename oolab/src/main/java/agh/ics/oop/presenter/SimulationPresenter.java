@@ -82,9 +82,9 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void runSimulation(MapParameters mapParameters, SimulationParameters simulationParameters) {
-        AbstractWorldMap map=switch(mapParameters.mapType()){
-            case("EarthGlobe")->new EarthGlobe(mapParameters.mapWidth(),mapParameters.mapHeight());
-            default-> throw new IllegalArgumentException();
+        AbstractWorldMap map = switch (mapParameters.mapType()) {
+            case ("EarthGlobe") -> new EarthGlobe(mapParameters.mapWidth(), mapParameters.mapHeight());
+            default -> throw new IllegalArgumentException();
         };
 
         setWorldMap(map);
