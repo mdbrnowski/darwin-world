@@ -10,16 +10,13 @@
             fx:controller="agh.ics.oop.presenter.StartWindowPresenter"
             minHeight="400.0" minWidth="600.0"
             style="-fx-padding: 25;">
-    <top>
 
-    </top>
     <center>
         <VBox>
             <Label text="Set parameters" textAlignment="CENTER"/>
             <HBox spacing="5">
                 <VBox>
                     <Label text="Map" textAlignment="CENTER"/>
-
                     <VBox>
                         <Label text="MapType" textAlignment="CENTER"/>
                         <ComboBox fx:id="mapCombo" layoutX="200.0" layoutY="33.0" prefWidth="150.0" value="EarthGlobe">
@@ -38,14 +35,11 @@
                         <Label text="Map height" textAlignment="CENTER"/>
                         <Spinner fx:id="heightSpinner" max="30" initialValue="10" editable="true" prefWidth="150.0"/>
                     </VBox>
-
-
                 </VBox>
                 <VBox>
-                    <Label text="General"></Label>
+                    <Label text="General"/>
                     <VBox>
                         <Label text="Genome" textAlignment="CENTER"/>
-
                         <ComboBox fx:id="genomeCombo" layoutX="200.0" layoutY="33.0" prefWidth="150.0"
                                   value="FullPredestinationGenome">
                             <items>
@@ -55,7 +49,6 @@
                                 </FXCollections>
                             </items>
                         </ComboBox>
-
                     </VBox>
                     <VBox>
                         <Label text="Genome length" textAlignment="CENTER"/>
@@ -64,7 +57,6 @@
                     </VBox>
                     <VBox>
                         <Label text="Vegetation" textAlignment="CENTER"/>
-
                         <ComboBox fx:id="vegetationCombo" layoutX="200.0" layoutY="33.0" prefWidth="150.0"
                                   value="ForestEquators">
                             <items>
@@ -80,7 +72,6 @@
                         <Spinner fx:id="plantsCountSpinner" max="30" initialValue="10" editable="true"
                                  prefWidth="150.0"/>
                     </VBox>
-
                     <VBox>
                         <Label text="Start animals count" textAlignment="CENTER"/>
                         <Spinner fx:id="animalsCountSpinner" max="30" initialValue="10" editable="true"
@@ -88,8 +79,7 @@
                     </VBox>
                 </VBox>
                 <VBox>
-                    <Label text="Energy"></Label>
-
+                    <Label text="Energy"/>
                     <VBox>
                         <Label text="Energy from one plant" textAlignment="CENTER"/>
                         <Spinner fx:id="plantsEnergySpinner" max="20" initialValue="10" editable="true"
@@ -113,8 +103,7 @@
 
                 </VBox>
                 <VBox>
-                    <Label text="Mutations"></Label>
-
+                    <Label text="Mutations"/>
                     <VBox>
                         <Label text="Mutation type" textAlignment="CENTER"/>
                         <ComboBox fx:id="mutationTypeCombo" layoutX="200.0" layoutY="33.0" prefWidth="150.0"
@@ -136,14 +125,10 @@
                         <Spinner fx:id="maxMutationSpinner" max="20" initialValue="10" editable="true"
                                  prefWidth="150.0"/>
                     </VBox>
-
                 </VBox>
-
             </HBox>
         </VBox>
-
     </center>
-
 
     <bottom>
         <Button onAction="#onSimulationStartClicked" text="Start"/>
