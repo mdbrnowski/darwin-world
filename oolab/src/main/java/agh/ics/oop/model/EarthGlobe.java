@@ -32,7 +32,10 @@ public class EarthGlobe extends AbstractWorldMap {
 
     @Override
     public void move(Animal animal) {
-        Vector2d old_position = animal.getPosition();
+        Vector2d oldPsition = animal.getPosition();
+
+        MapDirection newOrientation = animal.getOrientation().add(animal.getGenome().iterate(day));
+        animal.setOrientation(newOrientation);
 
         Vector2d newCandidate = animal.getPosition().add(animal.getOrientation().toUnitVector());
 
@@ -40,14 +43,14 @@ public class EarthGlobe extends AbstractWorldMap {
 
         if (newCandidate.getY() > height || newCandidate.getY() < 0) {
             animal.setOrientation(animal.getOrientation().reverse());
-            newPosition = new Vector2d((newCandidate.getX() + width + 1) % (width + 1), old_position.getY());
+            newPosition = new Vector2d((newCandidate.getX() + width + 1) % (width + 1), oldPsition.getY());
         } else {
             newPosition = new Vector2d((newCandidate.getX() + width + 1) % (width + 1), newCandidate.getY());
         }
 
         animal.move(this, newPosition);
-        if (!animal.isAt(old_position)) {
-            animals.remove(old_position);
+        if (!animal.isAt(oldPsition)) {
+            animals.remove(oldPsition);
             animals.put(animal.getPosition(), animal);
             mapChanged("Moved an animal to %s".formatted(animal.getPosition()));
         }
