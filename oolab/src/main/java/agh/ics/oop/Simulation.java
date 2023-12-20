@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static agh.ics.oop.parameters.enums.VegetationEnum.FORESTEQUATORS;
-
 public class Simulation implements Runnable {
     private final AbstractWorldMap map;
     private final List<Animal> animals;
@@ -90,26 +88,14 @@ public class Simulation implements Runnable {
             randomList.add(random.nextInt(8));
         }
 
-        AbstractGenome genome = switch (genomeType) {
-            case FULLPREDESTINATIONGENOME -> new FullPredestinationGenome(randomList);
-            case BACKANDFORTHGENOME -> new BackAndForthGenome(randomList);
-            default -> throw new IllegalArgumentException();
-        };
+        AbstractGenome genome = genomeType.getEquivalentObject(randomList);
         System.out.println(genome.getGenome());
 
-        Animal animal = new Animal(position, mapDirection, genome);
-        return animal;
+        return new Animal(position, mapDirection, genome);
     }
 
     private void setVegetation(VegetationEnum vegetationType, AbstractWorldMap map, int plantsCount) {
-        AbstractVegetation vegetation = switch (vegetationType) {
-            case FORESTEQUATORS -> new ForestEquators(map.getCurrentBounds().topRight().getX(),
-                    map.getCurrentBounds().topRight().getY(), plantsCount);
-            case LIFEGIVINGCORPSES -> new LifeGivingCorpses(map.getCurrentBounds().topRight().getX(),
-                    map.getCurrentBounds().topRight().getY(), plantsCount);
-            default -> throw new IllegalArgumentException();
-        };
-
-        this.vegetation = vegetation;
+        this.vegetation = vegetationType.getEquivalentObject(map.getCurrentBounds().topRight().getX(),
+                map.getCurrentBounds().topRight().getY(), plantsCount);;
     }
 }
