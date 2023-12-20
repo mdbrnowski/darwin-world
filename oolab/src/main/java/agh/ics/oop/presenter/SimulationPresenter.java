@@ -6,6 +6,7 @@ import agh.ics.oop.parameters.SimulationParameters;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.parameters.MapParameters;
+import agh.ics.oop.parameters.enums.MapEnum;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -83,7 +84,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void runSimulation(MapParameters mapParameters, SimulationParameters simulationParameters) {
         AbstractWorldMap map = switch (mapParameters.mapType()) {
-            case ("EarthGlobe") -> new EarthGlobe(mapParameters.mapWidth(), mapParameters.mapHeight());
+            case EARTHGLOBE -> new EarthGlobe(mapParameters.mapWidth(), mapParameters.mapHeight());
             default -> throw new IllegalArgumentException();
         };
 

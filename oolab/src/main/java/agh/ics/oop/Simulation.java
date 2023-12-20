@@ -4,10 +4,14 @@ import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.PositionAlreadyOccupiedException;
 import agh.ics.oop.model.util.RandomPositionGenerator;
 import agh.ics.oop.parameters.SimulationParameters;
+import agh.ics.oop.parameters.enums.GenomeEnum;
+import agh.ics.oop.parameters.enums.VegetationEnum;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static agh.ics.oop.parameters.enums.VegetationEnum.FORESTEQUATORS;
 
 public class Simulation implements Runnable {
     private final AbstractWorldMap map;
@@ -75,7 +79,7 @@ public class Simulation implements Runnable {
         }
     }
 
-    private Animal makeNewAnimal(Vector2d position, String genomeType, int genomeLength) {
+    private Animal makeNewAnimal(Vector2d position, GenomeEnum genomeType, int genomeLength) {
         Random random = new Random();
         MapDirection mapDirection = MapDirection.NORTH;
         mapDirection = mapDirection.add(random.nextInt(8));
@@ -87,8 +91,8 @@ public class Simulation implements Runnable {
         }
 
         AbstractGenome genome = switch (genomeType) {
-            case "FullPredestinationGenome" -> new FullPredestinationGenome(randomList);
-            case "BackAndForthGenome" -> new BackAndForthGenome(randomList);
+            case FULLPREDESTINATIONGENOME -> new FullPredestinationGenome(randomList);
+            case BACKANDFORTHGENOME -> new BackAndForthGenome(randomList);
             default -> throw new IllegalArgumentException();
         };
         System.out.println(genome.getGenome());
@@ -97,11 +101,11 @@ public class Simulation implements Runnable {
         return animal;
     }
 
-    private void setVegetation(String vegetationType, AbstractWorldMap map, int plantsCount) {
+    private void setVegetation(VegetationEnum vegetationType, AbstractWorldMap map, int plantsCount) {
         AbstractVegetation vegetation = switch (vegetationType) {
-            case ("ForestEquators") -> new ForestEquators(map.getCurrentBounds().topRight().getX(),
+            case FORESTEQUATORS -> new ForestEquators(map.getCurrentBounds().topRight().getX(),
                     map.getCurrentBounds().topRight().getY(), plantsCount);
-            case ("LifeGivingCorpses") -> new LifeGivingCorpses(map.getCurrentBounds().topRight().getX(),
+            case LIFEGIVINGCORPSES -> new LifeGivingCorpses(map.getCurrentBounds().topRight().getX(),
                     map.getCurrentBounds().topRight().getY(), plantsCount);
             default -> throw new IllegalArgumentException();
         };

@@ -19,13 +19,7 @@
                     <Label text="Map" textAlignment="CENTER"/>
                     <VBox>
                         <Label text="MapType" textAlignment="CENTER"/>
-                        <ComboBox fx:id="mapCombo" layoutX="200.0" layoutY="33.0" prefWidth="150.0" value="EarthGlobe">
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="EarthGlobe"/>
-                                </FXCollections>
-                            </items>
-                        </ComboBox>
+                        <ComboBox fx:id="mapCombo" layoutX="200.0" layoutY="33.0" prefWidth="150.0"/>
                     </VBox>
                     <VBox>
                         <Label text="Map width" textAlignment="CENTER"/>
@@ -40,15 +34,7 @@
                     <Label text="General"/>
                     <VBox>
                         <Label text="Genome" textAlignment="CENTER"/>
-                        <ComboBox fx:id="genomeCombo" layoutX="200.0" layoutY="33.0" prefWidth="150.0"
-                                  value="FullPredestinationGenome">
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="FullPredestinationGenome"/>
-                                    <String fx:value="BackAndForthGenome"/>
-                                </FXCollections>
-                            </items>
-                        </ComboBox>
+                        <ComboBox fx:id="genomeCombo" layoutX="200.0" layoutY="33.0" prefWidth="150.0"/>
                     </VBox>
                     <VBox>
                         <Label text="Genome length" textAlignment="CENTER"/>
@@ -57,15 +43,7 @@
                     </VBox>
                     <VBox>
                         <Label text="Vegetation" textAlignment="CENTER"/>
-                        <ComboBox fx:id="vegetationCombo" layoutX="200.0" layoutY="33.0" prefWidth="150.0"
-                                  value="ForestEquators">
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="ForestEquators"/>
-                                    <String fx:value="LifeGivingCorpses"/>
-                                </FXCollections>
-                            </items>
-                        </ComboBox>
+                        <ComboBox fx:id="vegetationCombo" layoutX="200.0" layoutY="33.0" prefWidth="150.0"/>
                     </VBox>
                     <VBox>
                         <Label text="Start plants count" textAlignment="CENTER"/>

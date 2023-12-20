@@ -1,5 +1,8 @@
 package agh.ics.oop.parameters;
 
-public record GeneralParameters(String genome, int genomeLength, String vegetation, int startPlantsCount,
+import agh.ics.oop.parameters.enums.GenomeEnum;
+import agh.ics.oop.parameters.enums.VegetationEnum;
+
+public record GeneralParameters(GenomeEnum genome, int genomeLength, VegetationEnum vegetation, int startPlantsCount,
                                 int startAnimalsCount) {
 }
