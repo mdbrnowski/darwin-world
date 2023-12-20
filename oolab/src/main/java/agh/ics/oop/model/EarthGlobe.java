@@ -37,6 +37,8 @@ public class EarthGlobe extends AbstractWorldMap {
         MapDirection newOrientation = animal.getOrientation().add(animal.getGenome().iterate(day));
         animal.setOrientation(newOrientation);
 
+        System.out.println("day: "+day+" animal: "+animal+" gene: "+animal.getGenome().iterate(day));
+
         Vector2d newCandidate = animal.getPosition().add(animal.getOrientation().toUnitVector());
 
         Vector2d newPosition;

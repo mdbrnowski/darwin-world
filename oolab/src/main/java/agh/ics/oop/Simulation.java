@@ -63,11 +63,11 @@ public class Simulation implements Runnable {
         // todo: change this
         map.removeDead();
         for (int i = 0; i < 10; i++) {
-            map.nextDay();
             for (int j = 0; j < map.getAnimals().size(); j++) {
                 map.move(map.getAnimals().get(j));
                 sleep();
             }
+            map.nextDay();
         }
     }
 
