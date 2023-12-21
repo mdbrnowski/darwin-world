@@ -4,8 +4,8 @@ import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.PositionAlreadyOccupiedException;
 import agh.ics.oop.model.util.RandomPositionGenerator;
 import agh.ics.oop.parameters.SimulationParameters;
-import agh.ics.oop.parameters.enums.GenomeEnum;
-import agh.ics.oop.parameters.enums.VegetationEnum;
+import agh.ics.oop.parameters.types.GenomeType;
+import agh.ics.oop.parameters.types.VegetationType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +77,7 @@ public class Simulation implements Runnable {
         }
     }
 
-    private Animal makeNewAnimal(Vector2d position, GenomeEnum genomeType, int genomeLength) {
+    private Animal makeNewAnimal(Vector2d position, GenomeType genomeType, int genomeLength) {
         Random random = new Random();
         MapDirection mapDirection = MapDirection.NORTH;
         mapDirection = mapDirection.add(random.nextInt(8));
@@ -94,7 +94,7 @@ public class Simulation implements Runnable {
         return new Animal(position, mapDirection, genome);
     }
 
-    private void setVegetation(VegetationEnum vegetationType, AbstractWorldMap map, int plantsCount) {
+    private void setVegetation(VegetationType vegetationType, AbstractWorldMap map, int plantsCount) {
         this.vegetation = vegetationType.getEquivalentObject(map.getCurrentBounds().topRight().getX(),
                 map.getCurrentBounds().topRight().getY(), plantsCount);;
     }

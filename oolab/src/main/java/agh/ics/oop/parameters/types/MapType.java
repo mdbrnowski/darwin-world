@@ -1,23 +1,22 @@
-package agh.ics.oop.parameters.enums;
+package agh.ics.oop.parameters.types;
 
 import agh.ics.oop.model.*;
 
-public enum MapEnum {
-    EARTHGLOBE("EarthGlobe");
+public enum MapType {
+    EARTH_GLOBE("EarthGlobe");
     private final String displayValue;
 
-
-    MapEnum(String displayValue) {
+    MapType(String displayValue) {
         this.displayValue = displayValue;
     }
 
-    public String getDisplayValue() {
+    public String toString() {
         return displayValue;
     }
 
     public AbstractWorldMap getEquivalentObject(int width, int height) {
         return switch (this) {
-            case EARTHGLOBE -> new EarthGlobe(width, height);
+            case EARTH_GLOBE -> new EarthGlobe(width, height);
         };
     }
 }

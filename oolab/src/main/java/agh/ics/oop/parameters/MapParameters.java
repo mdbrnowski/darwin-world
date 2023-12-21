@@ -1,6 +1,6 @@
 package agh.ics.oop.parameters;
 
-import agh.ics.oop.parameters.enums.MapEnum;
+import agh.ics.oop.parameters.types.MapType;
 
-public record MapParameters(MapEnum mapType, int mapWidth, int mapHeight) {
+public record MapParameters(MapType mapType, int mapWidth, int mapHeight) {
 }

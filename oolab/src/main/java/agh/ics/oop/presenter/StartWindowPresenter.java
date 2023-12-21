@@ -1,9 +1,9 @@
 package agh.ics.oop.presenter;
 
 import agh.ics.oop.parameters.*;
-import agh.ics.oop.parameters.enums.GenomeEnum;
-import agh.ics.oop.parameters.enums.MapEnum;
-import agh.ics.oop.parameters.enums.VegetationEnum;
+import agh.ics.oop.parameters.types.GenomeType;
+import agh.ics.oop.parameters.types.MapType;
+import agh.ics.oop.parameters.types.VegetationType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -47,43 +47,43 @@ public class StartWindowPresenter {
     public Spinner<Integer> genomeLengthSpinner;
 
     public void initialize() {
-        for (MapEnum mapEnum : MapEnum.values()) {
-            mapCombo.getItems().add(mapEnum.getDisplayValue());
+        for (MapType mapEnum : MapType.values()) {
+            mapCombo.getItems().add(mapEnum.toString());
         }
-        mapCombo.getSelectionModel().select(MapEnum.EARTHGLOBE.getDisplayValue());
+        mapCombo.getSelectionModel().select(MapType.EARTH_GLOBE.toString());
 
-        for (VegetationEnum vegetationEnum : VegetationEnum.values()) {
-            vegetationCombo.getItems().add(vegetationEnum.getDisplayValue());
+        for (VegetationType vegetationEnum : VegetationType.values()) {
+            vegetationCombo.getItems().add(vegetationEnum.toString());
         }
-        vegetationCombo.getSelectionModel().select(VegetationEnum.FORESTEQUATORS.getDisplayValue());
+        vegetationCombo.getSelectionModel().select(VegetationType.FOREST_EQUATORS.toString());
 
-        for (GenomeEnum genomeEnum : GenomeEnum.values()) {
-            genomeCombo.getItems().add(genomeEnum.getDisplayValue());
+        for (GenomeType genomeEnum : GenomeType.values()) {
+            genomeCombo.getItems().add(genomeEnum.toString());
         }
-        genomeCombo.getSelectionModel().select(GenomeEnum.FULLPREDESTINATIONGENOME.getDisplayValue());
+        genomeCombo.getSelectionModel().select(GenomeType.FULL_PREDESTINATION_GENOME.toString());
     }
 
-    private MapEnum getMapEnumByDisplayValue(String displayValue) {
-        for (MapEnum mapEnum : MapEnum.values()) {
-            if (mapEnum.getDisplayValue().equals(displayValue)) {
+    private MapType getMapTypeByDisplayValue(String displayValue) {
+        for (MapType mapEnum : MapType.values()) {
+            if (mapEnum.toString().equals(displayValue)) {
                 return mapEnum;
             }
         }
         throw new IllegalArgumentException();
     }
 
-    private VegetationEnum getVegetationEnumByDisplayValue(String displayValue) {
-        for (VegetationEnum vegetation : VegetationEnum.values()) {
-            if (vegetation.getDisplayValue().equals(displayValue)) {
+    private VegetationType getVegetationTypeByDisplayValue(String displayValue) {
+        for (VegetationType vegetation : VegetationType.values()) {
+            if (vegetation.toString().equals(displayValue)) {
                 return vegetation;
             }
         }
         throw new IllegalArgumentException();
     }
 
-    private GenomeEnum getGenomeEnumByDisplayValue(String displayValue) {
-        for (GenomeEnum genome : GenomeEnum.values()) {
-            if (genome.getDisplayValue().equals(displayValue)) {
+    private GenomeType getGenomeTypeByDisplayValue(String displayValue) {
+        for (GenomeType genome : GenomeType.values()) {
+            if (genome.toString().equals(displayValue)) {
                 return genome;
             }
         }
@@ -100,8 +100,8 @@ public class StartWindowPresenter {
         configureStage(newWindowStage, viewRoot);
         newWindowStage.show();
 
-        MapParameters mapParameters = new MapParameters(getMapEnumByDisplayValue(mapCombo.getValue()), widthSpinner.getValue(),
-                heightSpinner.getValue());
+        MapParameters mapParameters = new MapParameters(getMapTypeByDisplayValue(mapCombo.getValue()),
+                widthSpinner.getValue(), heightSpinner.getValue());
 
         SimulationParameters simulationParameters = getSimulationParameters();
 
@@ -109,8 +109,8 @@ public class StartWindowPresenter {
     }
 
     private SimulationParameters getSimulationParameters() {
-        GeneralParameters generalParameters = new GeneralParameters(getGenomeEnumByDisplayValue(genomeCombo.getValue()),
-                genomeLengthSpinner.getValue(), getVegetationEnumByDisplayValue(vegetationCombo.getValue()),
+        GeneralParameters generalParameters = new GeneralParameters(getGenomeTypeByDisplayValue(genomeCombo.getValue()),
+                genomeLengthSpinner.getValue(), getVegetationTypeByDisplayValue(vegetationCombo.getValue()),
                 plantsCountSpinner.getValue(), animalsCountSpinner.getValue());
 
         EnergyParameters energyParameters = new EnergyParameters(plantsEnergySpinner.getValue(),
