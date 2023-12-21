@@ -18,11 +18,11 @@ public abstract class AbstractVegetation {
     public AbstractVegetation(int numberOfElements) {
         this.numberOfElements = numberOfElements;
     }
-  
+
     /*
      * vegetate creates randomly 80% of plants to create on preferred fields and the other 20% on not preferred ones
      */
-    public Map<Vector2d, Grass> vegatate(AbstractWorldMap map) {
+    public void vegatate(AbstractWorldMap map) {
 
         List<Vector2d> currPreferredFields = getPreferred(map);
         List<Vector2d> currNotPreferredFields = getNotPreferred(map);
@@ -41,7 +41,8 @@ public abstract class AbstractVegetation {
 
             plants.put(position, new Grass(position));
         }
-        return plants;
+        map.setPlants(plants);
+        System.out.println(numberOfElements);
 
     }
 

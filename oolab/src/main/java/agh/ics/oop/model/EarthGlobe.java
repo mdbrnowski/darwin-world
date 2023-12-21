@@ -37,6 +37,8 @@ public class EarthGlobe extends AbstractWorldMap {
         MapDirection newOrientation = animal.getOrientation().add(animal.getGenome().iterate(day));
         animal.setOrientation(newOrientation);
 
+        System.out.println("day: "+day+" animal: "+animal+" gene: "+animal.getGenome().iterate(day));
+
         Vector2d newCandidate = animal.getPosition().add(animal.getOrientation().toUnitVector());
 
         Vector2d newPosition;
@@ -54,6 +56,12 @@ public class EarthGlobe extends AbstractWorldMap {
             animals.put(animal.getPosition(), animal);
             mapChanged("Moved an animal to %s".formatted(animal.getPosition()));
         }
+    }
+
+    @Override
+    public void setPlants(Map<Vector2d, Grass> plants) {
+        this.plants = plants;
+        System.out.println(plants);
     }
 
     @Override

@@ -9,6 +9,10 @@ public abstract class AbstractGenome {
         this.genome = genome;
     }
 
+    public List<Integer> getGenome() {
+        return genome;
+    }
+
     abstract int iterate(int day);
 
 }

@@ -2,8 +2,10 @@ package agh.ics.oop.presenter;
 
 import agh.ics.oop.Simulation;
 import agh.ics.oop.SimulationEngine;
+import agh.ics.oop.parameters.SimulationParameters;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.Boundary;
+import agh.ics.oop.parameters.MapParameters;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -79,12 +81,13 @@ public class SimulationPresenter implements MapChangeListener {
         mapGrid.getRowConstraints().clear();
     }
 
-    public void runSimulation() {
-        EarthGlobe map = new EarthGlobe(10, 10);
+    public void runSimulation(MapParameters mapParameters, SimulationParameters simulationParameters) {
+        AbstractWorldMap map = mapParameters.mapType().getEquivalentObject(mapParameters.mapWidth(),
+                mapParameters.mapHeight());
+
         setWorldMap(map);
         map.addObserver(this);
-        List<Vector2d> positions = List.of(new Vector2d(2,2));
-        Simulation simulation = new Simulation(map, positions, 500);
+        Simulation simulation = new Simulation(map, simulationParameters, 500);
         SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
         simulationEngine.runAsync();
     }
