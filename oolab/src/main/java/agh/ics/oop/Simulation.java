@@ -56,6 +56,7 @@ public class Simulation implements Runnable {
     public void run() {
         sleep();
         while (!map.getAnimals().isEmpty()) {
+            map.nextDay();
             map.removeDead();
             var animals = map.getAnimals();
             for (Animal animal : animals) {
@@ -63,7 +64,6 @@ public class Simulation implements Runnable {
                 animal.decrementEnergy();
                 animal.incrementAge();
             }
-            map.nextDay();
             sleep();
         }
     }
