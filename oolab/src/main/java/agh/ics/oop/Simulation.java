@@ -2,22 +2,40 @@ package agh.ics.oop;
 
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.PositionAlreadyOccupiedException;
+import agh.ics.oop.model.util.RandomPositionGenerator;
+import agh.ics.oop.parameters.SimulationParameters;
+import agh.ics.oop.parameters.types.GenomeType;
+import agh.ics.oop.parameters.types.VegetationType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Simulation implements Runnable {
-    private final WorldMap map;
-    private long sleepTime = 0;
+    private final AbstractWorldMap map;
+    private final List<Animal> animals;
     private AbstractVegetation vegetation;
+    private long sleepTime = 0;
+    private int minMutations;
+    private int maxMutations;
 
-    public Simulation(WorldMap map, List<Vector2d> positions) {
+    public Simulation(AbstractWorldMap map, SimulationParameters parameters) {
         this.map = map;
-        this.vegetation = new ForestEquators(10, 10, 15);  // todo: remove fixed values
-//        this.vegetation = new LifeGivingCorpses(10, 10, 15);
-        for (Vector2d position : positions) {
-            Animal a = new Animal(position, MapDirection.NORTH, new FullPredestinationGenome(List.of(1, 2)));
-            a.setEnergy(2);
+        this.minMutations = parameters.mutationParameters().minMutationNumber();
+        this.maxMutations = parameters.mutationParameters().maxMutationNumber();
+        this.animals = new ArrayList<>();
+
+        List<Vector2d> mapFields = new ArrayList<>();
+        for (int i = 0; i < map.getCurrentBounds().topRight().getX(); i++)
+            for (int j = 0; j < map.getCurrentBounds().topRight().getY(); j++) {
+                mapFields.add(new Vector2d(i, j));
+            }
+
+        for (Vector2d position : new RandomPositionGenerator(mapFields,
+                parameters.generalParameters().startAnimalsCount())) {
+            Animal a = makeNewAnimal(position, parameters.generalParameters().genome(),
+                    parameters.generalParameters().genomeLength());
+            a.setEnergy(parameters.energyParameters().initialAnimalEnergy());
             try {
                 map.place(a);
             } catch (PositionAlreadyOccupiedException ex) {
@@ -25,10 +43,14 @@ public class Simulation implements Runnable {
             }
         }
         map.mapChanged("All animals placed");
+
+        setVegetation(parameters.generalParameters().vegetation(), map,
+                parameters.generalParameters().startPlantsCount());
+        vegetation.vegatate(map);
     }
 
-    public Simulation(WorldMap map, List<Vector2d> positions, long sleepTime) {
-        this(map, positions);
+    public Simulation(AbstractWorldMap map, SimulationParameters parameters, long sleepTime) {
+        this(map, parameters);
         this.sleepTime = sleepTime;
     }
 
@@ -39,7 +61,7 @@ public class Simulation implements Runnable {
             map.removeDead();
             var animals = map.getAnimals();
             for (Animal animal : animals) {
-                map.move(animal);  // todo: should move and change direction
+                map.move(animal);
                 animal.decrementEnergy();
                 animal.incrementAge();
             }
@@ -53,5 +75,27 @@ public class Simulation implements Runnable {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Animal makeNewAnimal(Vector2d position, GenomeType genomeType, int genomeLength) {
+        Random random = new Random();
+        MapDirection mapDirection = MapDirection.NORTH;
+        mapDirection = mapDirection.add(random.nextInt(8));
+
+
+        List<Integer> randomList = new ArrayList<>();
+        for (int i = 0; i < genomeLength; i++) {
+            randomList.add(random.nextInt(8));
+        }
+
+        AbstractGenome genome = genomeType.getEquivalentObject(randomList);
+        System.out.println(genome.getGenome());
+
+        return new Animal(position, mapDirection, genome);
+    }
+
+    private void setVegetation(VegetationType vegetationType, AbstractWorldMap map, int plantsCount) {
+        this.vegetation = vegetationType.getEquivalentObject(map.getCurrentBounds().topRight().getX(),
+                map.getCurrentBounds().topRight().getY(), plantsCount);;
     }
 }

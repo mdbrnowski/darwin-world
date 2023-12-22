@@ -28,14 +28,14 @@ public class LifeGivingCorpses extends AbstractVegetation {
         Set<Vector2d> newPreferred = recentlyDead.stream()
                 .flatMap(key -> Stream.of(
                         key,
-                        map.getNextPosition(key,new Vector2d(-1,-1)),
-                        map.getNextPosition(key,new Vector2d(-1,0)),
-                        map.getNextPosition(key,new Vector2d(0,-1)),
-                        map.getNextPosition(key,new Vector2d(0,1)),
-                        map.getNextPosition(key,new Vector2d(1,0)),
-                        map.getNextPosition(key,new Vector2d(1,1)),
-                        map.getNextPosition(key,new Vector2d(-1,1)),
-                        map.getNextPosition(key,new Vector2d(1,-1))
+                        map.getNextPosition(key, new Vector2d(-1, -1)),
+                        map.getNextPosition(key, new Vector2d(-1, 0)),
+                        map.getNextPosition(key, new Vector2d(0, -1)),
+                        map.getNextPosition(key, new Vector2d(0, 1)),
+                        map.getNextPosition(key, new Vector2d(1, 0)),
+                        map.getNextPosition(key, new Vector2d(1, 1)),
+                        map.getNextPosition(key, new Vector2d(-1, 1)),
+                        map.getNextPosition(key, new Vector2d(1, -1))
                 ))
                 .collect(Collectors.toSet());
 

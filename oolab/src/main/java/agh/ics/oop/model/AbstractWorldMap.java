@@ -12,10 +12,20 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected List<Vector2d> recentlyDead = new ArrayList<>();
     private final List<MapChangeListener> listeners = new ArrayList<>();
     private final UUID id;
+    /**
+     * Determines the day of the maps' life
+     */
+    protected int day = 0;
 
     public AbstractWorldMap() {
         id = UUID.randomUUID();
     }
+
+    public void nextDay() {
+        day += 1;
+    }
+
+    public abstract void setPlants(Map<Vector2d, Grass> plants);
 
     @Override
     public boolean canMoveTo(Vector2d position) {
@@ -34,10 +44,10 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public void move(Animal animal) {
-        Vector2d old_position = animal.getPosition();
+        Vector2d oldPosition = animal.getPosition();
         animal.move(this, animal.getPosition().add(animal.getOrientation().toUnitVector()));
-        if (!animal.isAt(old_position)) {
-            animals.remove(old_position);
+        if (!animal.isAt(oldPosition)) {
+            animals.remove(oldPosition);
             animals.put(animal.getPosition(), animal);
             mapChanged("Moved an animal to %s".formatted(animal.getPosition()));
         }
