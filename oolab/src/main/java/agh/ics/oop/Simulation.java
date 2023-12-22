@@ -13,7 +13,6 @@ import java.util.Random;
 
 public class Simulation implements Runnable {
     private final AbstractWorldMap map;
-    private final List<Animal> animals;
     private AbstractVegetation vegetation;
     private long sleepTime = 0;
     private int minMutations;
@@ -23,7 +22,6 @@ public class Simulation implements Runnable {
         this.map = map;
         this.minMutations = parameters.mutationParameters().minMutationNumber();
         this.maxMutations = parameters.mutationParameters().maxMutationNumber();
-        this.animals = new ArrayList<>();
 
         List<Vector2d> mapFields = new ArrayList<>();
         for (int i = 0; i < map.getCurrentBounds().topRight().getX(); i++)
@@ -38,17 +36,15 @@ public class Simulation implements Runnable {
             a.setEnergy(parameters.energyParameters().initialAnimalEnergy());
             try {
                 map.place(a);
-                animals.add(a);
             } catch (PositionAlreadyOccupiedException ex) {
                 System.out.println(ex.getMessage());
             }
         }
+        map.mapChanged("All animals placed");
 
         setVegetation(parameters.generalParameters().vegetation(), map,
                 parameters.generalParameters().startPlantsCount());
-        vegetation.vegatate(map);
-
-        System.out.println(map);
+        vegetation.vegetate(map);
     }
 
     public Simulation(AbstractWorldMap map, SimulationParameters parameters, long sleepTime) {
@@ -58,14 +54,17 @@ public class Simulation implements Runnable {
 
     @Override
     public void run() {
-        // todo: change this
-        map.removeDead();
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < map.getAnimals().size(); j++) {
-                map.move(map.getAnimals().get(j));
-                sleep();
+        sleep();
+        while (!map.getAnimals().isEmpty()) {
+            map.removeDead();
+            var animals = map.getAnimals();
+            for (Animal animal : animals) {
+                map.move(animal);
+                animal.decrementEnergy();
+                animal.incrementAge();
             }
             map.nextDay();
+            sleep();
         }
     }
 

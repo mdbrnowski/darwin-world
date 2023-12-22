@@ -8,19 +8,18 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LifeGivingCorpses extends AbstractVegetation {
-    public LifeGivingCorpses(int maxX, int maxY, int numberOfElements) {
-
+    public LifeGivingCorpses(int width, int height, int numberOfElements) {
         super(numberOfElements);
 
         notPreferredFields = new ArrayList<>();
-        for (int i = 0; i <= maxX; i++) {
-            for (int j = 0; j <= maxY; j++) {
+        for (int i = 0; i <= width; i++) {
+            for (int j = 0; j <= height; j++) {
                 notPreferredFields.add(new Vector2d(i, j));
             }
         }
     }
 
-    /*
+    /**
      * Returns fields around those on which an animal has died recently
      */
     @Override
@@ -44,7 +43,7 @@ public class LifeGivingCorpses extends AbstractVegetation {
                 (elem) -> !(map.objectAt(elem) instanceof Grass)).collect(Collectors.toList());
     }
 
-    /*
+    /**
      * returns not preferred fields - the ones that are not contained in the list returned by getPreferred
      * and on which there is no grass
      */
