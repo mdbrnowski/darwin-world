@@ -12,9 +12,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected List<Vector2d> recentlyDead = new ArrayList<>();
     private final List<MapChangeListener> listeners = new ArrayList<>();
     private final UUID id;
-    /**
-     * Determines the day of the maps' life
-     */
     protected int day = 0;
 
     public AbstractWorldMap() {

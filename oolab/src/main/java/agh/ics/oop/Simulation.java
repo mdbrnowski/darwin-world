@@ -13,7 +13,6 @@ import java.util.Random;
 
 public class Simulation implements Runnable {
     private final AbstractWorldMap map;
-    private final List<Animal> animals;
     private AbstractVegetation vegetation;
     private long sleepTime = 0;
     private int minMutations;
@@ -23,7 +22,6 @@ public class Simulation implements Runnable {
         this.map = map;
         this.minMutations = parameters.mutationParameters().minMutationNumber();
         this.maxMutations = parameters.mutationParameters().maxMutationNumber();
-        this.animals = new ArrayList<>();
 
         List<Vector2d> mapFields = new ArrayList<>();
         for (int i = 0; i < map.getCurrentBounds().topRight().getX(); i++)
@@ -46,7 +44,7 @@ public class Simulation implements Runnable {
 
         setVegetation(parameters.generalParameters().vegetation(), map,
                 parameters.generalParameters().startPlantsCount());
-        vegetation.vegatate(map);
+        vegetation.vegetate(map);
     }
 
     public Simulation(AbstractWorldMap map, SimulationParameters parameters, long sleepTime) {
@@ -65,6 +63,7 @@ public class Simulation implements Runnable {
                 animal.decrementEnergy();
                 animal.incrementAge();
             }
+            map.nextDay();
             sleep();
         }
     }
