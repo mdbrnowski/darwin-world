@@ -28,8 +28,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         day += 1;
     }
 
-    public abstract void setPlants(Map<Vector2d, Grass> plants);
-
     @Override
     public void place(Animal animal) {
         animals.put(animal.getPosition(), animal);
@@ -100,6 +98,9 @@ public abstract class AbstractWorldMap implements WorldMap {
         return recentlyDead;
     }
 
-    public abstract Vector2d getNextPosition(Vector2d position, Vector2d move);
+    public void setPlants(Map<Vector2d, Grass> plants) {
+        this.plants = plants;
+    }
 
+    public abstract Vector2d getNextPosition(Vector2d position, Vector2d move);
 }
