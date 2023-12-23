@@ -59,21 +59,19 @@ public class SimulationPresenter implements MapChangeListener {
 
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                if (!map.animalsAt(new Vector2d(x, y)).isEmpty() || map.plantAt(new Vector2d(x, y)) != null) {
-                    var label = new Label();
-                    if (map.animalsAt(new Vector2d(x, y)).size() > 1) {
-                        label.setText(Animal.MULTIPLE_ANIMALS_TO_STRING);
-                        label.setTextFill(Color.color(1, 0, 0));
-                    } else if (map.animalsAt(new Vector2d(x, y)).size() == 1) {
-                        label.setText(map.animalsAt(new Vector2d(x, y)).get(0).toString());
-                        label.setTextFill(Color.color(1, 0, 0));
-                    } else {
-                        label.setText(map.plantAt(new Vector2d(x, y)).toString());
-                        label.setTextFill(Color.color(0.2, 0.6, 0.3));
-                    }
-                    label.setFont(Font.font(20));
-                    mapGrid.add(label, x - minX + 1, maxY - y + 1);
+                var label = new Label();
+                if (map.animalsAt(new Vector2d(x, y)).size() > 1) {
+                    label.setText(Animal.MULTIPLE_ANIMALS_TO_STRING);
+                    label.setTextFill(Color.color(1, 0, 0));
+                } else if (map.animalsAt(new Vector2d(x, y)).size() == 1) {
+                    label.setText(map.animalsAt(new Vector2d(x, y)).get(0).toString());
+                    label.setTextFill(Color.color(1, 0, 0));
+                } else if (map.plantAt(new Vector2d(x, y)) != null) {
+                    label.setText(map.plantAt(new Vector2d(x, y)).toString());
+                    label.setTextFill(Color.color(0.2, 0.6, 0.3));
                 }
+                label.setFont(Font.font(20));
+                mapGrid.add(label, x - minX + 1, maxY - y + 1);
             }
         }
 
