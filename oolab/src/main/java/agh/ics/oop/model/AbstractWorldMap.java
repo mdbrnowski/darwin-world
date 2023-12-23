@@ -2,19 +2,25 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.MapVisualizer;
-import agh.ics.oop.model.util.PositionAlreadyOccupiedException;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public abstract class AbstractWorldMap implements WorldMap {
-    protected Map<Vector2d, Animal> animals = new HashMap<>();
-    protected List<Vector2d> recentlyDead = new ArrayList<>();
+    protected final int width;
+    protected final int height;
+    protected Multimap<Vector2d, Animal> animals = ArrayListMultimap.create();
+    protected Map<Vector2d, Grass> plants = new HashMap<>();
+    protected Set<Vector2d> recentlyDead = new HashSet<>();
     private final List<MapChangeListener> listeners = new ArrayList<>();
     private final UUID id;
     protected int day = 0;
 
-    public AbstractWorldMap() {
+    public AbstractWorldMap(int width, int height) {
+        this.width = width;
+        this.height = height;
         id = UUID.randomUUID();
     }
 
@@ -25,44 +31,23 @@ public abstract class AbstractWorldMap implements WorldMap {
     public abstract void setPlants(Map<Vector2d, Grass> plants);
 
     @Override
-    public boolean canMoveTo(Vector2d position) {
-        return !isOccupied(position);
+    public void place(Animal animal) {
+        animals.put(animal.getPosition(), animal);
+        mapChanged("Added a new animal at %s".formatted(animal.getPosition()));
     }
-
-    @Override
-    public void place(Animal animal) throws PositionAlreadyOccupiedException {
-        if (canMoveTo(animal.getPosition())) {
-            animals.put(animal.getPosition(), animal);
-            mapChanged("Added a new animal at %s".formatted(animal.getPosition()));
-        } else
-            throw new PositionAlreadyOccupiedException(animal.getPosition());
-    }
-
 
     @Override
     public void move(Animal animal) {
         Vector2d oldPosition = animal.getPosition();
-        animal.move(this, animal.getPosition().add(animal.getOrientation().toUnitVector()));
-        if (!animal.isAt(oldPosition)) {
-            animals.remove(oldPosition);
-            animals.put(animal.getPosition(), animal);
-            mapChanged("Moved an animal to %s".formatted(animal.getPosition()));
-        }
+        animal.move(animal.getPosition().add(animal.getOrientation().toUnitVector()));
+        animals.remove(oldPosition, animal);
+        animals.put(animal.getPosition(), animal);
+        mapChanged("Moved an animal to %s".formatted(animal.getPosition()));
     }
 
     @Override
-    public boolean isOccupied(Vector2d position) {
-        return animals.get(position) != null;
-    }
-
-    @Override
-    public WorldElement objectAt(Vector2d position) {
-        return animals.get(position);
-    }
-
-    @Override
-    public List<WorldElement> getElements() {
-        return new ArrayList<>(animals.values());
+    public List<Animal> animalsAt(Vector2d position) {
+        return new ArrayList<>(animals.get(position));
     }
 
     @Override
@@ -71,10 +56,15 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public String toString() {
-        Boundary b = getCurrentBounds();
-        return new MapVisualizer(this).draw(b.bottomLeft(), b.topRight());
+    public Grass plantAt(Vector2d position) {
+        return plants.get(position);
     }
+
+    @Override
+    public Boundary getCurrentBounds() {
+        return new Boundary(new Vector2d(0, 0), new Vector2d(width, height));
+    }
+
 
     @Override
     public UUID getId() {
@@ -89,24 +79,24 @@ public abstract class AbstractWorldMap implements WorldMap {
         System.out.println("Listener: " + message);  // todo: it's only for debug
     }
 
+    @Override
+    public void removeDead() {
+        recentlyDead = Multimaps.filterEntries(animals, e -> e.getValue().getEnergy() == 0).keySet();
+        animals = Multimaps.filterEntries(animals, e -> e.getValue().getEnergy() > 0);
+        mapChanged("Dead animals removed");
+    }
+
+    @Override
+    public String toString() {
+        Boundary b = getCurrentBounds();
+        return new MapVisualizer(this).draw(b.bottomLeft(), b.topRight());
+    }
+
     public void addObserver(MapChangeListener listener) {
         listeners.add(listener);
     }
 
-    @Override
-    public void removeDead() {
-        recentlyDead = animals.entrySet().stream()
-                .filter(entry -> entry.getValue().getEnergy() == 0)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
-
-        animals = animals.entrySet().stream()
-                .filter(entry -> entry.getValue().getEnergy() > 0)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        mapChanged("Dead animals removed");
-    }
-
-    public List<Vector2d> getRecentlyDead() {
+    public Set<Vector2d> getRecentlyDead() {
         return recentlyDead;
     }
 

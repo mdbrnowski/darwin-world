@@ -1,5 +1,6 @@
 package agh.ics.oop.model.util;
 
+import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.WorldMap;
 
@@ -74,10 +75,12 @@ public class MapVisualizer {
     }
 
     private String drawObject(Vector2d currentPosition) {
-        Object object = this.map.objectAt(currentPosition);
-        if (object != null) {
-            return object.toString();
-        }
+        if (map.animalsAt(currentPosition).size() > 1)
+            return Animal.MULTIPLE_ANIMALS_TO_STRING;
+        if (map.animalsAt(currentPosition).size() == 1)
+            return map.animalsAt(currentPosition).get(0).toString();
+        if (map.plantAt(currentPosition) != null)
+            return map.plantAt(currentPosition).toString();
         return EMPTY_CELL;
     }
 }

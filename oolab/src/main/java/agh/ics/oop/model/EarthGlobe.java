@@ -1,33 +1,11 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.util.Boundary;
-
 import java.util.*;
 
 public class EarthGlobe extends AbstractWorldMap {
 
-    private final int width;
-    private final int height;
-    private Map<Vector2d, Grass> plants = new HashMap<>();
-
-
     public EarthGlobe(int width, int height) {
-        super();
-        this.width = width;
-        this.height = height;
-    }
-
-    @Override
-    public List<WorldElement> getElements() {
-        List<WorldElement> result = new ArrayList<>(animals.values());
-        result.addAll(plants.values());
-        return result;
-    }
-
-    @Override
-    public WorldElement objectAt(Vector2d position) {
-        if (super.isOccupied(position)) return animals.get(position);
-        return plants.get(position);
+        super(width, height);
     }
 
     @Override
@@ -48,23 +26,16 @@ public class EarthGlobe extends AbstractWorldMap {
             newPosition = new Vector2d((newCandidate.getX() + width + 1) % (width + 1), newCandidate.getY());
         }
 
-        animal.move(this, newPosition);
-        if (!animal.isAt(oldPosition)) {
-            animals.remove(oldPosition);
-            animals.put(animal.getPosition(), animal);
-            mapChanged("Moved an animal to %s".formatted(animal.getPosition()));
-        }
+        animal.move(newPosition);
+        animals.remove(oldPosition, animal);
+        animals.put(animal.getPosition(), animal);
+        mapChanged("Moved an animal to %s".formatted(animal.getPosition()));
     }
 
     @Override
     public void setPlants(Map<Vector2d, Grass> plants) {
         this.plants = plants;
         System.out.println(plants);
-    }
-
-    @Override
-    public Boundary getCurrentBounds() {
-        return new Boundary(new Vector2d(0, 0), new Vector2d(width, height));
     }
 
     @Override
