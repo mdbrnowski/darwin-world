@@ -38,7 +38,7 @@ public class LifeGivingCorpses extends AbstractVegetation {
                 ))
                 .collect(Collectors.toSet());
 
-        return newPreferred.stream().filter((elem) -> map.plantAt(elem) == null).collect(Collectors.toList());
+        return newPreferred.stream().filter((elem) -> map.getPlantAt(elem) == null).collect(Collectors.toList());
     }
 
     /**
@@ -51,6 +51,6 @@ public class LifeGivingCorpses extends AbstractVegetation {
 
         return notPreferredFields.stream()
                 .filter(vector2d -> !currPreferredFields.contains(vector2d))
-                .filter((elem) -> map.plantAt(elem) == null).collect(Collectors.toList());
+                .filter((elem) -> map.getPlantAt(elem) == null).collect(Collectors.toList());
     }
 }

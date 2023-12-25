@@ -1,5 +1,7 @@
 package agh.ics.oop.model;
 
+import java.util.Random;
+
 public enum MapDirection {
     NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST;
 
@@ -51,4 +53,7 @@ public enum MapDirection {
         };
     }
 
+    public static MapDirection getRandom() {
+        return directions[new Random().nextInt(8)];
+    }
 }

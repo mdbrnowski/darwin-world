@@ -44,7 +44,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public List<Animal> animalsAt(Vector2d position) {
+    public List<Animal> getAnimalsAt(Vector2d position) {
         return new ArrayList<>(animals.get(position));
     }
 
@@ -54,15 +54,27 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public Grass plantAt(Vector2d position) {
+    public Grass getPlantAt(Vector2d position) {
         return plants.get(position);
+    }
+
+    @Override
+    public List<Grass> getPlants() {
+        return new ArrayList<>(plants.values());
+    }
+
+    public void addPlants(Map<Vector2d, Grass> plants) {
+        this.plants.putAll(plants);
+    }
+
+    public void removePlant(Grass plant) {
+        plants.remove(plant.getPosition());
     }
 
     @Override
     public Boundary getCurrentBounds() {
         return new Boundary(new Vector2d(0, 0), new Vector2d(width, height));
     }
-
 
     @Override
     public UUID getId() {
@@ -96,10 +108,6 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public Set<Vector2d> getRecentlyDead() {
         return recentlyDead;
-    }
-
-    public void setPlants(Map<Vector2d, Grass> plants) {
-        this.plants = plants;
     }
 
     public abstract Vector2d getNextPosition(Vector2d position, Vector2d move);

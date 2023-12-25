@@ -47,7 +47,7 @@
                     </VBox>
                     <VBox>
                         <Label text="Start plants count" textAlignment="CENTER"/>
-                        <Spinner fx:id="plantsCountSpinner" max="30" initialValue="10" editable="true"
+                        <Spinner fx:id="plantsCountSpinner" max="30" initialValue="4" editable="true"
                                  prefWidth="150.0"/>
                     </VBox>
                     <VBox>
@@ -60,12 +60,12 @@
                     <Label text="Energy"/>
                     <VBox>
                         <Label text="Energy from one plant" textAlignment="CENTER"/>
-                        <Spinner fx:id="plantsEnergySpinner" max="20" initialValue="10" editable="true"
+                        <Spinner fx:id="plantsEnergySpinner" max="20" initialValue="6" editable="true"
                                  prefWidth="150.0"/>
                     </VBox>
                     <VBox>
                         <Label text="Initial animals' energy" textAlignment="CENTER"/>
-                        <Spinner fx:id="initialEnergySpinner" max="10" initialValue="4" editable="true"
+                        <Spinner fx:id="initialEnergySpinner" max="10" initialValue="8" editable="true"
                                  prefWidth="150.0"/>
                     </VBox>
                     <VBox>
@@ -95,12 +95,12 @@
                     </VBox>
                     <VBox>
                         <Label text="Min mutation number" textAlignment="CENTER"/>
-                        <Spinner fx:id="minMutationSpinner" max="20" initialValue="10" editable="true"
+                        <Spinner fx:id="minMutationSpinner" max="20" initialValue="2" editable="true"
                                  prefWidth="150.0"/>
                     </VBox>
                     <VBox>
                         <Label text="Max mutation number" textAlignment="CENTER"/>
-                        <Spinner fx:id="maxMutationSpinner" max="20" initialValue="10" editable="true"
+                        <Spinner fx:id="maxMutationSpinner" max="20" initialValue="2" editable="true"
                                  prefWidth="150.0"/>
                     </VBox>
                 </VBox>

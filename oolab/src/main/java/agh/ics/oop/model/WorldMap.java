@@ -26,7 +26,7 @@ public interface WorldMap {
      * @param position The position of the animals.
      * @return list of animals (possibly empty).
      */
-    List<Animal> animalsAt(Vector2d position);
+    List<Animal> getAnimalsAt(Vector2d position);
 
     /**
      * @return list of animals.
@@ -39,7 +39,12 @@ public interface WorldMap {
      * @param position The position of the grass.
      * @return grass or null.
      */
-    Grass plantAt(Vector2d position);
+    Grass getPlantAt(Vector2d position);
+
+    /**
+     * @return list of plants.
+     */
+    List<Grass> getPlants();
 
     /**
      * @return current bounds (lower left and upper right corners)

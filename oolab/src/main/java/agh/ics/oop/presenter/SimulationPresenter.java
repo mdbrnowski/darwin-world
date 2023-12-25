@@ -60,14 +60,14 @@ public class SimulationPresenter implements MapChangeListener {
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 var label = new Label();
-                if (map.animalsAt(new Vector2d(x, y)).size() > 1) {
+                if (map.getAnimalsAt(new Vector2d(x, y)).size() > 1) {
                     label.setText(Animal.MULTIPLE_ANIMALS_TO_STRING);
                     label.setTextFill(Color.color(1, 0, 0));
-                } else if (map.animalsAt(new Vector2d(x, y)).size() == 1) {
-                    label.setText(map.animalsAt(new Vector2d(x, y)).get(0).toString());
+                } else if (map.getAnimalsAt(new Vector2d(x, y)).size() == 1) {
+                    label.setText(map.getAnimalsAt(new Vector2d(x, y)).get(0).toString());
                     label.setTextFill(Color.color(1, 0, 0));
-                } else if (map.plantAt(new Vector2d(x, y)) != null) {
-                    label.setText(map.plantAt(new Vector2d(x, y)).toString());
+                } else if (map.getPlantAt(new Vector2d(x, y)) != null) {
+                    label.setText(map.getPlantAt(new Vector2d(x, y)).toString());
                     label.setTextFill(Color.color(0.2, 0.6, 0.3));
                 }
                 label.setFont(Font.font(20));
