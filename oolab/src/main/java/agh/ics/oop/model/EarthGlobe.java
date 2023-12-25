@@ -18,9 +18,9 @@ public class EarthGlobe extends AbstractWorldMap {
         Vector2d newPosition;
         if (newCandidate.getY() > height || newCandidate.getY() < 0) {
             animal.setOrientation(animal.getOrientation().reverse());
-            newPosition = new Vector2d(newCandidate.getX() % (width + 1), oldPosition.getY());
+            newPosition = new Vector2d(Math.floorMod(newCandidate.getX(), width + 1), oldPosition.getY());
         } else {
-            newPosition = new Vector2d(newCandidate.getX() % (width + 1), newCandidate.getY());
+            newPosition = new Vector2d(Math.floorMod(newCandidate.getX(), width + 1), newCandidate.getY());
         }
         animal.move(newPosition);
 
@@ -33,8 +33,8 @@ public class EarthGlobe extends AbstractWorldMap {
     public Vector2d getNextPosition(Vector2d position, Vector2d move) {
         Vector2d newCandidate = position.add(move);
         if (newCandidate.getY() > height || newCandidate.getY() < 0)
-            return new Vector2d(newCandidate.getX() % (width + 1), position.getY());
+            return new Vector2d(Math.floorMod(newCandidate.getX(), width + 1), position.getY());
         else
-            return new Vector2d(newCandidate.getX() % (width + 1), newCandidate.getY());
+            return new Vector2d(Math.floorMod(newCandidate.getX(), width + 1), newCandidate.getY());
     }
 }
