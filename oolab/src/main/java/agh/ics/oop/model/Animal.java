@@ -15,6 +15,7 @@ public class Animal implements WorldElement {
     private int childrenNum;
     private int age;
     private AbstractGenome genome;
+    public final static String MULTIPLE_ANIMALS_TO_STRING = "⚤";
 
 
     //extended constructor, in the future probably should contain energy
@@ -49,8 +50,8 @@ public class Animal implements WorldElement {
         return orientation.toString() + "%s".formatted(this.energy);  // todo: undo
     }
 
-    public void move(MoveValidator validator, Vector2d new_position) {
-        if (validator.canMoveTo(new_position)) position = new_position;
+    public void move(Vector2d new_position) {
+        position = new_position;
     }
 
     public int getEnergy() {
@@ -91,7 +92,7 @@ public class Animal implements WorldElement {
 
     public Animal breed(Animal animal, int minMutations, int maxMutations) {
 
-        //create basic genome, without mutations
+        // create basic genome, without mutations
         double energyPart = ((double) this.energy) / ((double) (animal.getEnergy() + this.energy));
         int genomeSize = genome.genome.size();
         int firstGenome = (int) floor(energyPart * genomeSize);
@@ -107,7 +108,7 @@ public class Animal implements WorldElement {
             genomeList.add(animal.getGenome().genome.get(i));
         }
 
-        //mutate
+        // mutate
         Random random = new Random();
         int mutationNumber = random.nextInt((maxMutations - minMutations)) + minMutations;
 
@@ -121,7 +122,7 @@ public class Animal implements WorldElement {
             genomeList.set(position, (currentGene + mutation) % 8);
         }
 
-        //create genome of the parents' type
+        // create genome of the parents' type
         AbstractGenome newGenome;
         if (genome instanceof FullPredestinationGenome) {
             newGenome = new FullPredestinationGenome(genomeList);
@@ -131,7 +132,7 @@ public class Animal implements WorldElement {
 
         Animal newAnimal = new Animal(position, MapDirection.values()[random.nextInt(4)], newGenome);
 
-        //parents have one more child
+        // parents have one more child
         this.childrenNum += 1;
         animal.incrementChildrenNum();
 

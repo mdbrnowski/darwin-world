@@ -1,7 +1,6 @@
 package agh.ics.oop;
 
 import agh.ics.oop.model.*;
-import agh.ics.oop.model.util.PositionAlreadyOccupiedException;
 import agh.ics.oop.model.util.RandomPositionGenerator;
 import agh.ics.oop.parameters.SimulationParameters;
 import agh.ics.oop.parameters.types.GenomeType;
@@ -34,11 +33,7 @@ public class Simulation implements Runnable {
             Animal a = makeNewAnimal(position, parameters.generalParameters().genome(),
                     parameters.generalParameters().genomeLength());
             a.setEnergy(parameters.energyParameters().initialAnimalEnergy());
-            try {
-                map.place(a);
-            } catch (PositionAlreadyOccupiedException ex) {
-                System.out.println(ex.getMessage());
-            }
+            map.place(a);
         }
         map.mapChanged("All animals placed");
 
