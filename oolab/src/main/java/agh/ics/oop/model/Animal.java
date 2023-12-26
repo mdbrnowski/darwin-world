@@ -8,7 +8,7 @@ import java.util.Random;
 
 import static java.lang.Math.floor;
 
-public class Animal implements WorldElement {
+public class Animal implements WorldElement, Comparable<Animal> {
     private MapDirection orientation;
     private Vector2d position;
     private int energy;
@@ -91,31 +91,25 @@ public class Animal implements WorldElement {
     }
 
     public Animal breed(Animal animal, int minMutations, int maxMutations) {
+        // todo: child's energy
 
         // create basic genome, without mutations
         double energyPart = ((double) this.energy) / ((double) (animal.getEnergy() + this.energy));
         int genomeSize = genome.genome.size();
         int firstGenome = (int) floor(energyPart * genomeSize);
 
-
         List<Integer> genomeList = new ArrayList<>();
-
-        for (int i = 0; i <= firstGenome; i++) {
+        for (int i = 0; i <= firstGenome; i++)
             genomeList.add(genome.genome.get(i));
-        }
-
-        for (int i = firstGenome + 1; i < genomeSize; i++) {
+        for (int i = firstGenome + 1; i < genomeSize; i++)
             genomeList.add(animal.getGenome().genome.get(i));
-        }
 
         // mutate
         Random random = new Random();
         int mutationNumber = random.nextInt((maxMutations - minMutations)) + minMutations;
 
         RandomGenerator randomGenerator = new RandomGenerator(genomeSize, mutationNumber);
-
         for (int position : randomGenerator) {
-
             int mutation = random.nextInt(7) + 1;
             int currentGene = genomeList.get(position);
             System.out.println(position + " " + mutation);
@@ -124,18 +118,25 @@ public class Animal implements WorldElement {
 
         // create genome of the parents' type
         AbstractGenome newGenome;
-        if (genome instanceof FullPredestinationGenome) {
+        if (genome instanceof FullPredestinationGenome)
             newGenome = new FullPredestinationGenome(genomeList);
-        } else {
+        else
             newGenome = new BackAndForthGenome(genomeList);
-        }
 
-        Animal newAnimal = new Animal(position, MapDirection.values()[random.nextInt(4)], newGenome);
-
-        // parents have one more child
-        this.childrenNum += 1;
+        this.incrementChildrenNum();
         animal.incrementChildrenNum();
 
-        return newAnimal;
+        return new Animal(position, MapDirection.getRandom(), newGenome);
+    }
+
+    @Override
+    public int compareTo(Animal other) {
+        if (this.energy != other.energy)
+            return this.energy - other.energy;
+        if (this.age != other.age)
+            return this.age - other.age;
+        if (this.childrenNum != other.childrenNum)
+            return this.childrenNum - other.childrenNum;
+        return 0;
     }
 }

@@ -34,11 +34,10 @@ public abstract class AbstractVegetation {
             plants.put(position, new Grass(position));
         for (Vector2d position : new RandomPositionGenerator(currNotPreferredFields, notPreferred))
             plants.put(position, new Grass(position));
-        map.setPlants(plants);
-        System.out.println(numberOfElements);
+        map.addPlants(plants);
     }
 
-    public abstract List<Vector2d> getPreferred(AbstractWorldMap map);
+    protected abstract List<Vector2d> getPreferred(AbstractWorldMap map);
 
-    public abstract List<Vector2d> getNotPreferred(AbstractWorldMap map);
+    protected abstract List<Vector2d> getNotPreferred(AbstractWorldMap map);
 }

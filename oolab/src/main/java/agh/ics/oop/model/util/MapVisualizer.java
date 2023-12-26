@@ -75,12 +75,12 @@ public class MapVisualizer {
     }
 
     private String drawObject(Vector2d currentPosition) {
-        if (map.animalsAt(currentPosition).size() > 1)
+        if (map.getAnimalsAt(currentPosition).size() > 1)
             return Animal.MULTIPLE_ANIMALS_TO_STRING;
-        if (map.animalsAt(currentPosition).size() == 1)
-            return map.animalsAt(currentPosition).get(0).toString();
-        if (map.plantAt(currentPosition) != null)
-            return map.plantAt(currentPosition).toString();
+        if (map.getAnimalsAt(currentPosition).size() == 1)
+            return map.getAnimalsAt(currentPosition).get(0).toString();
+        if (map.getPlantAt(currentPosition) != null)
+            return map.getPlantAt(currentPosition).toString();
         return EMPTY_CELL;
     }
 }

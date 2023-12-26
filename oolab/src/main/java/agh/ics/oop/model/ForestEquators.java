@@ -30,11 +30,11 @@ public class ForestEquators extends AbstractVegetation {
 
     @Override
     public List<Vector2d> getPreferred(AbstractWorldMap map) {
-        return preferredFields.stream().filter((elem) -> map.plantAt(elem) == null).collect(Collectors.toList());
+        return preferredFields.stream().filter((elem) -> map.getPlantAt(elem) == null).collect(Collectors.toList());
     }
 
     @Override
     public List<Vector2d> getNotPreferred(AbstractWorldMap map) {
-        return notPreferredFields.stream().filter((elem) -> map.plantAt(elem) == null).collect(Collectors.toList());
+        return notPreferredFields.stream().filter((elem) -> map.getPlantAt(elem) == null).collect(Collectors.toList());
     }
 }

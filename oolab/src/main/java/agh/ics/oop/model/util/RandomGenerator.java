@@ -9,9 +9,7 @@ import java.util.Random;
  * generates random array of non-repeating numbers
  */
 public class RandomGenerator implements Iterable<Integer> {
-
     private final List<Integer> used = new ArrayList<>();
-
 
     public RandomGenerator(int genomeSize, int mutationCount) {
         Random random = new Random();
