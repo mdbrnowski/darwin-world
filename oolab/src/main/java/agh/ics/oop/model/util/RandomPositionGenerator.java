@@ -35,8 +35,7 @@ public class RandomPositionGenerator implements Iterable<Vector2d> {
 
             @Override
             public Vector2d next() {
-                n--;
-                return vectors.get(n);
+                return vectors.get(--n);
             }
         };
     }

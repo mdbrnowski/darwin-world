@@ -55,7 +55,7 @@ public class Simulation implements Runnable {
             var animals = map.getAnimals();
             for (Animal animal : animals) {
                 map.move(animal);
-                animal.decrementEnergy();
+                animal.decreaseEnergy(1);
                 animal.incrementAge();
             }
 
@@ -71,7 +71,7 @@ public class Simulation implements Runnable {
                 }
             }
 
-            // todo: breed
+            // breed
             var positions = map.getAnimals().stream().map(Animal::getPosition).collect(Collectors.toSet());
             for (Vector2d position : positions) {
                 var animalsAt = map.getAnimalsAt(position);
@@ -79,8 +79,11 @@ public class Simulation implements Runnable {
                     animalsAt.sort(Collections.reverseOrder());
                     Animal a = animalsAt.get(0), b = animalsAt.get(1);
                     if (a.getEnergy() >= parameters.energyParameters().minBreedEnergy() &&
-                        b.getEnergy() >= parameters.energyParameters().minBreedEnergy()) {
-                        // todo
+                            b.getEnergy() >= parameters.energyParameters().minBreedEnergy()) {
+                        Animal c = a.breed(b, parameters.mutationParameters().minMutationNumber(),
+                                parameters.mutationParameters().maxMutationNumber(),
+                                parameters.energyParameters().energyForChild());
+                        map.place(c);
                     }
                 }
             }
