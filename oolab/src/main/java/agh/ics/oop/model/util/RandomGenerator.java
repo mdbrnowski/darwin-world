@@ -10,6 +10,7 @@ public class RandomGenerator implements Iterable<Integer> {
     private final List<Integer> numbers;
 
     public RandomGenerator(int max, int n) {
+        assert max > n;
         this.n = n;
         numbers = new ArrayList<>();
         for (int i = 0; i < max; i++)
