@@ -11,7 +11,7 @@ import java.util.*;
 public abstract class AbstractWorldMap implements WorldMap {
     protected final int width;
     protected final int height;
-    protected Multimap<Vector2d, Animal> animals = ArrayListMultimap.create();
+    protected Multimap<Vector2d, Animal> animals = Multimaps.synchronizedListMultimap(ArrayListMultimap.create());
     protected Map<Vector2d, Grass> plants = new HashMap<>();
     protected Set<Vector2d> recentlyDead = new HashSet<>();
     private final List<MapChangeListener> listeners = new ArrayList<>();
@@ -29,13 +29,13 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public void place(Animal animal) {
+    public synchronized void place(Animal animal) {
         animals.put(animal.getPosition(), animal);
         mapChanged("Added a new animal at %s".formatted(animal.getPosition()));
     }
 
     @Override
-    public void move(Animal animal) {
+    public synchronized void move(Animal animal) {
         Vector2d oldPosition = animal.getPosition();
         animal.move(animal.getPosition().add(animal.getOrientation().toUnitVector()));
         animals.remove(oldPosition, animal);
@@ -90,9 +90,10 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public void removeDead() {
+    public synchronized void removeDead() {
         recentlyDead = Multimaps.filterEntries(animals, e -> e.getValue().getEnergy() == 0).keySet();
-        animals = Multimaps.filterEntries(animals, e -> e.getValue().getEnergy() > 0);
+        animals = Multimaps.synchronizedMultimap(Multimaps.filterEntries(animals,
+                e -> e.getValue().getEnergy() > 0));
         mapChanged("Dead animals removed");
     }
 
