@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static java.lang.Math.floor;
-
 public class Animal implements WorldElement, Comparable<Animal> {
     private MapDirection orientation;
     private Vector2d position;
@@ -66,8 +64,8 @@ public class Animal implements WorldElement, Comparable<Animal> {
         energy += value;
     }
 
-    public void decrementEnergy() {
-        increaseEnergy(-1);
+    public void decreaseEnergy(int value) {
+        increaseEnergy(-value);
     }
 
     public int getAge() {
@@ -82,51 +80,41 @@ public class Animal implements WorldElement, Comparable<Animal> {
         return genome;
     }
 
-    public void setGenome(AbstractGenome genome) {
-        this.genome = genome;
-    }
-
     public void incrementChildrenNum() {
         childrenNum += 1;
     }
 
-    public Animal breed(Animal animal, int minMutations, int maxMutations) {
-        // todo: child's energy
+    public Animal breed(Animal other, int minMutations, int maxMutations, int energyForChild) {
 
         // create basic genome, without mutations
-        double energyPart = ((double) this.energy) / ((double) (animal.getEnergy() + this.energy));
+        double energyPart = (double) this.getEnergy() / (other.getEnergy() + this.getEnergy());
         int genomeSize = genome.genome.size();
-        int firstGenome = (int) floor(energyPart * genomeSize);
+        int firstGenome = (int) Math.ceil(energyPart * genomeSize);
 
         List<Integer> genomeList = new ArrayList<>();
-        for (int i = 0; i <= firstGenome; i++)
-            genomeList.add(genome.genome.get(i));
-        for (int i = firstGenome + 1; i < genomeSize; i++)
-            genomeList.add(animal.getGenome().genome.get(i));
+        for (int i = 0; i < firstGenome; i++)
+            genomeList.add(this.getGenome().genome.get(i));
+        for (int i = firstGenome; i < genomeSize; i++)
+            genomeList.add(other.getGenome().genome.get(i));
 
         // mutate
         Random random = new Random();
-        int mutationNumber = random.nextInt((maxMutations - minMutations)) + minMutations;
+        int mutationNumber = (minMutations == maxMutations) ? minMutations :
+                random.nextInt((maxMutations - minMutations)) + minMutations;
 
         RandomGenerator randomGenerator = new RandomGenerator(genomeSize, mutationNumber);
-        for (int position : randomGenerator) {
-            int mutation = random.nextInt(7) + 1;
-            int currentGene = genomeList.get(position);
-            System.out.println(position + " " + mutation);
-            genomeList.set(position, (currentGene + mutation) % 8);
-        }
-
-        // create genome of the parents' type
-        AbstractGenome newGenome;
-        if (genome instanceof FullPredestinationGenome)
-            newGenome = new FullPredestinationGenome(genomeList);
-        else
-            newGenome = new BackAndForthGenome(genomeList);
+        for (int position : randomGenerator)
+            genomeList.set(position, (genomeList.get(position) + 1 + random.nextInt(7)) % 8);
+        AbstractGenome newGenome = genome.newInstance(genomeList);
 
         this.incrementChildrenNum();
-        animal.incrementChildrenNum();
+        other.incrementChildrenNum();
+        this.decreaseEnergy(energyForChild);
+        other.decreaseEnergy(energyForChild);
 
-        return new Animal(position, MapDirection.getRandom(), newGenome);
+        Animal child = new Animal(position, MapDirection.getRandom(), newGenome);
+        child.setEnergy(2 * energyForChild);
+        return child;
     }
 
     @Override
