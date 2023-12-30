@@ -1,53 +1,121 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.Animal;
-import agh.ics.oop.model.MoveDirection;
-import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.WorldMap;
-import agh.ics.oop.model.util.PositionAlreadyOccupiedException;
+import agh.ics.oop.model.*;
+import agh.ics.oop.model.util.RandomPositionGenerator;
+import agh.ics.oop.parameters.SimulationParameters;
+import agh.ics.oop.parameters.types.GenomeType;
+import agh.ics.oop.parameters.types.VegetationType;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Simulation implements Runnable {
-    private final WorldMap map;
-    private final List<MoveDirection> directions;
-    private final List<Animal> animals;
+    private final AbstractWorldMap map;
+    private AbstractVegetation vegetation;
     private long sleepTime = 0;
-    public Simulation(WorldMap map, List<Vector2d> positions, List<MoveDirection> directions) {
+    private final SimulationParameters parameters;
+
+    public Simulation(AbstractWorldMap map, SimulationParameters parameters) {
         this.map = map;
-        this.directions = directions;
-        this.animals = new ArrayList<>();
-        for (Vector2d position : positions) {
-            Animal a = new Animal(position);
-            try {
-                map.place(a);
-                animals.add(a);
-            } catch (PositionAlreadyOccupiedException ex) {
-                System.out.println(ex.getMessage());
+        this.parameters = parameters;
+
+        List<Vector2d> mapFields = new ArrayList<>();
+        for (int i = 0; i < map.getCurrentBounds().topRight().getX(); i++)
+            for (int j = 0; j < map.getCurrentBounds().topRight().getY(); j++) {
+                mapFields.add(new Vector2d(i, j));
             }
+
+        for (Vector2d position : new RandomPositionGenerator(mapFields,
+                parameters.generalParameters().startAnimalsCount())) {
+            Animal a = makeNewAnimal(position, parameters.generalParameters().genome(),
+                    parameters.generalParameters().genomeLength());
+            a.setEnergy(parameters.energyParameters().initialAnimalEnergy());
+            map.place(a);
         }
+        map.mapChanged("All animals placed");
+
+        setVegetation(parameters.generalParameters().vegetation(), map,
+                parameters.generalParameters().startPlantsCount());
+        vegetation.vegetate(map);
     }
 
-    public Simulation(WorldMap map, List<Vector2d> positions, List<MoveDirection> directions, long sleepTime) {
-        this(map, positions, directions);
+    public Simulation(AbstractWorldMap map, SimulationParameters parameters, long sleepTime) {
+        this(map, parameters);
         this.sleepTime = sleepTime;
     }
 
     @Override
     public void run() {
-        int n = animals.size();
-        for (int i = 0; i < directions.size(); i++) {
-            map.move(animals.get(i % n), directions.get(i));
-            try {
-                Thread.sleep(sleepTime);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        sleep();
+        while (!map.getAnimals().isEmpty()) {
+            map.nextDay();
+            map.removeDead();
+
+            // move and turn
+            var animals = map.getAnimals();
+            for (Animal animal : animals) {
+                map.move(animal);
+                animal.decreaseEnergy(1);
+                animal.incrementAge();
             }
+
+            // eat plants
+            var plants = map.getPlants();
+            for (Grass plant : plants) {
+                var animalsAt = map.getAnimalsAt(plant.getPosition());
+                if (!animalsAt.isEmpty()) {
+                    animalsAt.sort(Collections.reverseOrder());
+                    Animal best = animalsAt.get(0);
+                    best.increaseEnergy(parameters.energyParameters().energyFromOnePlant());
+                    map.removePlant(plant);
+                }
+            }
+
+            // breed
+            var positions = map.getAnimals().stream().map(Animal::getPosition).collect(Collectors.toSet());
+            for (Vector2d position : positions) {
+                var animalsAt = map.getAnimalsAt(position);
+                if (animalsAt.size() >= 2) {
+                    animalsAt.sort(Collections.reverseOrder());
+                    Animal a = animalsAt.get(0), b = animalsAt.get(1);
+                    if (a.getEnergy() >= parameters.energyParameters().minBreedEnergy() &&
+                            b.getEnergy() >= parameters.energyParameters().minBreedEnergy()) {
+                        Animal c = a.breed(b, parameters.mutationParameters().minMutationNumber(),
+                                parameters.mutationParameters().maxMutationNumber(),
+                                parameters.energyParameters().energyForChild());
+                        map.place(c);
+                    }
+                }
+            }
+
+            vegetation.vegetate(map);
+            sleep();
         }
     }
 
-    public List<Animal> getAnimals() {
-        return animals;
+    private void sleep() {
+        try {
+            Thread.sleep(sleepTime);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Animal makeNewAnimal(Vector2d position, GenomeType genomeType, int genomeLength) {
+        Random random = new Random();
+        MapDirection mapDirection = MapDirection.getRandom();
+
+        List<Integer> randomList = new ArrayList<>();
+        for (int i = 0; i < genomeLength; i++)
+            randomList.add(random.nextInt(8));
+
+        AbstractGenome genome = genomeType.getEquivalentObject(randomList);
+
+        return new Animal(position, mapDirection, genome);
+    }
+
+    private void setVegetation(VegetationType vegetationType, AbstractWorldMap map, int plantsCount) {
+        this.vegetation = vegetationType.getEquivalentObject(map.getCurrentBounds().topRight().getX(),
+                map.getCurrentBounds().topRight().getY(), plantsCount);
     }
 }

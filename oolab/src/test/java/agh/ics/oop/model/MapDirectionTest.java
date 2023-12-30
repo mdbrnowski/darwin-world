@@ -6,19 +6,28 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class MapDirectionTest {
     @Test
-    public void nextTest() {
-        assertSame(MapDirection.NORTH.next(), MapDirection.EAST);
-        assertSame(MapDirection.WEST.next(), MapDirection.NORTH);
-        assertSame(MapDirection.SOUTH.next(), MapDirection.WEST);
-        assertSame(MapDirection.EAST.next(), MapDirection.SOUTH);
+    public void addTwoTest() {
+        assertSame(MapDirection.NORTH.add(2), MapDirection.EAST);
+        assertSame(MapDirection.EAST.add(2), MapDirection.SOUTH);
+        assertSame(MapDirection.SOUTH.add(2), MapDirection.WEST);
+        assertSame(MapDirection.WEST.add(2), MapDirection.NORTH);
     }
 
     @Test
-    public void previousTest() {
-        assertSame(MapDirection.NORTH.previous(), MapDirection.WEST);
-        assertSame(MapDirection.WEST.previous(), MapDirection.SOUTH);
-        assertSame(MapDirection.SOUTH.previous(), MapDirection.EAST);
-        assertSame(MapDirection.EAST.previous(), MapDirection.NORTH);
+    public void addTest() {
+        assertSame(MapDirection.NORTH.add(6), MapDirection.WEST);
+        assertSame(MapDirection.WEST.add(3), MapDirection.NORTHEAST);
+        assertSame(MapDirection.SOUTHEAST.add(7), MapDirection.EAST);
+        assertSame(MapDirection.SOUTHWEST.add(5), MapDirection.EAST);
+        assertSame(MapDirection.NORTHWEST.add(2), MapDirection.NORTHEAST);
+    }
+
+    @Test
+    public void reverseTest() {
+        assertSame(MapDirection.NORTH.reverse(), MapDirection.SOUTH);
+        assertSame(MapDirection.SOUTH.reverse(), MapDirection.NORTH);
+        assertSame(MapDirection.EAST.reverse(), MapDirection.EAST);
+        assertSame(MapDirection.WEST.reverse(), MapDirection.WEST);
     }
 }
 

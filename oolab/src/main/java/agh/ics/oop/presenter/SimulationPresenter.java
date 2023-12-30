@@ -1,16 +1,16 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.OptionsParser;
 import agh.ics.oop.Simulation;
 import agh.ics.oop.SimulationEngine;
+import agh.ics.oop.parameters.SimulationParameters;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.Boundary;
+import agh.ics.oop.parameters.MapParameters;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -18,7 +18,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.util.List;
-import java.util.Objects;
 
 public class SimulationPresenter implements MapChangeListener {
     private WorldMap map;
@@ -27,8 +26,6 @@ public class SimulationPresenter implements MapChangeListener {
     public GridPane mapGrid;
     @FXML
     private Label moveDescriptionLabel;
-    @FXML
-    public TextField directionsTextField;
 
 
     @Override
@@ -62,15 +59,20 @@ public class SimulationPresenter implements MapChangeListener {
 
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                if (map.objectAt(new Vector2d(x, y)) != null) {
-                    var label = new Label(map.objectAt(new Vector2d(x, y)).toString());
-                    if (!Objects.equals(label.getText(), "*"))
-                        label.setTextFill(Color.color(1, 0, 0));
-                    else
-                        label.setTextFill(Color.color(0.2, 0.6, 0.3));
-                    label.setFont(Font.font(20));
-                    mapGrid.add(label, x - minX + 1, maxY - y + 1);
+                var label = new Label();
+                var animals = map.getAnimalsAt(new Vector2d(x, y));
+                if (animals.size() > 1) {
+                    label.setText(Animal.MULTIPLE_ANIMALS_TO_STRING);
+                    label.setTextFill(Color.color(1, 0, 0));
+                } else if (animals.size() == 1) {
+                    label.setText(animals.get(0).toString());
+                    label.setTextFill(Color.color(1, 0, 0));
+                } else if (map.getPlantAt(new Vector2d(x, y)) != null) {
+                    label.setText(map.getPlantAt(new Vector2d(x, y)).toString());
+                    label.setTextFill(Color.color(0.2, 0.6, 0.3));
                 }
+                label.setFont(Font.font(20));
+                mapGrid.add(label, x - minX + 1, maxY - y + 1);
             }
         }
 
@@ -84,15 +86,14 @@ public class SimulationPresenter implements MapChangeListener {
         mapGrid.getRowConstraints().clear();
     }
 
-    public void onSimulationStartClicked() {
-        List<MoveDirection> directions = OptionsParser.parse(directionsTextField.getText().split(" "));
-        List<Vector2d> positions = List.of(new Vector2d(1, 1), new Vector2d(3, 2));
+    public void runSimulation(MapParameters mapParameters, SimulationParameters simulationParameters) {
+        AbstractWorldMap map = mapParameters.mapType().getEquivalentObject(mapParameters.mapWidth(),
+                mapParameters.mapHeight());
 
-        Thread simulationThread = new Thread(() -> {
-            Simulation simulation = new Simulation(map, positions, directions, 500);
-            SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
-            simulationEngine.runAsync();
-        });
-        simulationThread.start();
+        setWorldMap(map);
+        map.addObserver(this);
+        Simulation simulation = new Simulation(map, simulationParameters, 500);
+        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
+        simulationEngine.runAsync();
     }
 }
