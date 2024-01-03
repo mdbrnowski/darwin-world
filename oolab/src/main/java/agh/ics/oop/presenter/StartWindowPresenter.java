@@ -300,6 +300,7 @@ public class StartWindowPresenter {
 
     private void writeCsvToFile(String name) {
         csvCombo.getItems().add(name);
+        csvCombo.getSelectionModel().select(name);
         for (int i = 0; i < paramControls.size(); i++) {
             Control control = paramControls.get(i);
             if (control instanceof ComboBox) {
