@@ -11,6 +11,11 @@ public class BackAndForthGenome extends AbstractGenome {
     }
 
     @Override
+    public AbstractGenome newInstance(List<Integer> genome) {
+        return new BackAndForthGenome(genome);
+    }
+
+    @Override
     public int iterate(int day) {
         int size = genome.size();
         if ((day / size) % 2 == 0) {

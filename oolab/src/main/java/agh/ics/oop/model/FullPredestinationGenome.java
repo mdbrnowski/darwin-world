@@ -9,6 +9,11 @@ public class FullPredestinationGenome extends AbstractGenome {
     }
 
     @Override
+    public AbstractGenome newInstance(List<Integer> genome) {
+        return new FullPredestinationGenome(genome);
+    }
+
+    @Override
     public int iterate(int day) {
         return genome.get(day % genome.size());
     }

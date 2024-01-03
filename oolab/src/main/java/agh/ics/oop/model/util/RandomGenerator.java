@@ -1,29 +1,21 @@
 package agh.ics.oop.model.util;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * generates random array of non-repeating numbers
  */
 public class RandomGenerator implements Iterable<Integer> {
-    private final List<Integer> used = new ArrayList<>();
+    private int n;
+    private final List<Integer> numbers;
 
-    public RandomGenerator(int genomeSize, int mutationCount) {
-        Random random = new Random();
-        List<Integer> unused = new ArrayList<>();
-        for (int i = 0; i < genomeSize; i++) {
-            unused.add(i);
-        }
-
-        for (int i = 0; i < mutationCount; i++) {
-            int size = unused.size();
-            int idx = random.nextInt(size);
-            int newPosition = unused.remove(idx);
-            used.add(newPosition);
-        }
+    public RandomGenerator(int max, int n) {
+        assert max > n;
+        this.n = n;
+        numbers = new ArrayList<>();
+        for (int i = 0; i < max; i++)
+            numbers.add(i);
+        Collections.shuffle(numbers);
     }
 
     @Override
@@ -31,12 +23,12 @@ public class RandomGenerator implements Iterable<Integer> {
         return new Iterator<>() {
             @Override
             public boolean hasNext() {
-                return !used.isEmpty();
+                return n != 0;
             }
 
             @Override
             public Integer next() {
-                return used.remove(0);
+                return numbers.get(--n);
             }
         };
     }

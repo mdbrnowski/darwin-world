@@ -13,6 +13,7 @@ public abstract class AbstractGenome {
         return genome;
     }
 
-    abstract int iterate(int day);
+    abstract AbstractGenome newInstance(List<Integer> genome);
 
+    abstract int iterate(int day);
 }

@@ -81,7 +81,7 @@
                     </VBox>
                     <VBox>
                         <Label text="Energy for child" textAlignment="CENTER"/>
-                        <Spinner fx:id="childEnergySpinner" max="20" initialValue="10" editable="true"
+                        <Spinner fx:id="childEnergySpinner" max="20" initialValue="8" editable="true"
                                  prefWidth="150.0"/>
                     </VBox>
 
