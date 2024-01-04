@@ -23,4 +23,10 @@ public class BackAndForthGenome extends AbstractGenome {
         }
         return genome.get(size - 1 - day % size);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        BackAndForthGenome that = (BackAndForthGenome) obj;
+        return this.genome.equals(that.getGenome());
+    }
 }
