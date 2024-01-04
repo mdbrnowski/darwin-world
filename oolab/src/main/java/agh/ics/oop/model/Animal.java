@@ -12,7 +12,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
     private int energy;
     private int childrenNum;
     private int age;
-    private AbstractGenome genome;
+    private final AbstractGenome genome;
     public final static String MULTIPLE_ANIMALS_TO_STRING = "⚤";
 
 
@@ -66,6 +66,10 @@ public class Animal implements WorldElement, Comparable<Animal> {
 
     public void decreaseEnergy(int value) {
         increaseEnergy(-value);
+    }
+
+    public int getChildrenNum() {
+        return childrenNum;
     }
 
     public int getAge() {

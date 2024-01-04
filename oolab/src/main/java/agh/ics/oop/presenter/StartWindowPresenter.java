@@ -62,16 +62,13 @@ public class StartWindowPresenter {
     public Spinner<Integer> genomeLengthSpinner;
     @FXML
     public ComboBox<String> csvCombo;
-    private String path = "configurations.csv";
-    private Multimap<String, String> configurations = ArrayListMultimap.create();
+    private final String path = "configurations.csv";
+    private final Multimap<String, String> configurations = ArrayListMultimap.create();
     private List<Control> paramControls;
     private Stage primaryStage;
 
     public void initialize() {
-        paramControls = List.of(mapCombo, widthSpinner, heightSpinner, genomeCombo,
-                genomeLengthSpinner, vegetationCombo, plantsCountSpinner, animalsCountSpinner, plantsEnergySpinner,
-                initialEnergySpinner, minimumBreedSpinner, childEnergySpinner, mutationTypeCombo, minMutationSpinner,
-                maxMutationSpinner);
+        paramControls = List.of(mapCombo, widthSpinner, heightSpinner, genomeCombo, genomeLengthSpinner, vegetationCombo, plantsCountSpinner, animalsCountSpinner, plantsEnergySpinner, initialEnergySpinner, minimumBreedSpinner, childEnergySpinner, mutationTypeCombo, minMutationSpinner, maxMutationSpinner);
         String firstConf = null;
 
         try (Scanner scanner = new Scanner(Path.of(path))) {
@@ -99,17 +96,14 @@ public class StartWindowPresenter {
             e.printStackTrace();
         }
 
-        for (MapType mapEnum : MapType.values()) {
+        for (MapType mapEnum : MapType.values())
             mapCombo.getItems().add(mapEnum.toString());
-        }
 
-        for (VegetationType vegetationEnum : VegetationType.values()) {
+        for (VegetationType vegetationEnum : VegetationType.values())
             vegetationCombo.getItems().add(vegetationEnum.toString());
-        }
 
-        for (GenomeType genomeEnum : GenomeType.values()) {
+        for (GenomeType genomeEnum : GenomeType.values())
             genomeCombo.getItems().add(genomeEnum.toString());
-        }
 
         populateStageParams(firstConf);
 
@@ -119,8 +113,6 @@ public class StartWindowPresenter {
             csvCombo.getSelectionModel().select(selected);
         });
         removeAllConf();
-
-
     }
 
 
@@ -138,7 +130,6 @@ public class StartWindowPresenter {
                 });
             }
         }
-
     }
 
 
@@ -156,7 +147,6 @@ public class StartWindowPresenter {
                 spinner.getValueFactory().setValue(Integer.parseInt(params.get(i)));
             }
         }
-
     }
 
     private MapType getMapTypeByDisplayValue(String displayValue) {
@@ -196,8 +186,7 @@ public class StartWindowPresenter {
         configureStage(newWindowStage, viewRoot);
         newWindowStage.show();
 
-        MapParameters mapParameters = new MapParameters(getMapTypeByDisplayValue(mapCombo.getValue()),
-                widthSpinner.getValue(), heightSpinner.getValue());
+        MapParameters mapParameters = new MapParameters(getMapTypeByDisplayValue(mapCombo.getValue()), widthSpinner.getValue(), heightSpinner.getValue());
 
         SimulationParameters simulationParameters = getSimulationParameters();
 
@@ -206,15 +195,11 @@ public class StartWindowPresenter {
     }
 
     private SimulationParameters getSimulationParameters() {
-        GeneralParameters generalParameters = new GeneralParameters(getGenomeTypeByDisplayValue(genomeCombo.getValue()),
-                genomeLengthSpinner.getValue(), getVegetationTypeByDisplayValue(vegetationCombo.getValue()),
-                plantsCountSpinner.getValue(), animalsCountSpinner.getValue());
+        GeneralParameters generalParameters = new GeneralParameters(getGenomeTypeByDisplayValue(genomeCombo.getValue()), genomeLengthSpinner.getValue(), getVegetationTypeByDisplayValue(vegetationCombo.getValue()), plantsCountSpinner.getValue(), animalsCountSpinner.getValue());
 
-        EnergyParameters energyParameters = new EnergyParameters(plantsEnergySpinner.getValue(),
-                initialEnergySpinner.getValue(), minimumBreedSpinner.getValue(), childEnergySpinner.getValue());
+        EnergyParameters energyParameters = new EnergyParameters(plantsEnergySpinner.getValue(), initialEnergySpinner.getValue(), minimumBreedSpinner.getValue(), childEnergySpinner.getValue());
 
-        MutationParameters mutationParameters = new MutationParameters(mutationTypeCombo.getValue(),
-                minMutationSpinner.getValue(), maxMutationSpinner.getValue());
+        MutationParameters mutationParameters = new MutationParameters(mutationTypeCombo.getValue(), minMutationSpinner.getValue(), maxMutationSpinner.getValue());
 
         return new SimulationParameters(generalParameters, energyParameters, mutationParameters);
     }
@@ -267,7 +252,7 @@ public class StartWindowPresenter {
                 badSign.setManaged(true);
                 return;
             }
-            if (configurations.get(name).size() > 0) {
+            if (!configurations.get(name).isEmpty()) {
                 nameExists.setVisible(true);
                 nameExists.setManaged(true);
                 return;
@@ -301,8 +286,7 @@ public class StartWindowPresenter {
     private void writeCsvToFile(String name) {
         csvCombo.getItems().add(name);
         csvCombo.getSelectionModel().select(name);
-        for (int i = 0; i < paramControls.size(); i++) {
-            Control control = paramControls.get(i);
+        for (Control control : paramControls) {
             if (control instanceof ComboBox) {
                 ComboBox<String> combo = (ComboBox<String>) control;
                 configurations.put(name, combo.getValue());
@@ -312,13 +296,9 @@ public class StartWindowPresenter {
             }
         }
 
-        String csvData = name + ";" + configurations.get(name).stream().collect(Collectors.joining(";"));
+        String csvData = name + ";" + String.join(";", configurations.get(name));
         try {
-            Files.writeString(
-                    Path.of("configurations.csv"),
-                    csvData + System.lineSeparator(),
-                    CREATE, APPEND
-            );
+            Files.writeString(Path.of("configurations.csv"), csvData + System.lineSeparator(), CREATE, APPEND);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
