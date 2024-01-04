@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 public class GenomeTest {
-    //FullPredestinationGenome
+
     @Test
     public void FullPredestinationGenomeIterateTest() {
         FullPredestinationGenome genome = new FullPredestinationGenome(List.of(0, 1, 2, 3, 4, 5, 6, 7, 0));
@@ -31,7 +31,6 @@ public class GenomeTest {
         Assertions.assertNotEquals(genome2, genome3);
     }
 
-    //BackAndForthGenome
     @Test
     public void BackAndForthGenomeIterateTest() {
         BackAndForthGenome genome = new BackAndForthGenome(List.of(0, 1, 2, 3, 4, 5, 6, 7, 0));

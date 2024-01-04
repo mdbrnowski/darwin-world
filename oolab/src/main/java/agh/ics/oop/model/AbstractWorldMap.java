@@ -33,6 +33,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         animals.put(animal.getPosition(), animal);
         mapChanged("Added a new animal at %s".formatted(animal.getPosition()));
     }
+
     @Override
     public synchronized void move(Animal animal) {
         Vector2d oldPosition = animal.getPosition();

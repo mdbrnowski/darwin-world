@@ -3,7 +3,9 @@ package agh.ics.oop.model;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 public class AnimalTest {
     @Test
@@ -73,8 +75,10 @@ public class AnimalTest {
 
     @Test
     public void breedTest() {
-        Animal a = new Animal(new Vector2d(1, 2), MapDirection.NORTH, new BackAndForthGenome(List.of(0, 1, 2, 3, 4, 5)));
-        Animal b = new Animal(new Vector2d(1, 2), MapDirection.SOUTH, new BackAndForthGenome(List.of(6, 7, 0, 1, 2, 3)));
+        Animal a = new Animal(new Vector2d(1, 2), MapDirection.NORTH,
+                new BackAndForthGenome(List.of(0, 1, 2, 3, 4, 5)));
+        Animal b = new Animal(new Vector2d(1, 2), MapDirection.SOUTH,
+                new BackAndForthGenome(List.of(6, 7, 0, 1, 2, 3)));
 
         a.setEnergy(3);
         b.setEnergy(6);
@@ -97,8 +101,10 @@ public class AnimalTest {
         Assertions.assertEquals(a.getChildrenNum(), 1);
         Assertions.assertEquals(b.getChildrenNum(), 3);
 
-        Animal c = new Animal(new Vector2d(3, 4), MapDirection.EAST, new FullPredestinationGenome(List.of(0, 1, 2, 3, 4, 5, 6, 7)));
-        Animal d = new Animal(new Vector2d(3, 4), MapDirection.SOUTH, new FullPredestinationGenome(List.of(6, 7, 0, 1, 2, 3, 0, 2)));
+        Animal c = new Animal(new Vector2d(3, 4), MapDirection.EAST,
+                new FullPredestinationGenome(List.of(0, 1, 2, 3, 4, 5, 6, 7)));
+        Animal d = new Animal(new Vector2d(3, 4), MapDirection.SOUTH,
+                new FullPredestinationGenome(List.of(6, 7, 0, 1, 2, 3, 0, 2)));
 
         c.setEnergy(10);
         d.setEnergy(5);
