@@ -83,6 +83,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
     public AbstractGenome getGenome() {
         return genome;
     }
+    
     public void incrementChildrenNum() {
         childrenNum += 1;
     }
