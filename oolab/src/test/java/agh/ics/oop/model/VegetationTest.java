@@ -12,17 +12,23 @@ public class VegetationTest {
     @Test
     public void feGetPreferredTest() {
         ForestEquators vegetation1 = new ForestEquators(10, 10, 5);
-        List<Vector2d> correct1 = List.of(new Vector2d(0, 5), new Vector2d(1, 5), new Vector2d(2, 5),
-                new Vector2d(3, 5), new Vector2d(4, 5), new Vector2d(5, 5), new Vector2d(6, 5),
-                new Vector2d(7, 5), new Vector2d(8, 5), new Vector2d(9, 5), new Vector2d(10, 5));
+        List<Vector2d> correct1 = new ArrayList<>();
+
+        for(int i=0;i<=10;i++){
+            correct1.add(new Vector2d(i,5));
+        }
+
         EarthGlobe map1 = new EarthGlobe(10, 10);
 
         Assertions.assertEquals(vegetation1.getPreferred(map1), correct1);
 
         ForestEquators vegetation2 = new ForestEquators(10, 10, 5);
-        List<Vector2d> correct2 = List.of(new Vector2d(0, 5), new Vector2d(2, 5),
-                new Vector2d(3, 5), new Vector2d(5, 5), new Vector2d(6, 5),
-                new Vector2d(7, 5), new Vector2d(8, 5), new Vector2d(9, 5), new Vector2d(10, 5));
+        List<Vector2d> correct2 = new ArrayList<>();
+
+        for(int i=0;i<=10;i++){
+            if(i!=1 && i!=4)correct2.add(new Vector2d(i,5));
+        }
+
         EarthGlobe map2 = new EarthGlobe(10, 10);
         map2.placePlant(new Grass(new Vector2d(1, 5)));
         map2.placePlant(new Grass(new Vector2d(4, 5)));
@@ -64,9 +70,11 @@ public class VegetationTest {
     public void feVegetateTest() {
         ForestEquators vegetation1 = new ForestEquators(10, 10, 5);
         EarthGlobe map1 = new EarthGlobe(10, 10);
-        List<Vector2d> preferred1 = Arrays.asList(new Vector2d(0, 5), new Vector2d(1, 5), new Vector2d(2, 5),
-                new Vector2d(3, 5), new Vector2d(4, 5), new Vector2d(5, 5), new Vector2d(6, 5),
-                new Vector2d(7, 5), new Vector2d(8, 5), new Vector2d(9, 5), new Vector2d(10, 5));
+        List<Vector2d> preferred1 = new ArrayList<>();
+
+        for(int i=0;i<=10;i++){
+            preferred1.add(new Vector2d(i,5));
+        }
 
         vegetation1.vegetate(map1);
         Assertions.assertEquals(map1.getPlants().size(), 5);
@@ -78,9 +86,12 @@ public class VegetationTest {
         Assertions.assertEquals(preferred1.size(), 7);
 
         ForestEquators vegetation2 = new ForestEquators(10, 10, 5);
-        List<Vector2d> preferred2 = List.of(new Vector2d(0, 5), new Vector2d(2, 5),
-                new Vector2d(3, 5), new Vector2d(5, 5), new Vector2d(6, 5),
-                new Vector2d(7, 5), new Vector2d(8, 5), new Vector2d(9, 5), new Vector2d(10, 5));
+        List<Vector2d> preferred2 = new ArrayList<>();
+
+        for(int i=0;i<=10;i++){
+            if(i!=1 && i!=4)preferred2.add(new Vector2d(i,5));
+        }
+
         EarthGlobe map2 = new EarthGlobe(10, 10);
         map2.placePlant(new Grass(new Vector2d(1, 5)));
         map2.placePlant(new Grass(new Vector2d(4, 5)));
