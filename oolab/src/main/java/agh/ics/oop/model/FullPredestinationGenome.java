@@ -19,8 +19,9 @@ public class FullPredestinationGenome extends AbstractGenome {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        FullPredestinationGenome that = (FullPredestinationGenome) obj;
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (!(other instanceof FullPredestinationGenome that)) return false;
         return this.genome.equals(that.getGenome());
     }
 }

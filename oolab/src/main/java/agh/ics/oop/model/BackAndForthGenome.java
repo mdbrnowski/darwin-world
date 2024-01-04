@@ -25,8 +25,9 @@ public class BackAndForthGenome extends AbstractGenome {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        BackAndForthGenome that = (BackAndForthGenome) obj;
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (!(other instanceof BackAndForthGenome that)) return false;
         return this.genome.equals(that.getGenome());
     }
 }
