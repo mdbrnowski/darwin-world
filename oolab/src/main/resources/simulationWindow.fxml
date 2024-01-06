@@ -17,4 +17,23 @@
     <top>
         <Label fx:id="moveDescriptionLabel" text="Nothing yet" textAlignment="CENTER"/>
     </top>
+
+    <right>
+        <GridPane fx:id="statsPanel" minWidth="200" hgap="20" vgap="10">
+            <Label GridPane.columnIndex="1" GridPane.rowIndex="1" text="Number of animals:"/>
+            <Label GridPane.columnIndex="2" GridPane.rowIndex="1" fx:id="numberOfAnimalsLabel"/>
+            <Label GridPane.columnIndex="1" GridPane.rowIndex="2" text="Number of plants:"/>
+            <Label GridPane.columnIndex="2" GridPane.rowIndex="2" fx:id="numberOfPlantsLabel"/>
+            <Label GridPane.columnIndex="1" GridPane.rowIndex="3" text="Number of empty fields:"/>
+            <Label GridPane.columnIndex="2" GridPane.rowIndex="3" fx:id="numberOfEmptyFieldsLabel"/>
+            <Label GridPane.columnIndex="1" GridPane.rowIndex="4" text="Most popular genotype:"/>
+            <Label GridPane.columnIndex="2" GridPane.rowIndex="4" text="TODO"/>
+            <Label GridPane.columnIndex="1" GridPane.rowIndex="5" text="Average energy:"/>
+            <Label GridPane.columnIndex="2" GridPane.rowIndex="5" fx:id="averageEnergyLabel"/>
+            <Label GridPane.columnIndex="1" GridPane.rowIndex="6" text="Average life span:"/>
+            <Label GridPane.columnIndex="2" GridPane.rowIndex="6" fx:id="averageLifeSpanLabel"/>
+            <Label GridPane.columnIndex="1" GridPane.rowIndex="7" text="Average number of children:"/>
+            <Label GridPane.columnIndex="2" GridPane.rowIndex="7" fx:id="averageNumberOfChildrenLabel"/>
+        </GridPane>
+    </right>
 </BorderPane>
