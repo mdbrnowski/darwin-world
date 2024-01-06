@@ -73,7 +73,6 @@ public class AnimalTest {
         Assertions.assertEquals(List.of(d, c, a, b), animals);
     }
 
-
     @Test
     public void breedTest() {
         Animal a = new Animal(new Vector2d(1, 2), MapDirection.NORTH,
