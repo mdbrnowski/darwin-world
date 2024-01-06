@@ -19,7 +19,7 @@
     </top>
 
     <right>
-        <GridPane minWidth="200" hgap="20" vgap="10">
+        <GridPane fx:id="statsPanel" minWidth="200" hgap="20" vgap="10">
             <Label GridPane.columnIndex="1" GridPane.rowIndex="1" text="Number of animals:"/>
             <Label GridPane.columnIndex="2" GridPane.rowIndex="1" fx:id="numberOfAnimals"/>
             <Label GridPane.columnIndex="1" GridPane.rowIndex="2" text="Number of plants:"/>

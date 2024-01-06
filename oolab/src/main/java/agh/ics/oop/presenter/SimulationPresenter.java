@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,8 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private Label moveDescriptionLabel;
 
+    @FXML
+    public GridPane statsPanel;
     @FXML
     public Label numberOfAnimals;
     @FXML
@@ -52,6 +55,16 @@ public class SimulationPresenter implements MapChangeListener {
     public void setWorldMap(WorldMap map) {
         this.map = map;
         drawMap();
+    }
+
+    public void setupStats() {
+        for (Node node : statsPanel.getChildren())
+            if (node instanceof Label label) {
+                if (GridPane.getColumnIndex(node) == 1)
+                    label.setFont(new Font(14));
+                else
+                    label.setFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 15));
+            }
     }
 
     public void updateStats() {
@@ -114,11 +127,11 @@ public class SimulationPresenter implements MapChangeListener {
     public void runSimulation(MapParameters mapParameters, SimulationParameters simulationParameters) {
         AbstractWorldMap map = mapParameters.mapType().getEquivalentObject(mapParameters.mapWidth(),
                 mapParameters.mapHeight());
-
         setWorldMap(map);
         map.addObserver(this);
         Simulation simulation = new Simulation(map, simulationParameters, 500);
         SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
         simulationEngine.runAsync();
+        setupStats();
     }
 }
