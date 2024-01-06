@@ -13,6 +13,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final int height;
     protected Multimap<Vector2d, Animal> animals = Multimaps.synchronizedListMultimap(ArrayListMultimap.create());
     protected Map<Vector2d, Grass> plants = new HashMap<>();
+    protected List<Animal> deadAnimals = new ArrayList<>();
     protected Set<Vector2d> recentlyDead = new HashSet<>();
     private final List<MapChangeListener> listeners = new ArrayList<>();
     private final UUID id;
@@ -54,6 +55,11 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
+    public List<Animal> getDeadAnimals() {
+        return deadAnimals;
+    }
+
+    @Override
     public Grass getPlantAt(Vector2d position) {
         return plants.get(position);
     }
@@ -91,9 +97,12 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public synchronized void removeDead() {
-        recentlyDead = Multimaps.filterEntries(animals, e -> e.getValue().getEnergy() == 0).keySet();
-        animals = Multimaps.synchronizedMultimap(Multimaps.filterEntries(animals,
-                e -> e.getValue().getEnergy() > 0));
+        recentlyDead = new HashSet<>(Multimaps.filterEntries(animals,
+                e -> e.getValue().getEnergy() == 0).keySet());
+        deadAnimals.addAll(Multimaps.filterValues(animals,
+                e -> e.getEnergy() == 0).values().stream().toList());
+        animals = Multimaps.synchronizedMultimap(ArrayListMultimap.create(Multimaps.filterEntries(animals,
+                e -> e.getValue().getEnergy() > 0)));
         mapChanged("Dead animals removed");
     }
 

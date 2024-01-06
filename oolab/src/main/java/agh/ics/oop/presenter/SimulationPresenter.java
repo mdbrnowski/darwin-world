@@ -32,15 +32,17 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     public GridPane statsPanel;
     @FXML
-    public Label numberOfAnimals;
+    public Label numberOfAnimalsLabel;
     @FXML
-    public Label numberOfPlants;
+    public Label numberOfPlantsLabel;
     @FXML
-    public Label numberOfEmptyFields;
+    public Label numberOfEmptyFieldsLabel;
     @FXML
-    public Label averageEnergy;
+    public Label averageLifeSpanLabel;
     @FXML
-    public Label averageNumberOfChildren;
+    public Label averageEnergyLabel;
+    @FXML
+    public Label averageNumberOfChildrenLabel;
 
 
     @Override
@@ -69,13 +71,16 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void updateStats() {
         var animals = map.getAnimals();
+        var deadAnimals = map.getDeadAnimals();
         var plants = map.getPlants();
-        numberOfAnimals.setText(String.valueOf(animals.size()));
-        numberOfPlants.setText(String.valueOf(plants.size()));
-        numberOfEmptyFields.setText(String.valueOf(map.getNumberOfEmptyFields()));
-        averageEnergy.setText(String.format("%.1f",
+        numberOfAnimalsLabel.setText(String.valueOf(animals.size()));
+        numberOfPlantsLabel.setText(String.valueOf(plants.size()));
+        numberOfEmptyFieldsLabel.setText(String.valueOf(map.getNumberOfEmptyFields()));
+        double averageLifeSpan = deadAnimals.stream().collect(Collectors.averagingDouble(Animal::getAge));
+        averageLifeSpanLabel.setText(averageLifeSpan > 0 ? String.format("%.1f", averageLifeSpan) : "N/A");
+        averageEnergyLabel.setText(String.format("%.1f",
                 animals.stream().collect(Collectors.averagingDouble(Animal::getEnergy))));
-        averageNumberOfChildren.setText(String.format("%.1f",
+        averageNumberOfChildrenLabel.setText(String.format("%.1f",
                 animals.stream().collect(Collectors.averagingDouble(Animal::getChildrenNum))));
     }
 
