@@ -34,6 +34,11 @@ public interface WorldMap {
     List<Animal> getAnimals();
 
     /**
+     * @return list of animals that used to be on the map.
+     */
+    List<Animal> getDeadAnimals();
+
+    /**
      * Return grass at a given position.
      *
      * @param position The position of the grass.
@@ -47,12 +52,12 @@ public interface WorldMap {
     List<Grass> getPlants();
 
     /**
-     * @return current bounds (lower left and upper right corners)
+     * @return current bounds (lower left and upper right corners).
      */
     Boundary getCurrentBounds();
 
     /**
-     * @return ID of a map
+     * @return ID of a map.
      */
     UUID getId();
 
@@ -64,7 +69,12 @@ public interface WorldMap {
     void mapChanged(String message);
 
     /**
-     * Remove animals that have zero energy
+     * Remove animals that have zero energy.
      */
     void removeDead();
+
+    /**
+     * @return number of empty fields (without any animals).
+     */
+    int getNumberOfEmptyFields();
 }

@@ -13,10 +13,9 @@
 
     <center>
         <VBox spacing="6">
-            <HBox spacing="5">
-                <Label text="Choose configuration or set a new one:" textAlignment="CENTER"/>
-                <ComboBox fx:id="csvCombo" layoutX="200.0" layoutY="33.0" prefWidth="150.0"/>
-
+            <HBox spacing="5" alignment="BASELINE_LEFT">
+                <Label text="Choose configuration or set a new one: " textAlignment="CENTER"/>
+                <ComboBox fx:id="csvCombo" layoutX="200.0" layoutY="33.0" prefWidth="200.0"/>
             </HBox>
 
             <Label text="Set parameters" textAlignment="CENTER"/>
@@ -117,14 +116,12 @@
     </center>
 
     <bottom>
-
         <HBox spacing="250">
             <Button onAction="#onSimulationStartClicked" text="Start"/>
-            <HBox>
-                <Label text="Do you want to save the configuration?" textAlignment="CENTER"/>
+            <HBox alignment="BASELINE_LEFT">
+                <Label text="Do you want to save the configuration? " textAlignment="CENTER"/>
                 <Button onAction="#onSaveClicked" text="Save"/>
             </HBox>
-
         </HBox>
     </bottom>
 

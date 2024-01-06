@@ -8,7 +8,6 @@ import java.util.*;
 
 public class VegetationTest {
 
-    //ForestEquators
     @Test
     public void ForestEquatorsGetPreferredTest() {
         ForestEquators vegetation1 = new ForestEquators(10, 10, 5);
@@ -117,7 +116,6 @@ public class VegetationTest {
         Assertions.assertEquals(preferred2.size(), 5);
     }
 
-    //LifeGivingCorpses
     @Test
     public void LifeGivingCorpsesGetPreferredTest() {
         LifeGivingCorpses vegetation1 = new LifeGivingCorpses(10, 10, 5);
@@ -221,7 +219,7 @@ public class VegetationTest {
                 if (!preferred1.contains(newVector)) correct1.add(newVector);
             }
 
-        Assertions.assertEquals(new HashSet<Vector2d>(vegetation1.getNotPreferred(map1)), correct1);
+        Assertions.assertEquals(new HashSet<>(vegetation1.getNotPreferred(map1)), correct1);
 
         LifeGivingCorpses vegetation2 = new LifeGivingCorpses(10, 10, 5);
 
