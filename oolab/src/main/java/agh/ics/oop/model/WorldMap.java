@@ -67,4 +67,9 @@ public interface WorldMap {
      * Remove animals that have zero energy
      */
     void removeDead();
+
+    /**
+     * @return number of empty fields (without any animals)
+     */
+    int getNumberOfEmptyFields();
 }

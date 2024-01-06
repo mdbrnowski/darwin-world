@@ -98,6 +98,16 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
+    public int getNumberOfEmptyFields() {
+        int result = 0;
+        for (int i = 0; i <= width; i++)
+            for (int j = 0; j <= height; j++)
+                if (getAnimalsAt(new Vector2d(i, j)).isEmpty())
+                    result++;
+        return result;
+    }
+
+    @Override
     public String toString() {
         Boundary b = getCurrentBounds();
         return new MapVisualizer(this).draw(b.bottomLeft(), b.topRight());

@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SimulationPresenter implements MapChangeListener {
     private WorldMap map;
@@ -27,10 +28,22 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private Label moveDescriptionLabel;
 
+    @FXML
+    public Label numberOfAnimals;
+    @FXML
+    public Label numberOfPlants;
+    @FXML
+    public Label numberOfEmptyFields;
+    @FXML
+    public Label averageEnergy;
+    @FXML
+    public Label averageNumberOfChildren;
+
 
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
         Platform.runLater(() -> {
+            updateStats();
             drawMap();
             moveDescriptionLabel.setText(message);
         });
@@ -39,6 +52,18 @@ public class SimulationPresenter implements MapChangeListener {
     public void setWorldMap(WorldMap map) {
         this.map = map;
         drawMap();
+    }
+
+    public void updateStats() {
+        var animals = map.getAnimals();
+        var plants = map.getPlants();
+        numberOfAnimals.setText(String.valueOf(animals.size()));
+        numberOfPlants.setText(String.valueOf(plants.size()));
+        numberOfEmptyFields.setText(String.valueOf(map.getNumberOfEmptyFields()));
+        averageEnergy.setText(String.format("%.1f",
+                animals.stream().collect(Collectors.averagingDouble(Animal::getEnergy))));
+        averageNumberOfChildren.setText(String.format("%.1f",
+                animals.stream().collect(Collectors.averagingDouble(Animal::getChildrenNum))));
     }
 
     public void drawMap() {
