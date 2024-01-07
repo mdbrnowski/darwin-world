@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class PopularityCounter<T> {
-    public List<Pair<T, Integer>> getMostPopular(List<T> list, int n) {
+public class PopularityCounter {
+    public static <T> List<Pair<T, Integer>> getMostPopular(List<T> list, int n) {
         Map<T, Integer> counter = new HashMap<>();
         for (T x : list)
             counter.put(x, counter.getOrDefault(x, 0) + 1);
@@ -20,7 +20,7 @@ public class PopularityCounter<T> {
                 .collect(Collectors.toList());
     }
 
-    public String getMostPopularAsString(List<T> list, int n) {
+    public static <T> String getMostPopularAsString(List<T> list, int n) {
         List<Pair<T, Integer>> mostPopular = getMostPopular(list, n);
         return mostPopular.stream()
                 .map(e -> "%s   [%d]".formatted(e.getKey(), e.getValue()))

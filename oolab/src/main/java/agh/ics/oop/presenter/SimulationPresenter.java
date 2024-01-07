@@ -86,8 +86,9 @@ public class SimulationPresenter implements MapChangeListener {
         averageNumberOfChildrenLabel.setText(String.format("%.1f",
                 animals.stream().collect(Collectors.averagingDouble(Animal::getChildrenNum))));
         mostPopularGenotypeLabel.setText(
-                new PopularityCounter<String>().getMostPopularAsString(
-                        animals.stream().map(a -> a.getGenome().toString()).collect(Collectors.toList()), 3)
+                PopularityCounter.getMostPopularAsString(animals.stream()
+                        .map(a -> a.getGenome().toString())
+                        .collect(Collectors.toList()), 3)
         );
     }
 
