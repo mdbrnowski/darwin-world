@@ -5,6 +5,7 @@ import agh.ics.oop.SimulationEngine;
 import agh.ics.oop.parameters.SimulationParameters;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.Boundary;
+import agh.ics.oop.model.util.PopularityCounter;
 import agh.ics.oop.parameters.MapParameters;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -43,6 +44,8 @@ public class SimulationPresenter implements MapChangeListener {
     public Label averageEnergyLabel;
     @FXML
     public Label averageNumberOfChildrenLabel;
+    @FXML
+    public Label mostPopularGenotypeLabel;
 
 
     @Override
@@ -82,6 +85,11 @@ public class SimulationPresenter implements MapChangeListener {
                 animals.stream().collect(Collectors.averagingDouble(Animal::getEnergy))));
         averageNumberOfChildrenLabel.setText(String.format("%.1f",
                 animals.stream().collect(Collectors.averagingDouble(Animal::getChildrenNum))));
+        mostPopularGenotypeLabel.setText(
+                PopularityCounter.getMostPopularAsString(animals.stream()
+                        .map(a -> a.getGenome().toString())
+                        .collect(Collectors.toList()), 3)
+        );
     }
 
     public void drawMap() {
