@@ -1,5 +1,6 @@
 package agh.ics.oop.presenter;
 
+import agh.ics.oop.model.util.InvalidParametersException;
 import agh.ics.oop.parameters.*;
 import agh.ics.oop.parameters.types.GenomeType;
 import agh.ics.oop.parameters.types.MapType;
@@ -24,7 +25,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.CREATE;
@@ -62,16 +62,18 @@ public class StartWindowPresenter {
     public Spinner<Integer> genomeLengthSpinner;
     @FXML
     public ComboBox<String> csvCombo;
-    private final String path = "configurations.csv";
+    private static final String PATH = "configurations.csv";
     private final Multimap<String, String> configurations = ArrayListMultimap.create();
     private List<Control> paramControls;
     private Stage primaryStage;
 
     public void initialize() {
-        paramControls = List.of(mapCombo, widthSpinner, heightSpinner, genomeCombo, genomeLengthSpinner, vegetationCombo, plantsCountSpinner, animalsCountSpinner, plantsEnergySpinner, initialEnergySpinner, minimumBreedSpinner, childEnergySpinner, mutationTypeCombo, minMutationSpinner, maxMutationSpinner);
+        paramControls = List.of(mapCombo, widthSpinner, heightSpinner, genomeCombo, genomeLengthSpinner,
+                vegetationCombo, plantsCountSpinner, animalsCountSpinner, plantsEnergySpinner, initialEnergySpinner,
+                minimumBreedSpinner, childEnergySpinner, mutationTypeCombo, minMutationSpinner, maxMutationSpinner);
         String firstConf = null;
 
-        try (Scanner scanner = new Scanner(Path.of(path))) {
+        try (Scanner scanner = new Scanner(Path.of(PATH))) {
             if (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] params = line.split(";");
@@ -177,29 +179,41 @@ public class StartWindowPresenter {
     }
 
     public void onSimulationStartClicked() throws IOException {
-        Stage newWindowStage = new Stage();
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getClassLoader().getResource("simulationWindow.fxml"));
-        BorderPane viewRoot = loader.load();
-        SimulationPresenter presenter = loader.getController();
+        try {
+            MapParameters mapParameters = new MapParameters(getMapTypeByDisplayValue(mapCombo.getValue()),
+                    widthSpinner.getValue(), heightSpinner.getValue());
+            SimulationParameters simulationParameters = getSimulationParameters();
 
-        configureStage(newWindowStage, viewRoot);
-        newWindowStage.show();
-
-        MapParameters mapParameters = new MapParameters(getMapTypeByDisplayValue(mapCombo.getValue()), widthSpinner.getValue(), heightSpinner.getValue());
-
-        SimulationParameters simulationParameters = getSimulationParameters();
-
-        presenter.runSimulation(mapParameters, simulationParameters);
-
+            Stage newWindowStage = new Stage();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getClassLoader().getResource("simulationWindow.fxml"));
+            BorderPane viewRoot = loader.load();
+            SimulationPresenter presenter = loader.getController();
+            configureStage(newWindowStage, viewRoot);
+            newWindowStage.show();
+            presenter.runSimulation(mapParameters, simulationParameters);
+        } catch (InvalidParametersException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    private SimulationParameters getSimulationParameters() {
-        GeneralParameters generalParameters = new GeneralParameters(getGenomeTypeByDisplayValue(genomeCombo.getValue()), genomeLengthSpinner.getValue(), getVegetationTypeByDisplayValue(vegetationCombo.getValue()), plantsCountSpinner.getValue(), animalsCountSpinner.getValue());
+    private SimulationParameters getSimulationParameters() throws InvalidParametersException {
+        GeneralParameters generalParameters = new GeneralParameters(
+                getGenomeTypeByDisplayValue(genomeCombo.getValue()), genomeLengthSpinner.getValue(),
+                getVegetationTypeByDisplayValue(vegetationCombo.getValue()), plantsCountSpinner.getValue(),
+                animalsCountSpinner.getValue());
 
-        EnergyParameters energyParameters = new EnergyParameters(plantsEnergySpinner.getValue(), initialEnergySpinner.getValue(), minimumBreedSpinner.getValue(), childEnergySpinner.getValue());
+        EnergyParameters energyParameters = new EnergyParameters(plantsEnergySpinner.getValue(),
+                initialEnergySpinner.getValue(), minimumBreedSpinner.getValue(), childEnergySpinner.getValue());
 
-        MutationParameters mutationParameters = new MutationParameters(mutationTypeCombo.getValue(), minMutationSpinner.getValue(), maxMutationSpinner.getValue());
+        MutationParameters mutationParameters = new MutationParameters(mutationTypeCombo.getValue(),
+                minMutationSpinner.getValue(), maxMutationSpinner.getValue());
+
+        if (mutationParameters.minMutationNumber() > mutationParameters.maxMutationNumber())
+            throw new InvalidParametersException("Minimum mutation number should be smaller than its maximum.");
+
+        if (generalParameters.genomeLength() <= mutationParameters.maxMutationNumber())
+            throw new InvalidParametersException("Genome length should be larger than maximum mutation number.");
 
         return new SimulationParameters(generalParameters, energyParameters, mutationParameters);
     }
