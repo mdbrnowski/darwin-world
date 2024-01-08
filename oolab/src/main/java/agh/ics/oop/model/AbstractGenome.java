@@ -1,6 +1,8 @@
 package agh.ics.oop.model;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public abstract class AbstractGenome {
     protected List<Integer> genome;
@@ -19,4 +21,9 @@ public abstract class AbstractGenome {
 
     @Override
     public abstract boolean equals(Object obj);
+
+    @Override
+    public String toString() {
+        return genome.stream().map(Objects::toString).collect(Collectors.joining());
+    }
 }

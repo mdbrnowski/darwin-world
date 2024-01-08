@@ -17,15 +17,14 @@ public class SimulationTest {
         MutationParameters mutationParameters = new MutationParameters("FullyRandom",
                 2, 3);
         EarthGlobe map = new EarthGlobe(5, 7);
-        SimulationParameters parameters = new SimulationParameters(generalParameters, energyParameters, mutationParameters);
-        Simulation simulation = new Simulation(map, parameters);
+        SimulationParameters parameters = new SimulationParameters(generalParameters, energyParameters,
+                mutationParameters);
+        new Simulation(map, parameters);
 
         Assertions.assertEquals(map.getPlants().size(), 12);
         Assertions.assertEquals(map.getAnimals().size(), 10);
 
-        for (Animal animal : map.getAnimals()) {
+        for (Animal animal : map.getAnimals())
             Assertions.assertEquals(animal.getEnergy(), 5);
-        }
     }
-
 }
