@@ -62,6 +62,8 @@ public class StartWindowPresenter {
     public Spinner<Integer> genomeLengthSpinner;
     @FXML
     public ComboBox<String> csvCombo;
+    @FXML
+    public Label errorLabel;
     private static final String PATH = "configurations.csv";
     private final Multimap<String, String> configurations = ArrayListMultimap.create();
     private List<Control> paramControls;
@@ -184,6 +186,7 @@ public class StartWindowPresenter {
                     widthSpinner.getValue(), heightSpinner.getValue());
             SimulationParameters simulationParameters = getSimulationParameters();
 
+            errorLabel.setText("");
             Stage newWindowStage = new Stage();
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getClassLoader().getResource("simulationWindow.fxml"));
@@ -193,7 +196,7 @@ public class StartWindowPresenter {
             newWindowStage.show();
             presenter.runSimulation(mapParameters, simulationParameters);
         } catch (InvalidParametersException e) {
-            System.out.println(e.getMessage());
+            errorLabel.setText(e.getMessage());
         }
     }
 
