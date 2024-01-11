@@ -218,6 +218,9 @@ public class StartWindowPresenter {
         if (generalParameters.genomeLength() <= mutationParameters.maxMutationNumber())
             throw new InvalidParametersException("Genome length should be larger than maximum mutation number.");
 
+        if (energyParameters.minBreedEnergy() <= energyParameters.energyForChild())
+            throw new InvalidParametersException("Energy for child should be smaller than minimum breed energy.");
+
         return new SimulationParameters(generalParameters, energyParameters, mutationParameters);
     }
 
