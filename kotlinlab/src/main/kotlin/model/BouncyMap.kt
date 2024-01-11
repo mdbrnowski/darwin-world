@@ -27,5 +27,5 @@ class BouncyMap(private val width: Int, private val height: Int) : IWorldMap {
 
     override fun objectAt(position: Vector2d): Animal? = animals[position]
 
-    override fun getElements(): Collection<Animal> = animals.values;
+    override fun getElements(): Collection<Animal> = animals.values
 }

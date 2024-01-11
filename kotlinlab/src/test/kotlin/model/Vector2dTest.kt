@@ -6,7 +6,7 @@ import io.kotest.matchers.shouldNotBe
 
 class Vector2dTest : FunSpec({
 
-    test("equalsTest") {
+    test("equals") {
         val v1 = Vector2d(1, 2)
         val v2 = Vector2d(2, 2)
         val v3 = Vector2d(1, 2)
@@ -16,12 +16,11 @@ class Vector2dTest : FunSpec({
         v2 shouldNotBe v1
     }
 
-    test("toStringTest") {
-        val v = Vector2d(1, 2)
-        v.toString() shouldBe "(1,2)"
+    test("toString") {
+        Vector2d(1, 2).toString() shouldBe "(1,2)"
     }
 
-    test("precedesTest") {
+    test("precedes") {
         val v1 = Vector2d(0, 0)
         val v2 = Vector2d(2, 0)
         val v3 = Vector2d(2, 2)
@@ -36,7 +35,7 @@ class Vector2dTest : FunSpec({
         v4.precedes(v4) shouldBe true
     }
 
-    test("followsTest") {
+    test("follows") {
         val v1 = Vector2d(0, 0)
         val v2 = Vector2d(2, 0)
         val v3 = Vector2d(2, 2)
@@ -51,7 +50,7 @@ class Vector2dTest : FunSpec({
         v4.follows(v4) shouldBe true
     }
 
-    test("upperRightTest") {
+    test("upperRight") {
         val v1 = Vector2d(0, 0)
         val v2 = Vector2d(2, 0)
         val v3 = Vector2d(2, 2)
@@ -61,7 +60,7 @@ class Vector2dTest : FunSpec({
         v2.upperRight(v4) shouldBe v3
     }
 
-    test("lowerLeftTest") {
+    test("lowerLeft") {
         val v1 = Vector2d(0, 0)
         val v2 = Vector2d(2, 0)
         val v3 = Vector2d(2, 2)
@@ -71,21 +70,15 @@ class Vector2dTest : FunSpec({
         v2.lowerLeft(v4) shouldBe v1
     }
 
-    test("addTest") {
-        val v1 = Vector2d(1, 2)
-        val v2 = Vector2d(-2, -1)
-        val v3 = Vector2d(-1, 1)
-        v1 + v2 shouldBe v3
+    test("plus") {
+        Vector2d(1, 2) + Vector2d(-2, -1) shouldBe Vector2d(-1, 1)
     }
 
-    test("subtractTest") {
-        val v1 = Vector2d(1, 2)
-        val v2 = Vector2d(-2, -1)
-        val v3 = Vector2d(3, 3)
-        v1 - v2 shouldBe v3
+    test("minus") {
+        Vector2d(1, 2) - Vector2d(-2, -1) shouldBe Vector2d(3, 3)
     }
 
-    test("oppositeTest") {
+    test("opposite") {
         val v1 = Vector2d(1, 2)
         val v2 = Vector2d(-1, -2)
         -v1 shouldBe v2

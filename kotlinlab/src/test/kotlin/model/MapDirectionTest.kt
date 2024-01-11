@@ -5,14 +5,14 @@ import io.kotest.matchers.shouldBe
 
 class MapDirectionTest : FunSpec({
 
-    test("nextTest") {
+    test("next direction") {
         MapDirection.NORTH.next() shouldBe MapDirection.EAST
         MapDirection.WEST.next() shouldBe MapDirection.NORTH
         MapDirection.SOUTH.next() shouldBe MapDirection.WEST
         MapDirection.EAST.next() shouldBe MapDirection.SOUTH
     }
 
-    test("previousTest") {
+    test("previous direction") {
         MapDirection.NORTH.previous() shouldBe MapDirection.WEST
         MapDirection.WEST.previous() shouldBe MapDirection.SOUTH
         MapDirection.SOUTH.previous() shouldBe MapDirection.EAST

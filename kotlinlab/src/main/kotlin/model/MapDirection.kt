@@ -7,7 +7,7 @@ enum class MapDirection {
 
     fun previous(): MapDirection = entries[(ordinal + 1) % entries.size]
 
-    override fun toString() = when (this) {
+    override fun toString(): String = when (this) {
         NORTH -> "Północ"
         WEST -> "Zachód"
         SOUTH -> "Południe"
