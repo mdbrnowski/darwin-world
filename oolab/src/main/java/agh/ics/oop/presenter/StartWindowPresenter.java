@@ -212,14 +212,7 @@ public class StartWindowPresenter {
         MutationParameters mutationParameters = new MutationParameters(mutationTypeCombo.getValue(),
                 minMutationSpinner.getValue(), maxMutationSpinner.getValue());
 
-        if (mutationParameters.minMutationNumber() > mutationParameters.maxMutationNumber())
-            throw new InvalidParametersException("Minimum mutation number should be smaller than its maximum.");
-
-        if (generalParameters.genomeLength() <= mutationParameters.maxMutationNumber())
-            throw new InvalidParametersException("Genome length should be larger than maximum mutation number.");
-
-        if (energyParameters.minBreedEnergy() <= energyParameters.energyForChild())
-            throw new InvalidParametersException("Energy for child should be smaller than minimum breed energy.");
+        ParametersValidator.validate(generalParameters, energyParameters, mutationParameters);
 
         return new SimulationParameters(generalParameters, energyParameters, mutationParameters);
     }
