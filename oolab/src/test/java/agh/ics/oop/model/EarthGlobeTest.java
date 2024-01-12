@@ -25,7 +25,7 @@ public class EarthGlobeTest {
     @Test
     public void moveTest() {
         EarthGlobe map1 = new EarthGlobe(10, 10);
-        Animal animal1 = new Animal(new Vector2d(9, 10), MapDirection.WEST,
+        Animal animal1 = new Animal(new Vector2d(9, 10), MapDirection.WEST, 1,
                 new BackAndForthGenome(List.of(1, 2, 3, 4, 5, 6)));
 
         map1.place(animal1);
@@ -46,7 +46,7 @@ public class EarthGlobeTest {
         Assertions.assertEquals(animal1.getOrientation(), MapDirection.SOUTH);
         Assertions.assertEquals(animal1.getPosition(), new Vector2d(7, 10));
 
-        Animal animal2 = new Animal(new Vector2d(0, 0), MapDirection.SOUTH,
+        Animal animal2 = new Animal(new Vector2d(0, 0), MapDirection.SOUTH, 1,
                 new BackAndForthGenome(List.of(2, 7, 5, 2, 0, 0)));
 
         map1.place(animal2);
@@ -85,11 +85,11 @@ public class EarthGlobeTest {
         globe.addObserver(new ConsoleMapDisplay());
 
         FullPredestinationGenome genome = new FullPredestinationGenome(List.of(0, 2, 3));
-        Animal animal6 = new Animal(new Vector2d(1, height), MapDirection.NORTH, genome);
-        Animal animal7 = new Animal(new Vector2d(width, 0), MapDirection.EAST, genome);
-        Animal animal3 = new Animal(new Vector2d(0, 2), MapDirection.WEST, genome);
-        Animal animal4 = new Animal(new Vector2d(1, 0), MapDirection.SOUTH, genome);
-        Animal animal5 = new Animal(new Vector2d(0, height), MapDirection.NORTHWEST, genome);
+        Animal animal6 = new Animal(new Vector2d(1, height), MapDirection.NORTH, 0, genome);
+        Animal animal7 = new Animal(new Vector2d(width, 0), MapDirection.EAST, 0, genome);
+        Animal animal3 = new Animal(new Vector2d(0, 2), MapDirection.WEST, 0, genome);
+        Animal animal4 = new Animal(new Vector2d(1, 0), MapDirection.SOUTH, 0, genome);
+        Animal animal5 = new Animal(new Vector2d(0, height), MapDirection.NORTHWEST, 0, genome);
 
         globe.place(animal6);
         globe.place(animal7);
@@ -132,19 +132,19 @@ public class EarthGlobeTest {
         map.addPlants(plants);
 
         List<Animal> animals = List.of(
-                new Animal(new Vector2d(2, 3), MapDirection.NORTH,
+                new Animal(new Vector2d(2, 3), MapDirection.NORTH, 0,
                         new FullPredestinationGenome(List.of(0, 3, 6))),
-                new Animal(new Vector2d(1, 2), MapDirection.NORTHWEST,
+                new Animal(new Vector2d(1, 2), MapDirection.NORTHWEST, 0,
                         new FullPredestinationGenome(List.of(0, 3, 3))),
-                new Animal(new Vector2d(0, 0), MapDirection.SOUTH,
+                new Animal(new Vector2d(0, 0), MapDirection.SOUTH, 0,
                         new FullPredestinationGenome(List.of(1, 4, 5))),
-                new Animal(new Vector2d(5, 4), MapDirection.WEST,
+                new Animal(new Vector2d(5, 4), MapDirection.WEST, 0,
                         new FullPredestinationGenome(List.of(5, 7, 7))),
-                new Animal(new Vector2d(3, 3), MapDirection.SOUTHEAST,
+                new Animal(new Vector2d(3, 3), MapDirection.SOUTHEAST, 0,
                         new FullPredestinationGenome(List.of(2, 3, 2))),
-                new Animal(new Vector2d(2, 2), MapDirection.NORTH,
+                new Animal(new Vector2d(2, 2), MapDirection.NORTH, 0,
                         new FullPredestinationGenome(List.of(5, 2, 4))),
-                new Animal(new Vector2d(2, 1), MapDirection.NORTH,
+                new Animal(new Vector2d(2, 1), MapDirection.NORTH, 0,
                         new FullPredestinationGenome(List.of(0, 2, 2))));
 
         for (Animal animal : animals)
@@ -166,33 +166,25 @@ public class EarthGlobeTest {
 
         map.addPlants(plants);
 
-        Animal animal1 = new Animal(new Vector2d(2, 3), MapDirection.NORTH,
+        Animal animal1 = new Animal(new Vector2d(2, 3), MapDirection.NORTH, 1,
                 new FullPredestinationGenome(List.of(0, 3, 6)));
-        Animal animal2 = new Animal(new Vector2d(1, 2), MapDirection.NORTHWEST,
+        Animal animal2 = new Animal(new Vector2d(1, 2), MapDirection.NORTHWEST, 2,
                 new FullPredestinationGenome(List.of(0, 3, 3)));
-        Animal animal3 = new Animal(new Vector2d(0, 0), MapDirection.SOUTH,
+        Animal animal3 = new Animal(new Vector2d(0, 0), MapDirection.SOUTH, 0,
                 new FullPredestinationGenome(List.of(1, 4, 5)));
-        Animal animal4 = new Animal(new Vector2d(5, 4), MapDirection.WEST,
+        Animal animal4 = new Animal(new Vector2d(5, 4), MapDirection.WEST, 1,
                 new FullPredestinationGenome(List.of(5, 7, 7)));
-        Animal animal5 = new Animal(new Vector2d(3, 3), MapDirection.SOUTHEAST,
+        Animal animal5 = new Animal(new Vector2d(3, 3), MapDirection.SOUTHEAST, 0,
                 new FullPredestinationGenome(List.of(2, 3, 2)));
-        Animal animal6 = new Animal(new Vector2d(2, 2), MapDirection.NORTH,
+        Animal animal6 = new Animal(new Vector2d(2, 2), MapDirection.NORTH, 0,
                 new FullPredestinationGenome(List.of(5, 2, 4)));
-        Animal animal7 = new Animal(new Vector2d(2, 1), MapDirection.NORTH,
+        Animal animal7 = new Animal(new Vector2d(2, 1), MapDirection.NORTH, 4,
                 new FullPredestinationGenome(List.of(0, 2, 2)));
 
-        animal1.setEnergy(1);
-        animal2.setEnergy(2);
-        animal7.setEnergy(4);
-        animal4.setEnergy(1);
-
         List<Animal> animals = List.of(animal1, animal2, animal3, animal4, animal5, animal6, animal7);
-        Map<Vector2d, Animal> animalMap = new HashMap<>();
 
-        for (Animal animal : animals) {
+        for (Animal animal : animals)
             map.place(animal);
-            animalMap.put(animal.getPosition(), animal);
-        }
 
         Assertions.assertEquals(new HashSet<>(animals), new HashSet<>(map.getAnimals()));
         map.removeDead();
