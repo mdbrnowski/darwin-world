@@ -14,6 +14,8 @@ public class Simulation implements Runnable {
     private AbstractVegetation vegetation;
     private long sleepTime = 0;
     private final SimulationParameters parameters;
+    private boolean stopped = false;
+    private boolean ended = false;
 
     public Simulation(AbstractWorldMap map, SimulationParameters parameters) {
         this.map = map;
@@ -47,6 +49,8 @@ public class Simulation implements Runnable {
     public void run() {
         sleep();
         while (!map.getAnimals().isEmpty()) {
+            if (ended) return;
+            if (stopped) continue;
             map.nextDay();
             map.removeDead();
 
@@ -90,6 +94,22 @@ public class Simulation implements Runnable {
             vegetation.vegetate(map);
             sleep();
         }
+    }
+
+    public boolean isStopped() {
+        return stopped;
+    }
+
+    public void resume() {
+        stopped = false;
+    }
+
+    public void stop() {
+        stopped = true;
+    }
+
+    public void end() {
+        ended = true;
     }
 
     private void sleep() {

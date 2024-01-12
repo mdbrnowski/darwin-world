@@ -3,15 +3,34 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="650.0" minWidth="850.0"
             fx:controller="agh.ics.oop.presenter.SimulationPresenter"
+            stylesheets="simulationWindow.css"
             style="-fx-padding: 25;">
     <center>
-        <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true">
+        <VBox fx:id="pauseAndMap" spacing="5">
+            <HBox alignment="CENTER_RIGHT">
+                <Button fx:id="pauseButton" onAction="#onPauseButtonClicked">
+                    <graphic>
+                        <ImageView fx:id="pauseButtonImageView" fitWidth="30" preserveRatio="true">
+                            <Image url="pause.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
 
-        </GridPane>
+            <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true">
+
+            </GridPane>
+        </VBox>
+
     </center>
 
     <top>

@@ -2,6 +2,7 @@ package agh.ics.oop.presenter;
 
 import agh.ics.oop.Simulation;
 import agh.ics.oop.SimulationEngine;
+import agh.ics.oop.onActionControls.Pause;
 import agh.ics.oop.parameters.SimulationParameters;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.Boundary;
@@ -11,20 +12,23 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SimulationPresenter implements MapChangeListener {
     private WorldMap map;
-
+    @FXML
+    public Button pauseButton;
+    @FXML
+    public ImageView pauseButtonImageView;
     @FXML
     public GridPane mapGrid;
     @FXML
@@ -47,6 +51,8 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     public Label mostPopularGenotypeLabel;
 
+    private SimulationEngine simulationEngine;
+    private Simulation simulation;
 
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
@@ -108,11 +114,26 @@ public class SimulationPresenter implements MapChangeListener {
         for (int i = 0; i < maxY - minY + 2; i++)
             mapGrid.getRowConstraints().add(new RowConstraints(40));
 
+        HashMap<Vector2d, Double> highlightPositions = new HashMap<>();
+
+        if (simulation != null && simulation.isStopped()) {
+            highlightPositions = highlightGenome();
+        }
+
         int maxEnergy = map.getAnimals().stream().mapToInt(Animal::getEnergy).max().orElse(1);
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 var label = new Label();
                 var animals = map.getAnimalsAt(new Vector2d(x, y));
+
+                if (simulation != null && simulation.isStopped()) {
+                    System.out.println(highlightPositions.get(new Vector2d(x, y)));
+                    if (highlightPositions.get(new Vector2d(x, y)) != null) {
+                        label.setStyle(String.format("-fx-background-color: rgba(255,240,%.2f,0.7)",
+                                highlightPositions.get(new Vector2d(x, y)) * 255));
+                    }
+
+                }
                 if (animals.size() > 1) {
                     var animal = Collections.max(animals);
                     label.setText(Animal.MULTIPLE_ANIMALS_TO_STRING);
@@ -132,8 +153,28 @@ public class SimulationPresenter implements MapChangeListener {
             }
         }
 
+
         for (Node label : mapGrid.getChildren())
             GridPane.setHalignment(label, HPos.CENTER);
+    }
+
+    private HashMap<Vector2d, Double> highlightGenome() {
+
+        List<List<Vector2d>> genomePositions = Pause.highlightGenomes(map);
+        HashMap<Vector2d, Double> allPositions = new HashMap<>();
+
+        int n = genomePositions.size();
+        for (int i = n - 1; i >= 0; i--) {
+            int m = genomePositions.get(i).size();
+            for (int j = 0; j < m; j++) {
+                Vector2d vector = genomePositions.get(i).get(j);
+                allPositions.remove(vector);
+                allPositions.put(vector, (double) i / n);
+            }
+        }
+        System.out.println(allPositions.keySet());
+
+        return allPositions;
     }
 
     private void clearGrid() {
@@ -147,9 +188,21 @@ public class SimulationPresenter implements MapChangeListener {
                 mapParameters.mapHeight());
         setWorldMap(map);
         map.addObserver(this);
-        Simulation simulation = new Simulation(map, simulationParameters, 500);
-        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
+        simulation = new Simulation(map, simulationParameters, 500);
+        simulationEngine = new SimulationEngine(List.of(simulation));
         simulationEngine.runAsync();
         setupStats();
+        System.out.println(this);
     }
+
+    public void onPauseButtonClicked() {
+        Pause.pause(simulation, pauseButtonImageView, map);
+        drawMap();
+    }
+
+    public void shutdown() {
+        simulationEngine.shutdown();
+    }
+
+
 }

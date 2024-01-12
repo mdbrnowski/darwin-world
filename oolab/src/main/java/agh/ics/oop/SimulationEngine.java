@@ -51,4 +51,20 @@ public class SimulationEngine {
                 executorService.shutdownNow();
         }
     }
+
+    public void shutdown() {
+        for (Simulation simulation : simulations) {
+            simulation.end();
+        }
+
+        for (Thread simulationThread : simulationThreads) {
+            try {
+                simulationThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
 }

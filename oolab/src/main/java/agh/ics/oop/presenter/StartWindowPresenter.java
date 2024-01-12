@@ -194,7 +194,10 @@ public class StartWindowPresenter {
             SimulationPresenter presenter = loader.getController();
             configureStage(newWindowStage, viewRoot);
             newWindowStage.show();
+
             presenter.runSimulation(mapParameters, simulationParameters);
+
+            newWindowStage.setOnCloseRequest(event -> presenter.shutdown());
         } catch (InvalidParametersException e) {
             errorLabel.setText(e.getMessage());
         }
@@ -311,7 +314,7 @@ public class StartWindowPresenter {
 
         String csvData = name + ";" + String.join(";", configurations.get(name));
         try {
-            Files.writeString(Path.of("configurations.csv"), csvData + System.lineSeparator(), CREATE, APPEND);
+            Files.writeString(Path.of(PATH), csvData + System.lineSeparator(), CREATE, APPEND);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
