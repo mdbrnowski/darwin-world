@@ -12,13 +12,13 @@ import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,7 +57,7 @@ public class SimulationPresenter implements MapChangeListener {
         });
     }
 
-    public void setWorldMap(WorldMap map) {
+    private void setWorldMap(WorldMap map) {
         this.map = map;
         drawMap();
     }
@@ -108,21 +108,26 @@ public class SimulationPresenter implements MapChangeListener {
         for (int i = 0; i < maxY - minY + 2; i++)
             mapGrid.getRowConstraints().add(new RowConstraints(40));
 
+        int maxEnergy = map.getAnimals().stream().mapToInt(Animal::getEnergy).max().orElse(1);
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 var label = new Label();
                 var animals = map.getAnimalsAt(new Vector2d(x, y));
                 if (animals.size() > 1) {
+                    var animal = Collections.max(animals);
                     label.setText(Animal.MULTIPLE_ANIMALS_TO_STRING);
-                    label.setTextFill(Color.color(1, 0, 0));
+                    label.setTextFill(Color.color((double) animal.getEnergy() / maxEnergy, 0, 0));
+                    label.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 24));
                 } else if (animals.size() == 1) {
-                    label.setText(animals.get(0).toString());
-                    label.setTextFill(Color.color(1, 0, 0));
+                    var animal = animals.get(0);
+                    label.setText(animal.toString());
+                    label.setTextFill(Color.color((double) animal.getEnergy() / maxEnergy, 0, 0));
+                    label.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 24));
                 } else if (map.getPlantAt(new Vector2d(x, y)) != null) {
                     label.setText(map.getPlantAt(new Vector2d(x, y)).toString());
                     label.setTextFill(Color.color(0.2, 0.6, 0.3));
+                    label.setFont(Font.font("Arial", FontWeight.EXTRA_LIGHT, FontPosture.REGULAR, 16));
                 }
-                label.setFont(Font.font(20));
                 mapGrid.add(label, x - minX + 1, maxY - y + 1);
             }
         }

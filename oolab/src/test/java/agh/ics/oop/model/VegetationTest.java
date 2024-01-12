@@ -122,15 +122,10 @@ public class VegetationTest {
 
         EarthGlobe map1 = new EarthGlobe(10, 10);
 
-        Animal animal1 = new Animal(new Vector2d(2, 3), MapDirection.NORTH, new BackAndForthGenome(List.of(1, 2, 3)));
-        Animal animal2 = new Animal(new Vector2d(3, 4), MapDirection.SOUTH, new BackAndForthGenome(List.of(1, 7, 3)));
-        Animal animal3 = new Animal(new Vector2d(3, 4), MapDirection.EAST, new BackAndForthGenome(List.of(1, 3, 3)));
-        Animal animal4 = new Animal(new Vector2d(5, 5), MapDirection.WEST, new BackAndForthGenome(List.of(0, 0, 4)));
-
-        animal1.setEnergy(0);
-        animal2.setEnergy(0);
-        animal3.setEnergy(1);
-        animal4.setEnergy(2);
+        Animal animal1 = new Animal(new Vector2d(2, 3), MapDirection.NORTH, 0, new BackAndForthGenome(List.of(1, 2, 3)));
+        Animal animal2 = new Animal(new Vector2d(3, 4), MapDirection.SOUTH, 0, new BackAndForthGenome(List.of(1, 7, 3)));
+        Animal animal3 = new Animal(new Vector2d(3, 4), MapDirection.EAST, 1, new BackAndForthGenome(List.of(1, 3, 3)));
+        Animal animal4 = new Animal(new Vector2d(5, 5), MapDirection.WEST, 2, new BackAndForthGenome(List.of(0, 0, 4)));
 
         map1.place(animal1);
         map1.place(animal2);
@@ -150,15 +145,10 @@ public class VegetationTest {
 
         EarthGlobe map2 = new EarthGlobe(10, 10);
 
-        animal1 = new Animal(new Vector2d(2, 1), MapDirection.NORTH, new BackAndForthGenome(List.of(1, 2, 3)));
-        animal2 = new Animal(new Vector2d(4, 4), MapDirection.SOUTH, new BackAndForthGenome(List.of(1, 7, 3)));
-        animal3 = new Animal(new Vector2d(4, 4), MapDirection.EAST, new BackAndForthGenome(List.of(1, 3, 3)));
-        animal4 = new Animal(new Vector2d(10, 5), MapDirection.WEST, new BackAndForthGenome(List.of(0, 0, 4)));
-
-        animal1.setEnergy(0);
-        animal2.setEnergy(0);
-        animal3.setEnergy(1);
-        animal4.setEnergy(2);
+        animal1 = new Animal(new Vector2d(2, 1), MapDirection.NORTH, 0, new BackAndForthGenome(List.of(1, 2, 3)));
+        animal2 = new Animal(new Vector2d(4, 4), MapDirection.SOUTH, 0, new BackAndForthGenome(List.of(1, 7, 3)));
+        animal3 = new Animal(new Vector2d(4, 4), MapDirection.EAST, 1, new BackAndForthGenome(List.of(1, 3, 3)));
+        animal4 = new Animal(new Vector2d(10, 5), MapDirection.WEST, 2, new BackAndForthGenome(List.of(0, 0, 4)));
 
         map2.place(animal1);
         map2.place(animal2);
@@ -189,15 +179,10 @@ public class VegetationTest {
 
         EarthGlobe map1 = new EarthGlobe(10, 10);
 
-        Animal animal1 = new Animal(new Vector2d(2, 3), MapDirection.NORTH, new BackAndForthGenome(List.of(1, 2, 3)));
-        Animal animal2 = new Animal(new Vector2d(3, 4), MapDirection.SOUTH, new BackAndForthGenome(List.of(1, 7, 3)));
-        Animal animal3 = new Animal(new Vector2d(3, 4), MapDirection.EAST, new BackAndForthGenome(List.of(1, 3, 3)));
-        Animal animal4 = new Animal(new Vector2d(5, 5), MapDirection.WEST, new BackAndForthGenome(List.of(0, 0, 4)));
-
-        animal1.setEnergy(0);
-        animal2.setEnergy(0);
-        animal3.setEnergy(1);
-        animal4.setEnergy(2);
+        Animal animal1 = new Animal(new Vector2d(2, 3), MapDirection.NORTH, 0, new BackAndForthGenome(List.of(1, 2, 3)));
+        Animal animal2 = new Animal(new Vector2d(3, 4), MapDirection.SOUTH, 0, new BackAndForthGenome(List.of(1, 7, 3)));
+        Animal animal3 = new Animal(new Vector2d(3, 4), MapDirection.EAST, 1, new BackAndForthGenome(List.of(1, 3, 3)));
+        Animal animal4 = new Animal(new Vector2d(5, 5), MapDirection.WEST, 2, new BackAndForthGenome(List.of(0, 0, 4)));
 
         map1.place(animal1);
         map1.place(animal2);
@@ -225,15 +210,10 @@ public class VegetationTest {
 
         EarthGlobe map2 = new EarthGlobe(10, 10);
 
-        animal1 = new Animal(new Vector2d(2, 1), MapDirection.NORTH, new BackAndForthGenome(List.of(1, 2, 3)));
-        animal2 = new Animal(new Vector2d(4, 4), MapDirection.SOUTH, new BackAndForthGenome(List.of(1, 7, 3)));
-        animal3 = new Animal(new Vector2d(4, 4), MapDirection.EAST, new BackAndForthGenome(List.of(1, 3, 3)));
-        animal4 = new Animal(new Vector2d(10, 5), MapDirection.WEST, new BackAndForthGenome(List.of(0, 0, 4)));
-
-        animal1.setEnergy(0);
-        animal2.setEnergy(0);
-        animal3.setEnergy(1);
-        animal4.setEnergy(2);
+        animal1 = new Animal(new Vector2d(2, 1), MapDirection.NORTH, 0, new BackAndForthGenome(List.of(1, 2, 3)));
+        animal2 = new Animal(new Vector2d(4, 4), MapDirection.SOUTH, 0, new BackAndForthGenome(List.of(1, 7, 3)));
+        animal3 = new Animal(new Vector2d(4, 4), MapDirection.EAST, 1, new BackAndForthGenome(List.of(1, 3, 3)));
+        animal4 = new Animal(new Vector2d(10, 5), MapDirection.WEST, 2, new BackAndForthGenome(List.of(0, 0, 4)));
 
         map2.place(animal1);
         map2.place(animal2);
@@ -272,15 +252,10 @@ public class VegetationTest {
 
         EarthGlobe map1 = new EarthGlobe(10, 10);
 
-        Animal animal1 = new Animal(new Vector2d(2, 3), MapDirection.NORTH, new BackAndForthGenome(List.of(1, 2, 3)));
-        Animal animal2 = new Animal(new Vector2d(3, 4), MapDirection.SOUTH, new BackAndForthGenome(List.of(1, 7, 3)));
-        Animal animal3 = new Animal(new Vector2d(3, 4), MapDirection.EAST, new BackAndForthGenome(List.of(1, 3, 3)));
-        Animal animal4 = new Animal(new Vector2d(5, 5), MapDirection.WEST, new BackAndForthGenome(List.of(0, 0, 4)));
-
-        animal1.setEnergy(0);
-        animal2.setEnergy(0);
-        animal3.setEnergy(1);
-        animal4.setEnergy(2);
+        Animal animal1 = new Animal(new Vector2d(2, 3), MapDirection.NORTH, 0, new BackAndForthGenome(List.of(1, 2, 3)));
+        Animal animal2 = new Animal(new Vector2d(3, 4), MapDirection.SOUTH, 0, new BackAndForthGenome(List.of(1, 7, 3)));
+        Animal animal3 = new Animal(new Vector2d(3, 4), MapDirection.EAST, 1, new BackAndForthGenome(List.of(1, 3, 3)));
+        Animal animal4 = new Animal(new Vector2d(5, 5), MapDirection.WEST, 2, new BackAndForthGenome(List.of(0, 0, 4)));
 
         map1.place(animal1);
         map1.place(animal2);
@@ -306,15 +281,10 @@ public class VegetationTest {
 
         EarthGlobe map2 = new EarthGlobe(4, 4);
 
-        animal1 = new Animal(new Vector2d(2, 1), MapDirection.NORTH, new BackAndForthGenome(List.of(1, 2, 3)));
-        animal2 = new Animal(new Vector2d(4, 4), MapDirection.SOUTH, new BackAndForthGenome(List.of(1, 7, 3)));
-        animal3 = new Animal(new Vector2d(4, 4), MapDirection.EAST, new BackAndForthGenome(List.of(1, 3, 3)));
-        animal4 = new Animal(new Vector2d(0, 0), MapDirection.WEST, new BackAndForthGenome(List.of(0, 0, 4)));
-
-        animal1.setEnergy(0);
-        animal2.setEnergy(0);
-        animal3.setEnergy(1);
-        animal4.setEnergy(2);
+        animal1 = new Animal(new Vector2d(2, 1), MapDirection.NORTH, 0, new BackAndForthGenome(List.of(1, 2, 3)));
+        animal2 = new Animal(new Vector2d(4, 4), MapDirection.SOUTH, 0, new BackAndForthGenome(List.of(1, 7, 3)));
+        animal3 = new Animal(new Vector2d(4, 4), MapDirection.EAST, 1, new BackAndForthGenome(List.of(1, 3, 3)));
+        animal4 = new Animal(new Vector2d(0, 0), MapDirection.WEST, 2, new BackAndForthGenome(List.of(0, 0, 4)));
 
         map2.place(animal1);
         map2.place(animal2);
