@@ -27,9 +27,8 @@ public class Simulation implements Runnable {
 
         for (Vector2d position : new RandomPositionGenerator(mapFields,
                 parameters.generalParameters().startAnimalsCount())) {
-            Animal a = makeNewAnimal(position, parameters.generalParameters().genome(),
-                    parameters.generalParameters().genomeLength());
-            a.setEnergy(parameters.energyParameters().initialAnimalEnergy());
+            Animal a = makeNewAnimal(position, parameters.energyParameters().initialAnimalEnergy(),
+                    parameters.generalParameters().genome(), parameters.generalParameters().genomeLength());
             map.place(a);
         }
         map.mapChanged("All animals placed");
@@ -101,7 +100,7 @@ public class Simulation implements Runnable {
         }
     }
 
-    private Animal makeNewAnimal(Vector2d position, GenomeType genomeType, int genomeLength) {
+    private Animal makeNewAnimal(Vector2d position, int energy, GenomeType genomeType, int genomeLength) {
         Random random = new Random();
         MapDirection mapDirection = MapDirection.getRandom();
 
@@ -111,7 +110,7 @@ public class Simulation implements Runnable {
 
         AbstractGenome genome = genomeType.getEquivalentObject(randomList);
 
-        return new Animal(position, mapDirection, genome);
+        return new Animal(position, mapDirection, energy, genome);
     }
 
     private void setVegetation(VegetationType vegetationType, AbstractWorldMap map, int plantsCount) {

@@ -10,13 +10,9 @@ import java.util.Objects;
 public class AnimalTest {
     @Test
     public void sortFirstTest() {
-        Animal a = new Animal(null, null, null);
-        Animal b = new Animal(null, null, null);
-        Animal c = new Animal(null, null, null);
-
-        a.setEnergy(3);
-        b.setEnergy(2);
-        c.setEnergy(1);
+        Animal a = new Animal(null, null, 3, null);
+        Animal b = new Animal(null, null, 2, null);
+        Animal c = new Animal(null, null, 1, null);
 
         List<Animal> animals = new java.util.ArrayList<>(List.of(a, b, c));
         Collections.sort(animals);
@@ -25,9 +21,9 @@ public class AnimalTest {
 
     @Test
     public void sortSecondTest() {
-        Animal a = new Animal(null, null, null);
-        Animal b = new Animal(null, null, null);
-        Animal c = new Animal(null, null, null);
+        Animal a = new Animal(null, null, 1, null);
+        Animal b = new Animal(null, null, 1, null);
+        Animal c = new Animal(null, null, 1, null);
 
         a.incrementAge();
         a.incrementAge();
@@ -40,9 +36,9 @@ public class AnimalTest {
 
     @Test
     public void sortThirdTest() {
-        Animal a = new Animal(null, null, null);
-        Animal b = new Animal(null, null, null);
-        Animal c = new Animal(null, null, null);
+        Animal a = new Animal(null, null, 1, null);
+        Animal b = new Animal(null, null, 1, null);
+        Animal c = new Animal(null, null, 1, null);
 
         a.incrementChildrenNum();
         a.incrementChildrenNum();
@@ -55,15 +51,10 @@ public class AnimalTest {
 
     @Test
     public void sortAllTest() {
-        Animal a = new Animal(null, null, null);
-        Animal b = new Animal(null, null, null);
-        Animal c = new Animal(null, null, null);
-        Animal d = new Animal(null, null, null);
-
-        a.setEnergy(1);
-        b.setEnergy(1);
-        c.setEnergy(2);
-        d.setEnergy(2);
+        Animal a = new Animal(null, null, 1, null);
+        Animal b = new Animal(null, null, 1, null);
+        Animal c = new Animal(null, null, 2, null);
+        Animal d = new Animal(null, null, 2, null);
 
         a.incrementAge();
         d.incrementChildrenNum();
@@ -75,13 +66,11 @@ public class AnimalTest {
 
     @Test
     public void breedTest() {
-        Animal a = new Animal(new Vector2d(1, 2), MapDirection.NORTH,
+        Animal a = new Animal(new Vector2d(1, 2), MapDirection.NORTH, 3,
                 new BackAndForthGenome(List.of(0, 1, 2, 3, 4, 5)));
-        Animal b = new Animal(new Vector2d(1, 2), MapDirection.SOUTH,
+        Animal b = new Animal(new Vector2d(1, 2), MapDirection.SOUTH, 6,
                 new BackAndForthGenome(List.of(6, 7, 0, 1, 2, 3)));
 
-        a.setEnergy(3);
-        b.setEnergy(6);
         b.incrementChildrenNum();
         b.incrementChildrenNum();
 
@@ -101,13 +90,11 @@ public class AnimalTest {
         Assertions.assertEquals(a.getChildrenNum(), 1);
         Assertions.assertEquals(b.getChildrenNum(), 3);
 
-        Animal c = new Animal(new Vector2d(3, 4), MapDirection.EAST,
+        Animal c = new Animal(new Vector2d(3, 4), MapDirection.EAST, 10,
                 new FullPredestinationGenome(List.of(0, 1, 2, 3, 4, 5, 6, 7)));
-        Animal d = new Animal(new Vector2d(3, 4), MapDirection.SOUTH,
+        Animal d = new Animal(new Vector2d(3, 4), MapDirection.SOUTH, 5,
                 new FullPredestinationGenome(List.of(6, 7, 0, 1, 2, 3, 0, 2)));
 
-        c.setEnergy(10);
-        d.setEnergy(5);
         d.incrementChildrenNum();
 
         int energyForChild2 = 5;

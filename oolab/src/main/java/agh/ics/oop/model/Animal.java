@@ -16,11 +16,11 @@ public class Animal implements WorldElement, Comparable<Animal> {
     public final static String MULTIPLE_ANIMALS_TO_STRING = "⚤";
 
 
-    //extended constructor, in the future probably should contain energy
-    public Animal(Vector2d position, MapDirection orientation, AbstractGenome genome) {
-        this.orientation = orientation;
-        this.genome = genome;
+    public Animal(Vector2d position, MapDirection orientation, int energy, AbstractGenome genome) {
         this.position = position;
+        this.orientation = orientation;
+        this.energy = energy;
+        this.genome = genome;
         this.childrenNum = 0;
         this.age = 0;
     }
@@ -54,10 +54,6 @@ public class Animal implements WorldElement, Comparable<Animal> {
 
     public int getEnergy() {
         return energy;
-    }
-
-    public void setEnergy(int energy) {
-        this.energy = energy;
     }
 
     public void increaseEnergy(int value) {
@@ -116,9 +112,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
         this.decreaseEnergy(energyForChild);
         other.decreaseEnergy(energyForChild);
 
-        Animal child = new Animal(position, MapDirection.getRandom(), newGenome);
-        child.setEnergy(2 * energyForChild);
-        return child;
+        return new Animal(position, MapDirection.getRandom(), 2 * energyForChild, newGenome);
     }
 
     @Override
