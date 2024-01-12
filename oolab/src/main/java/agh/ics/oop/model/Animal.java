@@ -45,7 +45,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
 
     @Override
     public String toString() {
-        return orientation.toString() + "%s".formatted(this.energy);  // todo: undo
+        return orientation.toString();
     }
 
     public void move(Vector2d new_position) {
