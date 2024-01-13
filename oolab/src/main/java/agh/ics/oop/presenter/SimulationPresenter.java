@@ -152,26 +152,7 @@ public class SimulationPresenter implements MapChangeListener {
         for (Node label : mapGrid.getChildren())
             GridPane.setHalignment(label, HPos.CENTER);
     }
-
-//    private HashMap<Vector2d, Double> highlightGenome() {
-//
-//        List<List<Vector2d>> genomePositions = Pause.highlightGenomes(map);
-//        HashMap<Vector2d, Double> allPositions = new HashMap<>();
-//
-//        int n = genomePositions.size();
-//        for (int i = n - 1; i >= 0; i--) {
-//            int m = genomePositions.get(i).size();
-//            for (int j = 0; j < m; j++) {
-//                Vector2d vector = genomePositions.get(i).get(j);
-//                allPositions.remove(vector);
-//                allPositions.put(vector, (double) i / n);
-//            }
-//        }
-//        System.out.println(allPositions.keySet());
-//
-//        return allPositions;
-//    }
-
+    
     private void clearGrid() {
         mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
         mapGrid.getColumnConstraints().clear();
