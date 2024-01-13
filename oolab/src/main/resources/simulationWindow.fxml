@@ -8,6 +8,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ScrollPane?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="650.0" minWidth="850.0"
@@ -25,10 +26,14 @@
                     </graphic>
                 </Button>
             </HBox>
+            <HBox alignment="CENTER">
+                <ScrollPane fx:id="mapScrollPane" style="-fx-padding: 20px">
+                    <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true">
 
-            <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true">
+                    </GridPane>
+                </ScrollPane>
+            </HBox>
 
-            </GridPane>
         </VBox>
 
     </center>

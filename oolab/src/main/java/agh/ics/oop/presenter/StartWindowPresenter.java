@@ -17,6 +17,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.Math.max;
 import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.CREATE;
 
@@ -193,6 +195,8 @@ public class StartWindowPresenter {
             BorderPane viewRoot = loader.load();
             SimulationPresenter presenter = loader.getController();
             presenter.setStage(newWindowStage);
+            viewRoot.setMinWidth(Math.min(max(mapParameters.mapWidth() * 40 + 500, 800), Screen.getPrimary().getBounds().getWidth() - 110));
+            viewRoot.setMinHeight(Math.min(max(mapParameters.mapHeight() * 40 + 300, 600), Screen.getPrimary().getBounds().getHeight() - 110));
             configureStage(newWindowStage, viewRoot);
             newWindowStage.show();
 

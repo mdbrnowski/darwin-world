@@ -15,12 +15,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.util.*;
@@ -28,6 +30,8 @@ import java.util.stream.Collectors;
 
 public class SimulationPresenter implements MapChangeListener {
     private WorldMap map;
+    @FXML
+    public ScrollPane mapScrollPane;
     @FXML
     public Button highlightPreferredButton;
     @FXML
@@ -158,9 +162,12 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void drawMap() {
         clearGrid();
+
         Boundary boundary = map.getCurrentBounds();
         int minX = boundary.bottomLeft().getX(), minY = boundary.bottomLeft().getY();
         int maxX = boundary.topRight().getX(), maxY = boundary.topRight().getY();
+        mapScrollPane.setMinWidth(Math.min((maxX - minX + 2) * 40 + 50, Screen.getPrimary().getBounds().getWidth() - 150));
+        mapScrollPane.setPrefHeight(Math.min((maxY - minY + 2) * 40 + 50, Screen.getPrimary().getBounds().getHeight() - 150));
         mapGrid.add(new Label("y\\x"), 0, 0);
         for (int x = minX; x <= maxX; x++)
             mapGrid.add(new Label("%d".formatted(x)), x - minX + 1, 0);
