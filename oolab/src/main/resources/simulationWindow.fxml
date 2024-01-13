@@ -78,12 +78,12 @@
                 <Label GridPane.columnIndex="2" GridPane.rowIndex="6" fx:id="animalAgeLabel"/>
                 <Button GridPane.columnIndex="1" GridPane.rowIndex="7" text="Stop tracking" onAction="#stopTracking"/>
             </GridPane>
-            <HBox>
+            <VBox spacing="10" alignment="CENTER">
                 <Button fx:id="highlightGenomeButton" text="Most popular genomes" alignment="CENTER"
                         onAction="#highlightGenome" visible="false" managed="false"/>
                 <Button fx:id="highlightPreferredButton" text="Highlight preferred fields" alignment="CENTER"
                         onAction="#highlightPreferred" visible="false" managed="false"/>
-            </HBox>
+            </VBox>
 
         </VBox>
     </right>
