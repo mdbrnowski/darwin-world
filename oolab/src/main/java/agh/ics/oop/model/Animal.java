@@ -5,6 +5,7 @@ import agh.ics.oop.model.util.RandomGenerator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class Animal implements WorldElement, Comparable<Animal> {
     private MapDirection orientation;
@@ -13,6 +14,8 @@ public class Animal implements WorldElement, Comparable<Animal> {
     private int childrenNum;
     private int age;
     private final AbstractGenome genome;
+    private final int id;
+    private static int curr_id = 0;
     public final static String MULTIPLE_ANIMALS_TO_STRING = "⚤";
 
 
@@ -23,6 +26,12 @@ public class Animal implements WorldElement, Comparable<Animal> {
         this.genome = genome;
         this.childrenNum = 0;
         this.age = 0;
+        id = curr_id;
+        curr_id += 1;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public MapDirection getOrientation() {
@@ -79,7 +88,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
     public AbstractGenome getGenome() {
         return genome;
     }
-    
+
     public void incrementChildrenNum() {
         childrenNum += 1;
     }

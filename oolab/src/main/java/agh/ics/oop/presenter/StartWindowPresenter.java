@@ -192,6 +192,7 @@ public class StartWindowPresenter {
             loader.setLocation(getClass().getClassLoader().getResource("simulationWindow.fxml"));
             BorderPane viewRoot = loader.load();
             SimulationPresenter presenter = loader.getController();
+            presenter.setStage(newWindowStage);
             configureStage(newWindowStage, viewRoot);
             newWindowStage.show();
 
