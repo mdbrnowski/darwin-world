@@ -80,6 +80,8 @@ public class SimulationPresenter implements MapChangeListener {
     private Stage stage;
     private Pause pause = new Pause();
     private HashMap<Vector2d, Double> highlightGenomePositions = new HashMap<>();
+    private boolean highlightGenomeButtonPressed = false;
+    private boolean highlightPreferredButtonPressed = false;
     private List<Vector2d> highlightPreferred = new ArrayList<>();
 
     @Override
@@ -231,10 +233,12 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void highlightGenome() {
-        if (highlightGenomePositions.isEmpty()) {
+        if (!highlightGenomeButtonPressed) {
+            highlightGenomeButtonPressed = true;
             highlightGenomePositions = pause.highlightGenomes(map);
             highlightGenomeButton.setStyle("-fx-background-color: rgba(245,204,27,0.63);-fx-border-color: lightblue;-fx-border-radius: 5px");
         } else {
+            highlightGenomeButtonPressed = false;
             highlightGenomePositions.clear();
             highlightGenomeButton.setStyle(null);
         }
@@ -242,10 +246,12 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void highlightPreferred() {
-        if (highlightPreferred.isEmpty()) {
+        if (!highlightPreferredButtonPressed) {
+            highlightPreferredButtonPressed = true;
             highlightPreferred = pause.highlightPreferred(simulation.getVegetation(), map);
             highlightPreferredButton.setStyle("-fx-background-color: rgba(20,230,0,0.5);-fx-border-color: lightblue;-fx-border-radius: 5px");
         } else {
+            highlightPreferredButtonPressed = false;
             highlightPreferred.clear();
             highlightPreferredButton.setStyle(null);
         }
