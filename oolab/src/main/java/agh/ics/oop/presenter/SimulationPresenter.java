@@ -205,7 +205,7 @@ public class SimulationPresenter implements MapChangeListener {
                     }
                 }
 
-                if (pause.isTracked() && pause.getTrackedAnimal().getPosition().equals(new Vector2d(x, y)) && pause.getTrackedAnimal().getDiedOn() == null) {
+                if (pause.isTracked() && pause.getTrackedAnimal().getPosition().equals(new Vector2d(x, y)) && pause.getTrackedAnimal().getEnergy()>0) {
                     BorderStroke borderStroke = new BorderStroke(
                             Color.BLUE,
                             BorderStrokeStyle.SOLID,
