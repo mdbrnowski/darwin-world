@@ -89,10 +89,14 @@ public class SimulationPresenter implements MapChangeListener {
         numberOfEmptyFieldsLabel.setText(String.valueOf(map.getNumberOfEmptyFields()));
         double averageLifeSpan = deadAnimals.stream().collect(Collectors.averagingDouble(Animal::getAge));
         averageLifeSpanLabel.setText(averageLifeSpan > 0 ? String.format("%.1f", averageLifeSpan) : "N/A");
-        averageEnergyLabel.setText(String.format("%.1f", animals.stream().collect(Collectors.averagingDouble(Animal::getEnergy))));
-        averageNumberOfChildrenLabel.setText(String.format("%.1f", animals.stream().collect(Collectors.averagingDouble(Animal::getChildrenNum))));
-        mostPopularGenotypeLabel.setText(PopularityCounter.getMostPopularAsString(animals.stream().map(a -> a.getGenome().toString()).collect(Collectors.toList()), 3));
-        System.out.println("setStats: " + PopularityCounter.getMostPopularAsString(animals.stream().map(a -> a.getGenome().toString()).collect(Collectors.toList()), 3));
+        averageEnergyLabel.setText(String.format("%.1f",
+                animals.stream().collect(Collectors.averagingDouble(Animal::getEnergy))));
+        averageNumberOfChildrenLabel.setText(String.format("%.1f",
+                animals.stream().collect(Collectors.averagingDouble(Animal::getChildrenNum))));
+        mostPopularGenotypeLabel.setText(
+                PopularityCounter.getMostPopularAsString(animals.stream()
+                        .map(a -> a.getGenome().toString())
+                        .collect(Collectors.toList()), 3));
     }
 
     public void drawMap() {
@@ -152,7 +156,7 @@ public class SimulationPresenter implements MapChangeListener {
         for (Node label : mapGrid.getChildren())
             GridPane.setHalignment(label, HPos.CENTER);
     }
-    
+
     private void clearGrid() {
         mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
         mapGrid.getColumnConstraints().clear();
