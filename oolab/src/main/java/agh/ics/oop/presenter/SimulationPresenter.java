@@ -2,6 +2,7 @@ package agh.ics.oop.presenter;
 
 import agh.ics.oop.Simulation;
 import agh.ics.oop.SimulationEngine;
+import agh.ics.oop.onActionControls.Pause;
 import agh.ics.oop.parameters.SimulationParameters;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.Boundary;
@@ -10,21 +11,27 @@ import agh.ics.oop.parameters.MapParameters;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SimulationPresenter implements MapChangeListener {
     private WorldMap map;
-
+    @FXML
+    public Button pauseButton;
+    @FXML
+    public ImageView pauseButtonImageView;
     @FXML
     public GridPane mapGrid;
     @FXML
@@ -47,6 +54,9 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     public Label mostPopularGenotypeLabel;
 
+    private SimulationEngine simulationEngine;
+    private Simulation simulation;
+    private Stage stage;
 
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
@@ -88,8 +98,7 @@ public class SimulationPresenter implements MapChangeListener {
         mostPopularGenotypeLabel.setText(
                 PopularityCounter.getMostPopularAsString(animals.stream()
                         .map(a -> a.getGenome().toString())
-                        .collect(Collectors.toList()), 3)
-        );
+                        .collect(Collectors.toList()), 3));
     }
 
     public void drawMap() {
@@ -108,11 +117,25 @@ public class SimulationPresenter implements MapChangeListener {
         for (int i = 0; i < maxY - minY + 2; i++)
             mapGrid.getRowConstraints().add(new RowConstraints(40));
 
+        HashMap<Vector2d, Double> highlightPositions = Pause.highlightGenomes(map);
+        updateStats();
         int maxEnergy = map.getAnimals().stream().mapToInt(Animal::getEnergy).max().orElse(1);
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 var label = new Label();
                 var animals = map.getAnimalsAt(new Vector2d(x, y));
+                label.setPrefHeight(38);
+                label.setPrefWidth(38);
+                label.setAlignment(Pos.CENTER);
+
+                if (simulation != null && simulation.isStopped()) {
+                    if (!animals.isEmpty()) label.setOnMouseClicked(a -> Pause.showAnimalStats(label, animals, stage));
+                    if (highlightPositions.get(new Vector2d(x, y)) != null) {
+                        label.setStyle(String.format("-fx-background-color: rgba(255,240,%.2f,0.8)",
+                                255 - highlightPositions.get(new Vector2d(x, y)) * 255));
+                    }
+
+                }
                 if (animals.size() > 1) {
                     var animal = Collections.max(animals);
                     label.setText(Animal.MULTIPLE_ANIMALS_TO_STRING);
@@ -132,6 +155,7 @@ public class SimulationPresenter implements MapChangeListener {
             }
         }
 
+
         for (Node label : mapGrid.getChildren())
             GridPane.setHalignment(label, HPos.CENTER);
     }
@@ -147,9 +171,24 @@ public class SimulationPresenter implements MapChangeListener {
                 mapParameters.mapHeight());
         setWorldMap(map);
         map.addObserver(this);
-        Simulation simulation = new Simulation(map, simulationParameters, 500);
-        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
+        simulation = new Simulation(map, simulationParameters, 500);
+        simulationEngine = new SimulationEngine(List.of(simulation));
         simulationEngine.runAsync();
         setupStats();
+        System.out.println(this);
+    }
+
+    public void onPauseButtonClicked() {
+        Pause.pause(simulation, pauseButtonImageView);
+        drawMap();
+    }
+
+    public void shutdown() {
+        simulationEngine.shutdown();
+    }
+
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }

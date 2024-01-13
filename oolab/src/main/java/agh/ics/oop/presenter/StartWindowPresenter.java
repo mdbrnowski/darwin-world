@@ -192,9 +192,13 @@ public class StartWindowPresenter {
             loader.setLocation(getClass().getClassLoader().getResource("simulationWindow.fxml"));
             BorderPane viewRoot = loader.load();
             SimulationPresenter presenter = loader.getController();
+            presenter.setStage(newWindowStage);
             configureStage(newWindowStage, viewRoot);
             newWindowStage.show();
+
             presenter.runSimulation(mapParameters, simulationParameters);
+
+            newWindowStage.setOnCloseRequest(event -> presenter.shutdown());
         } catch (InvalidParametersException e) {
             errorLabel.setText(e.getMessage());
         }
@@ -311,7 +315,7 @@ public class StartWindowPresenter {
 
         String csvData = name + ";" + String.join(";", configurations.get(name));
         try {
-            Files.writeString(Path.of("configurations.csv"), csvData + System.lineSeparator(), CREATE, APPEND);
+            Files.writeString(Path.of(PATH), csvData + System.lineSeparator(), CREATE, APPEND);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
