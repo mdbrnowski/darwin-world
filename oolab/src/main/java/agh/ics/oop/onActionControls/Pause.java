@@ -54,12 +54,10 @@ public class Pause {
         int weightSum = weights.stream()
                 .reduce(0, Integer::sum);
 
-
         List<List<Vector2d>> mostPopularAnimalsPositions = new ArrayList<>();
 
-        int n = mostPopular.size();
-        for (int i = 0; i < n; i++) {
-            String genome = mostPopular.get(i).getKey();
+        for (Pair<String, Integer> stringIntegerPair : mostPopular) {
+            String genome = stringIntegerPair.getKey();
             List<Vector2d> currMostPopular = animals.stream()
                     .filter(animal -> genome.equals(animal.getGenome().toString()))
                     .map(Animal::getPosition)
@@ -68,7 +66,7 @@ public class Pause {
         }
         HashMap<Vector2d, Double> allPositions = new HashMap<>();
 
-        for (int i = n - 1; i >= 0; i--) {
+        for (int i = mostPopular.size() - 1; i >= 0; i--) {
             int m = mostPopularAnimalsPositions.get(i).size();
             for (int j = 0; j < m; j++) {
                 Vector2d vector = mostPopularAnimalsPositions.get(i).get(j);
@@ -133,7 +131,6 @@ public class Pause {
         scrollAnimalInfo.setStyle("-fx-padding: 20px, 20px, 20px,20px");
         scrollHBox.setAlignment(Pos.CENTER);
         dialogVbox.getChildren().add(scrollHBox);
-
 
         dialogVbox.setAlignment(Pos.CENTER);
 

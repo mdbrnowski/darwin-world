@@ -131,8 +131,8 @@ public class SimulationPresenter implements MapChangeListener {
                 if (simulation != null && simulation.isStopped()) {
                     if (!animals.isEmpty()) label.setOnMouseClicked(a -> Pause.showAnimalStats(label, animals, stage));
                     if (highlightPositions.get(new Vector2d(x, y)) != null) {
-                        label.setStyle(String.format("-fx-background-color: rgba(255,240,%.2f,0.7)",
-                                highlightPositions.get(new Vector2d(x, y)) * 255));
+                        label.setStyle(String.format("-fx-background-color: rgba(255,240,%.2f,0.8)",
+                                255 - highlightPositions.get(new Vector2d(x, y)) * 255));
                     }
 
                 }
