@@ -19,6 +19,11 @@ public class FullPredestinationGenome extends AbstractGenome {
     }
 
     @Override
+    public int getIterationIndex(int day) {
+        return day % genome.size();
+    }
+
+    @Override
     public boolean equals(Object other) {
         if (this == other) return true;
         if (!(other instanceof FullPredestinationGenome that)) return false;

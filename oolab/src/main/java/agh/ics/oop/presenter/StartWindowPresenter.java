@@ -259,7 +259,7 @@ public class StartWindowPresenter {
         Button save = new Button("Save");
 
         cancel.setOnAction(event -> {
-            dialog.close();
+            dialog.hide();
         });
 
         save.setOnAction(event -> {

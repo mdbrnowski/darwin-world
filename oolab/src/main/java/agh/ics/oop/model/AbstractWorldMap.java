@@ -53,6 +53,10 @@ public abstract class AbstractWorldMap implements WorldMap {
     public List<Animal> getAnimals() {
         return new ArrayList<>(animals.values());
     }
+    @Override
+    public int getDay() {
+        return day;
+    }
 
     @Override
     public List<Animal> getDeadAnimals() {
@@ -101,8 +105,15 @@ public abstract class AbstractWorldMap implements WorldMap {
                 e -> e.getValue().getEnergy() == 0).keySet());
         deadAnimals.addAll(Multimaps.filterValues(animals,
                 e -> e.getEnergy() == 0).values().stream().toList());
+
+        List<Animal> recDeadAnimals=getAnimals();
+        for(Animal animal: recDeadAnimals){
+            animal.setDiedOn(Optional.of(day));
+        }
+
         animals = Multimaps.synchronizedMultimap(ArrayListMultimap.create(Multimaps.filterEntries(animals,
                 e -> e.getValue().getEnergy() > 0)));
+
         mapChanged("Dead animals removed");
     }
 

@@ -17,7 +17,9 @@ public abstract class AbstractGenome {
 
     abstract AbstractGenome newInstance(List<Integer> genome);
 
-    abstract int iterate(int day);
+    public abstract int iterate(int day);
+
+    public abstract int getIterationIndex(int day);
 
     @Override
     public abstract boolean equals(Object obj);

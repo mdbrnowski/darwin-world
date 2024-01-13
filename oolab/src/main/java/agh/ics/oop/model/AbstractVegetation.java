@@ -37,7 +37,7 @@ public abstract class AbstractVegetation {
         map.addPlants(plants);
     }
 
-    protected abstract List<Vector2d> getPreferred(AbstractWorldMap map);
+    public abstract List<Vector2d> getPreferred(AbstractWorldMap map);
 
     protected abstract List<Vector2d> getNotPreferred(AbstractWorldMap map);
 }

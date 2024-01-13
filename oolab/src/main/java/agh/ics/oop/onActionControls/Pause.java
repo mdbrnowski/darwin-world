@@ -1,47 +1,54 @@
 package agh.ics.oop.onActionControls;
 
 import agh.ics.oop.Simulation;
-import agh.ics.oop.model.Animal;
-import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.WorldMap;
+import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.PopularityCounter;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Pause {
     private static final Image pauseImage = new Image("pause.png");
     private static final Image resumeImage = new Image("resume.png");
 
-    public static void pause(Simulation simulation, ImageView pauseButtonImageView) {
+    private boolean isTracked = false;
+    private Animal trackedAnimal;
+
+    public static void pause(Simulation simulation, ImageView pauseButtonImageView, Button highlightGenomeButton, Button highlightPreferredButton) {
         if (simulation.isStopped()) {
             simulation.resume();
             pauseButtonImageView.setImage(pauseImage);
-
+            highlightGenomeButton.setVisible(false);
+            highlightGenomeButton.setManaged(false);
+            highlightPreferredButton.setVisible(false);
+            highlightPreferredButton.setManaged(false);
         } else {
             simulation.stop();
             pauseButtonImageView.setImage(resumeImage);
+            highlightGenomeButton.setVisible(true);
+            highlightGenomeButton.setManaged(true);
+            highlightPreferredButton.setVisible(true);
+            highlightPreferredButton.setManaged(true);
         }
     }
 
-    public static HashMap<Vector2d, Double> highlightGenomes(WorldMap map) {
+    public HashMap<Vector2d, Double> highlightGenomes(WorldMap map) {
         var animals = map.getAnimals();
         List<Pair<String, Integer>> mostPopular = PopularityCounter.getMostPopular(animals.stream()
                 .map(animal -> animal.getGenome().toString())
@@ -78,9 +85,22 @@ public class Pause {
         return allPositions;
     }
 
-    public static void showAnimalStats(Label label, List<Animal> animals, Stage stage) {
+    public List<Vector2d> highlightPreferred(AbstractVegetation vegetation, WorldMap map) {
+        List<Vector2d> positions = vegetation.getPreferred((AbstractWorldMap) map);
+        return positions;
+    }
+
+    public void showAnimalStats(Label label, List<Animal> animals, Stage stage, int day) {
         String style = label.getStyle();
-        label.setStyle("-fx-border-color: BLUE; -fx-border-width: 2px;-fx-background-color: rgba(20,165,255,0.7);");
+        BorderStroke borderStroke = new BorderStroke(
+                Color.BLUE,
+                BorderStrokeStyle.SOLID,
+                null,
+                new BorderWidths(2)
+        );
+
+        Border border = new Border(borderStroke);
+        label.setBorder(border);
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(stage);
@@ -90,24 +110,29 @@ public class Pause {
         Label titleLabel = new Label(String.format("Animals on field (%d,%d):",
                 animals.get(0).getPosition().getX(), animals.get(0).getPosition().getY()));
         titleLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 20));
+        Label promptLabel = new Label("You can choose an animal to track");
+        promptLabel.setFont(Font.font("Arial", FontPosture.REGULAR, 13));
         dialogVbox.getChildren().add(titleLabel);
 
         GridPane animalInfoGridPane = new GridPane();
 
-        int label_num = 6;
+        int label_num = 7;
 
         for (int i = 0; i < animals.size(); i++) {
-
             Label animalIdLabel = new Label("Animal id:");
             Label animalIdValueLabel = new Label(String.format("%s", animals.get(i).getId()));
             Label genomeLabel = new Label("Genome:");
-            Label genomeValueLabel = new Label(String.format("%s", animals.get(i).getGenome()));
+            Label genomeValueLabel = new Label();
+            genomeValueLabel.setGraphic(getGenomeLabelContent(animals.get(i), day));
             Label energyLabel = new Label("Energy:");
             Label energyValueLabel = new Label(String.format("%d", animals.get(i).getEnergy()));
             Label childrenLabel = new Label(("Children number:"));
             Label childrenValueLabel = new Label(String.format("%d", animals.get(i).getChildrenNum()));
             Label ageLabel = new Label("Age:");
             Label ageValueLabel = new Label(String.format(" %s", animals.get(i).getAge()));
+            Button trackButton = new Button("Track");
+            Animal animal = animals.get(i);
+            trackButton.setOnAction(e -> startTracking(animal, dialog));
 
             animalIdLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 15));
 
@@ -121,6 +146,7 @@ public class Pause {
             animalInfoGridPane.add(childrenValueLabel, 1, i * label_num + 3);
             animalInfoGridPane.add(ageLabel, 0, i * label_num + 4);
             animalInfoGridPane.add(ageValueLabel, 1, i * label_num + 4);
+            animalInfoGridPane.add(trackButton, 0, i * label_num + 5);
         }
         ScrollPane scrollAnimalInfo = new ScrollPane(animalInfoGridPane);
         scrollAnimalInfo.setMinWidth(animalInfoGridPane.getPrefWidth());
@@ -136,7 +162,40 @@ public class Pause {
 
         Scene dialogScene = new Scene(dialogVbox, 350, 270);
         dialog.setScene(dialogScene);
-        dialog.setOnCloseRequest(a -> label.setStyle(style));
+        dialog.setOnCloseRequest(a -> {
+            label.setStyle(style);
+            label.setBorder(null);
+        });
         dialog.show();
     }
+
+    public Animal getTrackedAnimal() {
+        return trackedAnimal;
+    }
+
+    public void stopTracking() {
+        isTracked = false;
+    }
+
+    public boolean isTracked() {
+        return isTracked;
+    }
+
+    private void startTracking(Animal animal, Stage dialog) {
+        isTracked = true;
+        trackedAnimal = animal;
+        dialog.close();
+    }
+
+    public HBox getGenomeLabelContent(Animal animal, int day) {
+        String genome = animal.getGenome().toString();
+        int activeGene = animal.getGenome().getIterationIndex(day);
+        Text beforeActive = new Text(genome.substring(0, activeGene));
+        Text active = new Text(genome.substring(activeGene, Math.min(activeGene + 1, genome.length())));
+        active.setFill(Color.RED);
+        active.setStyle("-fx-font-weight: bold;");
+        Text afterActive = new Text(genome.substring(activeGene + 1));
+        return new HBox(beforeActive, active, afterActive);
+    }
+
 }
