@@ -14,7 +14,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
     private final AbstractGenome genome;
     private final int id;
     private static int curr_id = 0;
-    private Optional<Integer> diedOn = null;
+    private Optional<Integer> diedOn = Optional.empty();
     public final static String MULTIPLE_ANIMALS_TO_STRING = "⚤";
 
 
