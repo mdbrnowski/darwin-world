@@ -281,6 +281,8 @@ public class SimulationPresenter implements MapChangeListener {
         highlightPreferred.clear();
         highlightGenomeButton.setStyle(null);
         highlightPreferredButton.setStyle(null);
+        highlightGenomeButtonPressed = false;
+        highlightPreferredButtonPressed = false;
         Pause.pause(simulation, pauseButtonImageView, highlightGenomeButton, highlightPreferredButton);
         drawMap();
     }
