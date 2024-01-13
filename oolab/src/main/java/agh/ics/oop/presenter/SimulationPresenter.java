@@ -75,8 +75,10 @@ public class SimulationPresenter implements MapChangeListener {
     public void setupStats() {
         for (Node node : statsPanel.getChildren())
             if (node instanceof Label label) {
-                if (GridPane.getColumnIndex(node) == 1) label.setFont(new Font(14));
-                else label.setFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 15));
+                if (GridPane.getColumnIndex(node) == 1)
+                    label.setFont(new Font(14));
+                else
+                    label.setFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 15));
             }
     }
 
@@ -129,7 +131,8 @@ public class SimulationPresenter implements MapChangeListener {
                 if (simulation != null && simulation.isStopped()) {
                     if (!animals.isEmpty()) label.setOnMouseClicked(a -> Pause.showAnimalStats(label, animals, stage));
                     if (highlightPositions.get(new Vector2d(x, y)) != null) {
-                        label.setStyle(String.format("-fx-background-color: rgba(255,240,%.2f,0.7)", highlightPositions.get(new Vector2d(x, y)) * 255));
+                        label.setStyle(String.format("-fx-background-color: rgba(255,240,%.2f,0.7)",
+                                highlightPositions.get(new Vector2d(x, y)) * 255));
                     }
 
                 }
@@ -164,7 +167,8 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void runSimulation(MapParameters mapParameters, SimulationParameters simulationParameters) {
-        AbstractWorldMap map = mapParameters.mapType().getEquivalentObject(mapParameters.mapWidth(), mapParameters.mapHeight());
+        AbstractWorldMap map = mapParameters.mapType().getEquivalentObject(mapParameters.mapWidth(),
+                mapParameters.mapHeight());
         setWorldMap(map);
         map.addObserver(this);
         simulation = new Simulation(map, simulationParameters, 500);
