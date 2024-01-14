@@ -11,12 +11,12 @@ import java.util.*;
 public abstract class AbstractWorldMap implements WorldMap {
     protected final int width;
     protected final int height;
+    private final List<MapChangeListener> listeners = new ArrayList<>();
+    private final UUID id;
     protected Multimap<Vector2d, Animal> animals = Multimaps.synchronizedListMultimap(ArrayListMultimap.create());
     protected Map<Vector2d, Grass> plants = new HashMap<>();
     protected List<Animal> deadAnimals = new ArrayList<>();
     protected Set<Vector2d> recentlyDead = new HashSet<>();
-    private final List<MapChangeListener> listeners = new ArrayList<>();
-    private final UUID id;
     protected int day = 0;
 
     public AbstractWorldMap(int width, int height) {
@@ -52,6 +52,11 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public List<Animal> getAnimals() {
         return new ArrayList<>(animals.values());
+    }
+
+    @Override
+    public int getDay() {
+        return day;
     }
 
     @Override
@@ -101,8 +106,14 @@ public abstract class AbstractWorldMap implements WorldMap {
                 e -> e.getValue().getEnergy() == 0).keySet());
         deadAnimals.addAll(Multimaps.filterValues(animals,
                 e -> e.getEnergy() == 0).values().stream().toList());
+
+        List<Animal> recDeadAnimals = getAnimals().stream().filter(e -> e.getEnergy() <= 0).toList();
+        for (Animal animal : recDeadAnimals)
+            animal.setDiedOn(Optional.of(day));
+
         animals = Multimaps.synchronizedMultimap(ArrayListMultimap.create(Multimaps.filterEntries(animals,
                 e -> e.getValue().getEnergy() > 0)));
+
         mapChanged("Dead animals removed");
     }
 

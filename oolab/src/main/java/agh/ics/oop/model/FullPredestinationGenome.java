@@ -14,8 +14,8 @@ public class FullPredestinationGenome extends AbstractGenome {
     }
 
     @Override
-    public int iterate(int day) {
-        return genome.get(day % genome.size());
+    public int getIterationIndex(int day) {
+        return day % genome.size();
     }
 
     @Override

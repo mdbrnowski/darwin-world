@@ -15,12 +15,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.util.*;
@@ -29,11 +31,34 @@ import java.util.stream.Collectors;
 public class SimulationPresenter implements MapChangeListener {
     private WorldMap map;
     @FXML
+    public ScrollPane mapScrollPane;
+    @FXML
+    public Button highlightPreferredButton;
+    @FXML
+    public Button highlightGenomeButton;
+    @FXML
+    public Label plantsEatenLabel;
+    @FXML
+    public Label animalAgeLabelTitle;
+    @FXML
+    public GridPane trackPanel;
+    @FXML
+    public Label idLabel;
+    @FXML
+    public Label animalGenomeLabel;
+    @FXML
+    public Label animalEnergyLabel;
+    @FXML
+    public Label animalChildrenNumLabel;
+    @FXML
+    public Label animalAgeLabel;
+    @FXML
     public Button pauseButton;
     @FXML
     public ImageView pauseButtonImageView;
     @FXML
     public GridPane mapGrid;
+
     @FXML
     private Label moveDescriptionLabel;
 
@@ -57,14 +82,33 @@ public class SimulationPresenter implements MapChangeListener {
     private SimulationEngine simulationEngine;
     private Simulation simulation;
     private Stage stage;
+    private final Pause pause = new Pause();
+    private HashMap<Vector2d, Double> highlightGenomePositions = new HashMap<>();
+    private boolean highlightGenomeButtonPressed = false;
+    private boolean highlightPreferredButtonPressed = false;
+    private List<Vector2d> highlightPreferred = new ArrayList<>();
 
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
         Platform.runLater(() -> {
             updateStats();
             drawMap();
+            if (pause.isTracked()) {
+                trackPanel.setVisible(true);
+                trackPanel.setManaged(true);
+                updateTrackedAnimal(pause.getTrackedAnimal());
+            } else {
+                trackPanel.setVisible(false);
+                trackPanel.setManaged(false);
+            }
             moveDescriptionLabel.setText(message);
         });
+    }
+
+    public void stopTracking() {
+        pause.stopTracking();
+        trackPanel.setVisible(false);
+        trackPanel.setManaged(false);
     }
 
     private void setWorldMap(WorldMap map) {
@@ -101,11 +145,31 @@ public class SimulationPresenter implements MapChangeListener {
                         .collect(Collectors.toList()), 3));
     }
 
+    public void updateTrackedAnimal(Animal trackedAnimal) {
+        if (trackedAnimal.getEnergy() <= 0 && trackedAnimal.getDiedOn().isPresent()) {
+            animalAgeLabelTitle.setText("Died on day: ");
+            animalAgeLabel.setText(String.format("%d", trackedAnimal.getDiedOn().get()));
+        } else {
+            animalAgeLabelTitle.setText("Age: ");
+            animalAgeLabel.setText(String.format("%d", trackedAnimal.getAge()));
+            animalGenomeLabel.setGraphic(pause.getGenomeLabelContent(trackedAnimal, map.getDay()));
+            animalGenomeLabel.setGraphic(pause.getGenomeLabelContent(trackedAnimal, map.getDay()));
+        }
+        idLabel.setText(String.valueOf(trackedAnimal.getId()));
+        animalEnergyLabel.setText(String.format("%d", trackedAnimal.getEnergy()));
+        animalChildrenNumLabel.setText(String.format("%d", trackedAnimal.getChildrenNum()));
+        plantsEatenLabel.setText(String.format("%d", trackedAnimal.getPlantsEaten()));
+
+    }
+
     public void drawMap() {
         clearGrid();
+
         Boundary boundary = map.getCurrentBounds();
         int minX = boundary.bottomLeft().getX(), minY = boundary.bottomLeft().getY();
         int maxX = boundary.topRight().getX(), maxY = boundary.topRight().getY();
+        mapScrollPane.setMinWidth(Math.min((maxX - minX + 2) * 40 + 50, Screen.getPrimary().getBounds().getWidth() - 150));
+        mapScrollPane.setPrefHeight(Math.min((maxY - minY + 2) * 40 + 50, Screen.getPrimary().getBounds().getHeight() - 150));
         mapGrid.add(new Label("y\\x"), 0, 0);
         for (int x = minX; x <= maxX; x++)
             mapGrid.add(new Label("%d".formatted(x)), x - minX + 1, 0);
@@ -117,7 +181,7 @@ public class SimulationPresenter implements MapChangeListener {
         for (int i = 0; i < maxY - minY + 2; i++)
             mapGrid.getRowConstraints().add(new RowConstraints(40));
 
-        HashMap<Vector2d, Double> highlightPositions = Pause.highlightGenomes(map);
+
         updateStats();
         int maxEnergy = map.getAnimals().stream().mapToInt(Animal::getEnergy).max().orElse(1);
         for (int x = minX; x <= maxX; x++) {
@@ -129,12 +193,27 @@ public class SimulationPresenter implements MapChangeListener {
                 label.setAlignment(Pos.CENTER);
 
                 if (simulation != null && simulation.isStopped()) {
-                    if (!animals.isEmpty()) label.setOnMouseClicked(a -> Pause.showAnimalStats(label, animals, stage));
-                    if (highlightPositions.get(new Vector2d(x, y)) != null) {
+                    if (!animals.isEmpty()) label.setOnMouseClicked(a ->
+                            pause.showAnimalStats(label, animals, stage, map.getDay()));
+                    if (highlightGenomePositions.get(new Vector2d(x, y)) != null) {
                         label.setStyle(String.format("-fx-background-color: rgba(255,240,%.2f,0.8)",
-                                255 - highlightPositions.get(new Vector2d(x, y)) * 255));
+                                255 - highlightGenomePositions.get(new Vector2d(x, y)) * 255));
                     }
+                    if (highlightPreferred.contains(new Vector2d(x, y))) {
+                        label.setStyle("-fx-background-color: rgba(20,230,0,0.5)");
+                    }
+                }
 
+                if (pause.isTracked() && pause.getTrackedAnimal().getPosition().equals(new Vector2d(x, y)) && pause.getTrackedAnimal().getDiedOn().isEmpty()) {
+                    BorderStroke borderStroke = new BorderStroke(
+                            Color.BLUE,
+                            BorderStrokeStyle.SOLID,
+                            null,
+                            new BorderWidths(2)
+                    );
+
+                    Border border = new Border(borderStroke);
+                    label.setBorder(border);
                 }
                 if (animals.size() > 1) {
                     var animal = Collections.max(animals);
@@ -158,6 +237,35 @@ public class SimulationPresenter implements MapChangeListener {
 
         for (Node label : mapGrid.getChildren())
             GridPane.setHalignment(label, HPos.CENTER);
+
+    }
+
+    public void highlightGenome() {
+        if (!highlightGenomeButtonPressed) {
+            highlightGenomeButtonPressed = true;
+            highlightGenomePositions = pause.highlightGenomes(map);
+            highlightGenomeButton.setStyle("-fx-background-color: rgba(245,204,27,0.63);" +
+                    "-fx-border-color: lightblue;-fx-border-radius: 5px");
+        } else {
+            highlightGenomeButtonPressed = false;
+            highlightGenomePositions.clear();
+            highlightGenomeButton.setStyle(null);
+        }
+        drawMap();
+    }
+
+    public void highlightPreferred() {
+        if (!highlightPreferredButtonPressed) {
+            highlightPreferredButtonPressed = true;
+            highlightPreferred = pause.highlightPreferred(simulation.getVegetation(), map);
+            highlightPreferredButton.setStyle("-fx-background-color: rgba(20,230,0,0.5);" +
+                    "-fx-border-color: lightblue;-fx-border-radius: 5px");
+        } else {
+            highlightPreferredButtonPressed = false;
+            highlightPreferred.clear();
+            highlightPreferredButton.setStyle(null);
+        }
+        drawMap();
     }
 
     private void clearGrid() {
@@ -179,7 +287,13 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void onPauseButtonClicked() {
-        Pause.pause(simulation, pauseButtonImageView);
+        highlightGenomePositions.clear();
+        highlightPreferred.clear();
+        highlightGenomeButton.setStyle(null);
+        highlightPreferredButton.setStyle(null);
+        highlightGenomeButtonPressed = false;
+        highlightPreferredButtonPressed = false;
+        Pause.pause(simulation, pauseButtonImageView, highlightGenomeButton, highlightPreferredButton);
         drawMap();
     }
 

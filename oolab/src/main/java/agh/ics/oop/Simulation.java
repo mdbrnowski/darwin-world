@@ -69,7 +69,7 @@ public class Simulation implements Runnable {
                 if (!animalsAt.isEmpty()) {
                     animalsAt.sort(Collections.reverseOrder());
                     Animal best = animalsAt.get(0);
-                    best.increaseEnergy(parameters.energyParameters().energyFromOnePlant());
+                    best.eatPlant(parameters.energyParameters().energyFromOnePlant());
                     map.removePlant(plant);
                 }
             }
@@ -131,6 +131,10 @@ public class Simulation implements Runnable {
         AbstractGenome genome = genomeType.getEquivalentObject(randomList);
 
         return new Animal(position, mapDirection, energy, genome);
+    }
+
+    public AbstractVegetation getVegetation() {
+        return vegetation;
     }
 
     private void setVegetation(VegetationType vegetationType, AbstractWorldMap map, int plantsCount) {

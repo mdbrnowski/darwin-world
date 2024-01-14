@@ -16,12 +16,12 @@ public class BackAndForthGenome extends AbstractGenome {
     }
 
     @Override
-    public int iterate(int day) {
+    public int getIterationIndex(int day) {
         int size = genome.size();
         if ((day / size) % 2 == 0) {
-            return genome.get(day % size);
+            return day % size;
         }
-        return genome.get(size - 1 - day % size);
+        return size - 1 - day % size;
     }
 
     @Override

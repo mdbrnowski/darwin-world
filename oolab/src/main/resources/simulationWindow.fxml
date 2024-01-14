@@ -8,6 +8,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ScrollPane?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="650.0" minWidth="850.0"
@@ -25,10 +26,14 @@
                     </graphic>
                 </Button>
             </HBox>
+            <HBox alignment="CENTER">
+                <ScrollPane fx:id="mapScrollPane" style="-fx-padding: 20px">
+                    <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true">
 
-            <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true">
+                    </GridPane>
+                </ScrollPane>
+            </HBox>
 
-            </GridPane>
         </VBox>
 
     </center>
@@ -38,22 +43,48 @@
     </top>
 
     <right>
-        <GridPane fx:id="statsPanel" minWidth="300" hgap="20" vgap="10">
-            <Label GridPane.columnIndex="1" GridPane.rowIndex="1" text="Number of animals:"/>
-            <Label GridPane.columnIndex="2" GridPane.rowIndex="1" fx:id="numberOfAnimalsLabel"/>
-            <Label GridPane.columnIndex="1" GridPane.rowIndex="2" text="Number of plants:"/>
-            <Label GridPane.columnIndex="2" GridPane.rowIndex="2" fx:id="numberOfPlantsLabel"/>
-            <Label GridPane.columnIndex="1" GridPane.rowIndex="3" text="Number of empty fields:"/>
-            <Label GridPane.columnIndex="2" GridPane.rowIndex="3" fx:id="numberOfEmptyFieldsLabel"/>
-            <Label GridPane.columnIndex="1" GridPane.rowIndex="4" text="Average energy:"/>
-            <Label GridPane.columnIndex="2" GridPane.rowIndex="4" fx:id="averageEnergyLabel"/>
-            <Label GridPane.columnIndex="1" GridPane.rowIndex="5" text="Average life span:"/>
-            <Label GridPane.columnIndex="2" GridPane.rowIndex="5" fx:id="averageLifeSpanLabel"/>
-            <Label GridPane.columnIndex="1" GridPane.rowIndex="6" text="Average number of children:"/>
-            <Label GridPane.columnIndex="2" GridPane.rowIndex="6" fx:id="averageNumberOfChildrenLabel"/>
-            <Label GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.valignment="TOP"
-                   text="Most popular genotype:"/>
-            <Label GridPane.columnIndex="2" GridPane.rowIndex="7" fx:id="mostPopularGenotypeLabel"/>
-        </GridPane>
+        <VBox spacing="10">
+            <GridPane fx:id="statsPanel" minWidth="300" hgap="20" vgap="10">
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="1" text="Number of animals:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="1" fx:id="numberOfAnimalsLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="2" text="Number of plants:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="2" fx:id="numberOfPlantsLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="3" text="Number of empty fields:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="3" fx:id="numberOfEmptyFieldsLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="4" text="Average energy:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="4" fx:id="averageEnergyLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="5" text="Average life span:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="5" fx:id="averageLifeSpanLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="6" text="Average number of children:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="6" fx:id="averageNumberOfChildrenLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.valignment="TOP"
+                       text="Most popular genotype:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="7" fx:id="mostPopularGenotypeLabel"/>
+            </GridPane>
+
+            <GridPane fx:id="trackPanel" minWidth="300" hgap="20" vgap="10" visible="false" managed="false">
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="0" text="Tracked animal:" style="-fx-font-weight: bold;-fx-font-size: 15" />
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="1" text="Animal id:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="1" fx:id="idLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="2" text="Genome:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="2" fx:id="animalGenomeLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="3" text="Energy:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="3" fx:id="animalEnergyLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="4" text="Children Number:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="4" fx:id="animalChildrenNumLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="5"  text="Plants eaten:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="5" fx:id="plantsEatenLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="6" fx:id="animalAgeLabelTitle" text="Age:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="6" fx:id="animalAgeLabel"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="7" text="Stop tracking" onAction="#stopTracking"/>
+            </GridPane>
+            <VBox spacing="10" alignment="CENTER">
+                <Button fx:id="highlightGenomeButton" text="Most popular genomes" alignment="CENTER"
+                        onAction="#highlightGenome" visible="false" managed="false"/>
+                <Button fx:id="highlightPreferredButton" text="Highlight preferred fields" alignment="CENTER"
+                        onAction="#highlightPreferred" visible="false" managed="false"/>
+            </VBox>
+
+        </VBox>
     </right>
 </BorderPane>

@@ -74,6 +74,11 @@ public interface WorldMap {
     void removeDead();
 
     /**
+     * Return current day of the map.
+     */
+    int getDay();
+
+    /**
      * @return number of empty fields (without any animals).
      */
     int getNumberOfEmptyFields();

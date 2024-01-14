@@ -2,10 +2,7 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.RandomGenerator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class Animal implements WorldElement, Comparable<Animal> {
     private MapDirection orientation;
@@ -13,9 +10,11 @@ public class Animal implements WorldElement, Comparable<Animal> {
     private int energy;
     private int childrenNum;
     private int age;
+    private int plantsEaten = 0;
     private final AbstractGenome genome;
     private final int id;
     private static int curr_id = 0;
+    private Optional<Integer> diedOn = Optional.empty();
     public final static String MULTIPLE_ANIMALS_TO_STRING = "⚤";
 
 
@@ -33,6 +32,15 @@ public class Animal implements WorldElement, Comparable<Animal> {
     public int getId() {
         return id;
     }
+
+    public void setDiedOn(Optional<Integer> diedOn) {
+        this.diedOn = diedOn;
+    }
+
+    public Optional<Integer> getDiedOn() {
+        return diedOn;
+    }
+
 
     public MapDirection getOrientation() {
         return orientation;
@@ -65,12 +73,17 @@ public class Animal implements WorldElement, Comparable<Animal> {
         return energy;
     }
 
-    public void increaseEnergy(int value) {
-        energy += value;
+    public void eatPlant(int energyFromPlant) {
+        energy += energyFromPlant;
+        plantsEaten++;
     }
 
     public void decreaseEnergy(int value) {
-        increaseEnergy(-value);
+        energy -= value;
+    }
+
+    public int getPlantsEaten() {
+        return plantsEaten;
     }
 
     public int getChildrenNum() {
