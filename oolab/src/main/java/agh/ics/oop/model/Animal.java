@@ -14,7 +14,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
     private final AbstractGenome genome;
     private final int id;
     private static int curr_id = 0;
-    private Optional<Integer> diedOn = Optional.empty();
+    private Integer diedOn = null;
     public final static String MULTIPLE_ANIMALS_TO_STRING = "⚤";
 
 
@@ -33,14 +33,13 @@ public class Animal implements WorldElement, Comparable<Animal> {
         return id;
     }
 
-    public void setDiedOn(Optional<Integer> diedOn) {
+    public void setDiedOn(Integer diedOn) {
         this.diedOn = diedOn;
     }
 
     public Optional<Integer> getDiedOn() {
-        return diedOn;
+        return Optional.ofNullable(diedOn);
     }
-
 
     public MapDirection getOrientation() {
         return orientation;

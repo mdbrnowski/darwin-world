@@ -177,7 +177,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void updateTrackedAnimal(Animal trackedAnimal) {
-        if (trackedAnimal.getEnergy() <= 0 && trackedAnimal.getDiedOn().isPresent()) {
+        if (trackedAnimal.getDiedOn().isPresent()) {
             animalAgeLabelTitle.setText("Died on day: ");
             animalAgeLabel.setText(String.format("%d", trackedAnimal.getDiedOn().get()));
         } else {
@@ -236,7 +236,8 @@ public class SimulationPresenter implements MapChangeListener {
                     }
                 }
 
-                if (pause.isTracked() && pause.getTrackedAnimal().getPosition().equals(new Vector2d(x, y)) && pause.getTrackedAnimal().getDiedOn().isEmpty()) {
+                if (pause.isTracked() && pause.getTrackedAnimal().getPosition().equals(new Vector2d(x, y)) &&
+                        pause.getTrackedAnimal().getDiedOn().isEmpty()) {
                     BorderStroke borderStroke = new BorderStroke(
                             Color.BLUE,
                             BorderStrokeStyle.SOLID,

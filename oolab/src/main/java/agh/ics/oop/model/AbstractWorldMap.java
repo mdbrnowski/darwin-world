@@ -105,7 +105,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
         List<Animal> recDeadAnimals = getAnimals().stream().filter(e -> e.getEnergy() <= 0).toList();
         for (Animal animal : recDeadAnimals)
-            animal.setDiedOn(Optional.of(day));
+            animal.setDiedOn(day);
 
         animals = Multimaps.synchronizedMultimap(ArrayListMultimap.create(Multimaps.filterEntries(animals,
                 e -> e.getValue().getEnergy() > 0)));
