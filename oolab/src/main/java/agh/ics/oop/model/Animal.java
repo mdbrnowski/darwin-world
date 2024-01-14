@@ -73,20 +73,17 @@ public class Animal implements WorldElement, Comparable<Animal> {
         return energy;
     }
 
-    public void increaseEnergy(int value) {
-        energy += value;
+    public void eatPlant(int energyFromPlant) {
+        energy += energyFromPlant;
+        plantsEaten++;
     }
 
     public void decreaseEnergy(int value) {
-        increaseEnergy(-value);
+        energy -= value;
     }
 
     public int getPlantsEaten() {
         return plantsEaten;
-    }
-
-    public void increasePlantsEaten(int value) {
-        plantsEaten += value;
     }
 
     public int getChildrenNum() {

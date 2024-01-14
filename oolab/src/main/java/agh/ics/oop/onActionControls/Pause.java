@@ -30,7 +30,8 @@ public class Pause {
     private boolean isTracked = false;
     private Animal trackedAnimal;
 
-    public static void pause(Simulation simulation, ImageView pauseButtonImageView, Button highlightGenomeButton, Button highlightPreferredButton) {
+    public static void pause(Simulation simulation, ImageView pauseButtonImageView, Button highlightGenomeButton,
+                             Button highlightPreferredButton) {
         if (simulation.isStopped()) {
             simulation.resume();
             pauseButtonImageView.setImage(pauseImage);
@@ -86,8 +87,7 @@ public class Pause {
     }
 
     public List<Vector2d> highlightPreferred(AbstractVegetation vegetation, WorldMap map) {
-        List<Vector2d> positions = vegetation.getPreferred((AbstractWorldMap) map);
-        return positions;
+        return vegetation.getPreferred((AbstractWorldMap) map);
     }
 
     public void showAnimalStats(Label label, List<Animal> animals, Stage stage, int day) {
@@ -197,5 +197,4 @@ public class Pause {
         Text afterActive = new Text(genome.substring(activeGene + 1));
         return new HBox(beforeActive, active, afterActive);
     }
-
 }

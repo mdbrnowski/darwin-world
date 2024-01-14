@@ -69,8 +69,7 @@ public class Simulation implements Runnable {
                 if (!animalsAt.isEmpty()) {
                     animalsAt.sort(Collections.reverseOrder());
                     Animal best = animalsAt.get(0);
-                    best.increaseEnergy(parameters.energyParameters().energyFromOnePlant());
-                    best.increasePlantsEaten(1);
+                    best.eatPlant(parameters.energyParameters().energyFromOnePlant());
                     map.removePlant(plant);
                 }
             }

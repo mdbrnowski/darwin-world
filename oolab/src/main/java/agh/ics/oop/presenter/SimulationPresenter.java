@@ -82,7 +82,7 @@ public class SimulationPresenter implements MapChangeListener {
     private SimulationEngine simulationEngine;
     private Simulation simulation;
     private Stage stage;
-    private Pause pause = new Pause();
+    private final Pause pause = new Pause();
     private HashMap<Vector2d, Double> highlightGenomePositions = new HashMap<>();
     private boolean highlightGenomeButtonPressed = false;
     private boolean highlightPreferredButtonPressed = false;
@@ -193,9 +193,8 @@ public class SimulationPresenter implements MapChangeListener {
                 label.setAlignment(Pos.CENTER);
 
                 if (simulation != null && simulation.isStopped()) {
-                    if (!animals.isEmpty()) label.setOnMouseClicked(a -> {
-                        pause.showAnimalStats(label, animals, stage, map.getDay());
-                    });
+                    if (!animals.isEmpty()) label.setOnMouseClicked(a ->
+                            pause.showAnimalStats(label, animals, stage, map.getDay()));
                     if (highlightGenomePositions.get(new Vector2d(x, y)) != null) {
                         label.setStyle(String.format("-fx-background-color: rgba(255,240,%.2f,0.8)",
                                 255 - highlightGenomePositions.get(new Vector2d(x, y)) * 255));
@@ -245,7 +244,8 @@ public class SimulationPresenter implements MapChangeListener {
         if (!highlightGenomeButtonPressed) {
             highlightGenomeButtonPressed = true;
             highlightGenomePositions = pause.highlightGenomes(map);
-            highlightGenomeButton.setStyle("-fx-background-color: rgba(245,204,27,0.63);-fx-border-color: lightblue;-fx-border-radius: 5px");
+            highlightGenomeButton.setStyle("-fx-background-color: rgba(245,204,27,0.63);" +
+                    "-fx-border-color: lightblue;-fx-border-radius: 5px");
         } else {
             highlightGenomeButtonPressed = false;
             highlightGenomePositions.clear();
@@ -258,7 +258,8 @@ public class SimulationPresenter implements MapChangeListener {
         if (!highlightPreferredButtonPressed) {
             highlightPreferredButtonPressed = true;
             highlightPreferred = pause.highlightPreferred(simulation.getVegetation(), map);
-            highlightPreferredButton.setStyle("-fx-background-color: rgba(20,230,0,0.5);-fx-border-color: lightblue;-fx-border-radius: 5px");
+            highlightPreferredButton.setStyle("-fx-background-color: rgba(20,230,0,0.5);" +
+                    "-fx-border-color: lightblue;-fx-border-radius: 5px");
         } else {
             highlightPreferredButtonPressed = false;
             highlightPreferred.clear();
