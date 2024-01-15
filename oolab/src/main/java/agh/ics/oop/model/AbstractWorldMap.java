@@ -11,12 +11,12 @@ import java.util.*;
 public abstract class AbstractWorldMap implements WorldMap {
     protected final int width;
     protected final int height;
-    private final List<MapChangeListener> listeners = new ArrayList<>();
-    private final UUID id;
     protected Multimap<Vector2d, Animal> animals = Multimaps.synchronizedListMultimap(ArrayListMultimap.create());
     protected final Map<Vector2d, Grass> plants = new HashMap<>();
     protected final List<Animal> deadAnimals = new ArrayList<>();
     protected Set<Vector2d> recentlyDead = new HashSet<>();
+    private final List<MapChangeListener> listeners = new ArrayList<>();
+    private final UUID id;
     protected int day = 0;
 
     public AbstractWorldMap(int width, int height) {
