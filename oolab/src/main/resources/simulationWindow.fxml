@@ -72,11 +72,14 @@
                 <Label GridPane.columnIndex="2" GridPane.rowIndex="3" fx:id="animalEnergyLabel"/>
                 <Label GridPane.columnIndex="1" GridPane.rowIndex="4" text="Children Number:"/>
                 <Label GridPane.columnIndex="2" GridPane.rowIndex="4" fx:id="animalChildrenNumLabel"/>
-                <Label GridPane.columnIndex="1" GridPane.rowIndex="5"  text="Plants eaten:"/>
-                <Label GridPane.columnIndex="2" GridPane.rowIndex="5" fx:id="plantsEatenLabel"/>
-                <Label GridPane.columnIndex="1" GridPane.rowIndex="6" fx:id="animalAgeLabelTitle" text="Age:"/>
-                <Label GridPane.columnIndex="2" GridPane.rowIndex="6" fx:id="animalAgeLabel"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="7" text="Stop tracking" onAction="#stopTracking"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="5" fx:id="descendantsNumLabelTitle"
+                       text="Descendants Number:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="5" fx:id="descendantsNumLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="6" text="Plants eaten:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="6" fx:id="plantsEatenLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="7" fx:id="animalAgeLabelTitle" text="Age:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="7" fx:id="animalAgeLabel"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="8" text="Stop tracking" onAction="#stopTracking"/>
             </GridPane>
             <VBox spacing="10" alignment="CENTER">
                 <Button fx:id="highlightGenomeButton" text="Most popular genomes" alignment="CENTER"

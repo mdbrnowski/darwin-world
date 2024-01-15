@@ -132,6 +132,8 @@ public class Pause {
             Label ageValueLabel = new Label(String.format(" %s", animals.get(i).getAge()));
             Label descendantsNumLabel=new Label("Descendants number:");
             Label descendantsNumValueLabel=new Label(String.format(" %s", animals.get(i).getDescendantsNum()));
+            Label plantsEatenLabel = new Label("Plants eaten: ");
+            Label plantsEatenValueLabel = new Label(String.format(" %s", animals.get(i).getPlantsEaten()));
             Button trackButton = new Button("Track");
             Animal animal = animals.get(i);
             trackButton.setOnAction(e -> startTracking(animal, dialog));
@@ -146,11 +148,13 @@ public class Pause {
             animalInfoGridPane.add(energyValueLabel, 1, i * label_num + 2);
             animalInfoGridPane.add(childrenLabel, 0, i * label_num + 3);
             animalInfoGridPane.add(childrenValueLabel, 1, i * label_num + 3);
-            animalInfoGridPane.add(ageLabel, 0, i * label_num + 4);
-            animalInfoGridPane.add(ageValueLabel, 1, i * label_num + 4);
-            animalInfoGridPane.add(descendantsNumLabel, 0, i * label_num + 5);
-            animalInfoGridPane.add(descendantsNumValueLabel, 1, i * label_num + 5);
-            animalInfoGridPane.add(trackButton, 0, i * label_num + 6);
+            animalInfoGridPane.add(descendantsNumLabel, 0, i * label_num + 4);
+            animalInfoGridPane.add(descendantsNumValueLabel, 1, i * label_num + 4);
+            animalInfoGridPane.add(plantsEatenLabel, 0, i * label_num + 5);
+            animalInfoGridPane.add(plantsEatenValueLabel, 1, i * label_num + 5);
+            animalInfoGridPane.add(ageLabel, 0, i * label_num + 6);
+            animalInfoGridPane.add(ageValueLabel, 1, i * label_num + 6);
+            animalInfoGridPane.add(trackButton, 0, i * label_num + 7);
         }
         ScrollPane scrollAnimalInfo = new ScrollPane(animalInfoGridPane);
         scrollAnimalInfo.setMinWidth(animalInfoGridPane.getPrefWidth());

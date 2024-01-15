@@ -38,6 +38,10 @@ import static java.nio.file.StandardOpenOption.CREATE;
 public class SimulationPresenter implements MapChangeListener {
     private WorldMap map;
     @FXML
+    public Label descendantsNumLabel;
+    @FXML
+    public Label descendantsNumLabelTitle;
+    @FXML
     public ScrollPane mapScrollPane;
     @FXML
     public Button highlightPreferredButton;
@@ -190,6 +194,7 @@ public class SimulationPresenter implements MapChangeListener {
         animalEnergyLabel.setText(String.format("%d", trackedAnimal.getEnergy()));
         animalChildrenNumLabel.setText(String.format("%d", trackedAnimal.getChildrenNum()));
         plantsEatenLabel.setText(String.format("%d", trackedAnimal.getPlantsEaten()));
+        descendantsNumLabel.setText(String.format("%d", trackedAnimal.getDescendantsNum()));
 
     }
 
