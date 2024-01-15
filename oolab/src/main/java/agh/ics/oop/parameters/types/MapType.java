@@ -2,6 +2,7 @@ package agh.ics.oop.parameters.types;
 
 import agh.ics.oop.model.*;
 
+@SuppressWarnings("SameParameterValue")
 public enum MapType {
     EARTH_GLOBE("EarthGlobe");
     private final String displayValue;

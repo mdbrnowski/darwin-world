@@ -1,0 +1,13 @@
+#pauseAndMap {
+    -fx-padding: 10px 21px 0 0;
+}
+
+#speedUp:disabled {
+    -fx-opacity: 0.5;
+    -fx-background-color: lightgray;
+}
+
+#speedDown:disabled {
+    -fx-opacity: 0.5;
+    -fx-background-color: lightgray;
+}

@@ -1,20 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="650.0" minWidth="850.0"
             fx:controller="agh.ics.oop.presenter.SimulationPresenter"
+            stylesheets="simulationWindow.css"
             style="-fx-padding: 25;">
     <center>
-        <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true">
+        <VBox fx:id="pauseAndMap" spacing="5">
+            <HBox alignment="CENTER_RIGHT" spacing="5">
+                <Button fx:id="pauseButton" onAction="#onPauseButtonClicked">
+                    <graphic>
+                        <ImageView fx:id="pauseButtonImageView" fitWidth="30" preserveRatio="true">
+                            <Image url="pause.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
 
-        </GridPane>
+            </HBox>
+            <HBox alignment="CENTER">
+                <ScrollPane fx:id="mapScrollPane" style="-fx-padding: 20px">
+                    <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true">
+
+                    </GridPane>
+                </ScrollPane>
+            </HBox>
+            <HBox alignment="BASELINE_LEFT" spacing="10" style="-fx-padding: 10px">
+                <Label text="Simulation speed: "/>
+                <Button fx:id="speedDownButton" onAction="#onSpeedDownClicked">
+                    <graphic>
+                        <ImageView fitHeight="13" preserveRatio="true">
+                            <Image url="speedDown.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="speedUpButton" onAction="#onSpeedUpClicked">
+                    <graphic>
+                        <ImageView fitHeight="13" preserveRatio="true">
+                            <Image url="speedUp.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Slider max="2000" fx:id="speedSlider" blockIncrement="100" onMouseDragged="#onSliderChanged"
+                        onMouseClicked="#onSliderChanged" value="1500"/>
+            </HBox>
+        </VBox>
     </center>
 
     <top>
         <Label fx:id="moveDescriptionLabel" text="Nothing yet" textAlignment="CENTER"/>
     </top>
+
+    <right>
+        <VBox spacing="10">
+            <GridPane fx:id="statsPanel" minWidth="300" hgap="20" vgap="10">
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="1" text="Number of animals:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="1" fx:id="numberOfAnimalsLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="2" text="Number of plants:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="2" fx:id="numberOfPlantsLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="3" text="Number of empty fields:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="3" fx:id="numberOfEmptyFieldsLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="4" text="Average energy:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="4" fx:id="averageEnergyLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="5" text="Average life span:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="5" fx:id="averageLifeSpanLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="6" text="Average number of children:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="6" fx:id="averageNumberOfChildrenLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.valignment="TOP"
+                       text="Most popular genotype:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="7" fx:id="mostPopularGenotypeLabel"/>
+            </GridPane>
+
+            <GridPane fx:id="trackPanel" minWidth="300" hgap="20" vgap="10" visible="false" managed="false">
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="0" text="Tracked animal:" style="-fx-font-weight: bold;-fx-font-size: 15" />
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="1" text="Animal id:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="1" fx:id="idLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="2" text="Genome:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="2" fx:id="animalGenomeLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="3" text="Energy:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="3" fx:id="animalEnergyLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="4" text="Children Number:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="4" fx:id="animalChildrenNumLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="5" text="Descendants Number:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="5" fx:id="descendantsNumLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="6" text="Plants eaten:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="6" fx:id="plantsEatenLabel"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="7" fx:id="animalAgeLabelTitle" text="Age:"/>
+                <Label GridPane.columnIndex="2" GridPane.rowIndex="7" fx:id="animalAgeLabel"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="8" text="Stop tracking" onAction="#stopTracking"/>
+            </GridPane>
+            <VBox spacing="10" alignment="CENTER">
+                <Button fx:id="highlightGenomeButton" text="Most popular genomes" alignment="CENTER"
+                        onAction="#highlightGenome" visible="false" managed="false"/>
+                <Button fx:id="highlightPreferredButton" text="Highlight preferred fields" alignment="CENTER"
+                        onAction="#highlightPreferred" visible="false" managed="false"/>
+            </VBox>
+
+        </VBox>
+    </right>
 </BorderPane>

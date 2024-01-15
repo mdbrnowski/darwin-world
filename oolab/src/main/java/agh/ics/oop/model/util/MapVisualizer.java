@@ -2,10 +2,10 @@ package agh.ics.oop.model.util;
 
 import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.WorldMap;
+import agh.ics.oop.model.AbstractWorldMap;
 
 /**
- * The map visualizer converts the {@link WorldMap} map into a string
+ * The map visualizer converts the {@link AbstractWorldMap} map into a string
  * representation.
  *
  * @author apohllo, idzik
@@ -14,14 +14,14 @@ public class MapVisualizer {
     private static final String EMPTY_CELL = " ";
     private static final String FRAME_SEGMENT = "-";
     private static final String CELL_SEGMENT = "|";
-    private final WorldMap map;
+    private final AbstractWorldMap map;
 
     /**
      * Initializes the MapVisualizer with an instance of map to visualize.
      *
      * @param map Map
      */
-    public MapVisualizer(WorldMap map) {
+    public MapVisualizer(AbstractWorldMap map) {
         this.map = map;
     }
 
@@ -36,17 +36,17 @@ public class MapVisualizer {
      */
     public String draw(Vector2d lowerLeft, Vector2d upperRight) {
         StringBuilder builder = new StringBuilder();
-        for (int i = upperRight.getY() + 1; i >= lowerLeft.getY() - 1; i--) {
-            if (i == upperRight.getY() + 1) {
+        for (int i = upperRight.y() + 1; i >= lowerLeft.y() - 1; i--) {
+            if (i == upperRight.y() + 1) {
                 builder.append(drawHeader(lowerLeft, upperRight));
             }
             builder.append(String.format("%3d: ", i));
-            for (int j = lowerLeft.getX(); j <= upperRight.getX() + 1; j++) {
-                if (i < lowerLeft.getY() || i > upperRight.getY()) {
-                    builder.append(drawFrame(j <= upperRight.getX()));
+            for (int j = lowerLeft.x(); j <= upperRight.x() + 1; j++) {
+                if (i < lowerLeft.y() || i > upperRight.y()) {
+                    builder.append(drawFrame(j <= upperRight.x()));
                 } else {
                     builder.append(CELL_SEGMENT);
-                    if (j <= upperRight.getX()) {
+                    if (j <= upperRight.x()) {
                         builder.append(drawObject(new Vector2d(j, i)));
                     }
                 }
@@ -67,7 +67,7 @@ public class MapVisualizer {
     private String drawHeader(Vector2d lowerLeft, Vector2d upperRight) {
         StringBuilder builder = new StringBuilder();
         builder.append(" y\\x ");
-        for (int j = lowerLeft.getX(); j < upperRight.getX() + 1; j++) {
+        for (int j = lowerLeft.x(); j < upperRight.x() + 1; j++) {
             builder.append(String.format("%2d", j));
         }
         builder.append(System.lineSeparator());

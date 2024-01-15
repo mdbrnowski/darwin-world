@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -12,7 +11,12 @@
             style="-fx-padding: 25;">
 
     <center>
-        <VBox>
+        <VBox spacing="6">
+            <HBox spacing="5" alignment="BASELINE_LEFT">
+                <Label text="Choose configuration or set a new one: " textAlignment="CENTER"/>
+                <ComboBox fx:id="csvCombo" layoutX="200.0" layoutY="33.0" prefWidth="200.0"/>
+            </HBox>
+
             <Label text="Set parameters" textAlignment="CENTER"/>
             <HBox spacing="5">
                 <VBox>
@@ -46,7 +50,7 @@
                         <ComboBox fx:id="vegetationCombo" layoutX="200.0" layoutY="33.0" prefWidth="150.0"/>
                     </VBox>
                     <VBox>
-                        <Label text="Start plants count" textAlignment="CENTER"/>
+                        <Label text="Plants grown per day" textAlignment="CENTER"/>
                         <Spinner fx:id="plantsCountSpinner" max="30" initialValue="4" editable="true"
                                  prefWidth="150.0"/>
                     </VBox>
@@ -109,7 +113,22 @@
     </center>
 
     <bottom>
-        <Button onAction="#onSimulationStartClicked" text="Start"/>
+        <VBox spacing="20">
+            <HBox>
+                <Label fx:id="errorLabel" textAlignment="CENTER" style="-fx-text-fill: #BB2222; -fx-font-weight: bold;"/>
+            </HBox>
+            <BorderPane>
+                <left>
+                    <HBox spacing="20" alignment="BASELINE_CENTER">
+                        <Button onAction="#onSimulationStartClicked" text="Start"/>
+                        <CheckBox fx:id="saveLogCheck" text="save log"/>
+                    </HBox>
+                </left>
+                <right>
+                    <Button onAction="#onSaveClicked" text="Save configuration"/>
+                </right>
+            </BorderPane>
+        </VBox>
     </bottom>
 
 </BorderPane>

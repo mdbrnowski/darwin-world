@@ -6,7 +6,10 @@ import agh.ics.oop.parameters.SimulationParameters;
 import agh.ics.oop.parameters.types.GenomeType;
 import agh.ics.oop.parameters.types.VegetationType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class Simulation implements Runnable {
@@ -14,22 +17,23 @@ public class Simulation implements Runnable {
     private AbstractVegetation vegetation;
     private long sleepTime = 0;
     private final SimulationParameters parameters;
+    private boolean stopped = false;
+    private boolean ended = false;
 
     public Simulation(AbstractWorldMap map, SimulationParameters parameters) {
         this.map = map;
         this.parameters = parameters;
 
         List<Vector2d> mapFields = new ArrayList<>();
-        for (int i = 0; i < map.getCurrentBounds().topRight().getX(); i++)
-            for (int j = 0; j < map.getCurrentBounds().topRight().getY(); j++) {
+        for (int i = 0; i < map.getCurrentBounds().topRight().x(); i++)
+            for (int j = 0; j < map.getCurrentBounds().topRight().y(); j++) {
                 mapFields.add(new Vector2d(i, j));
             }
 
         for (Vector2d position : new RandomPositionGenerator(mapFields,
                 parameters.generalParameters().startAnimalsCount())) {
-            Animal a = makeNewAnimal(position, parameters.generalParameters().genome(),
-                    parameters.generalParameters().genomeLength());
-            a.setEnergy(parameters.energyParameters().initialAnimalEnergy());
+            Animal a = makeNewAnimal(position, parameters.energyParameters().initialAnimalEnergy(),
+                    parameters.generalParameters().genome(), parameters.generalParameters().genomeLength());
             map.place(a);
         }
         map.mapChanged("All animals placed");
@@ -48,6 +52,8 @@ public class Simulation implements Runnable {
     public void run() {
         sleep();
         while (!map.getAnimals().isEmpty()) {
+            if (ended) return;
+            if (stopped) continue;
             map.nextDay();
             map.removeDead();
 
@@ -66,7 +72,7 @@ public class Simulation implements Runnable {
                 if (!animalsAt.isEmpty()) {
                     animalsAt.sort(Collections.reverseOrder());
                     Animal best = animalsAt.get(0);
-                    best.increaseEnergy(parameters.energyParameters().energyFromOnePlant());
+                    best.eatPlant(parameters.energyParameters().energyFromOnePlant());
                     map.removePlant(plant);
                 }
             }
@@ -89,8 +95,43 @@ public class Simulation implements Runnable {
             }
 
             vegetation.vegetate(map);
+            map.mapChanged("Day %d".formatted(map.getDay()));
             sleep();
         }
+    }
+
+    public boolean isStopped() {
+        return stopped;
+    }
+
+    public void resume() {
+        stopped = false;
+    }
+
+    public void stop() {
+        stopped = true;
+    }
+
+    public void end() {
+        ended = true;
+    }
+
+    public long getSleepTime() {
+        return sleepTime;
+    }
+
+    public void increaseSleepTime() {
+        if (sleepTime < 2000)
+            this.sleepTime += 100;
+    }
+
+    public void decreaseSleepTime() {
+        if (sleepTime > 100)
+            this.sleepTime -= 100;
+    }
+
+    public void setSleepTime(int value) {
+        this.sleepTime = value;
     }
 
     private void sleep() {
@@ -101,7 +142,7 @@ public class Simulation implements Runnable {
         }
     }
 
-    private Animal makeNewAnimal(Vector2d position, GenomeType genomeType, int genomeLength) {
+    private Animal makeNewAnimal(Vector2d position, int energy, GenomeType genomeType, int genomeLength) {
         Random random = new Random();
         MapDirection mapDirection = MapDirection.getRandom();
 
@@ -111,11 +152,15 @@ public class Simulation implements Runnable {
 
         AbstractGenome genome = genomeType.getEquivalentObject(randomList);
 
-        return new Animal(position, mapDirection, genome);
+        return new Animal(position, mapDirection, energy, genome);
+    }
+
+    public AbstractVegetation getVegetation() {
+        return vegetation;
     }
 
     private void setVegetation(VegetationType vegetationType, AbstractWorldMap map, int plantsCount) {
-        this.vegetation = vegetationType.getEquivalentObject(map.getCurrentBounds().topRight().getX(),
-                map.getCurrentBounds().topRight().getY(), plantsCount);
+        this.vegetation = vegetationType.getEquivalentObject(map.getCurrentBounds().topRight().x(),
+                map.getCurrentBounds().topRight().y(), plantsCount);
     }
 }

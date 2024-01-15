@@ -1,9 +1,11 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.util.DescendantCounter;
 import agh.ics.oop.model.util.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class Animal implements WorldElement, Comparable<Animal> {
@@ -12,17 +14,37 @@ public class Animal implements WorldElement, Comparable<Animal> {
     private int energy;
     private int childrenNum;
     private int age;
-    private AbstractGenome genome;
+    private int plantsEaten = 0;
+    private final AbstractGenome genome;
+    private final int id;
+    private static int curr_id = 0;
+    private Integer diedOn = null;
     public final static String MULTIPLE_ANIMALS_TO_STRING = "⚤";
+    private final List<Animal> parents = new ArrayList<>();
+    private int descendantsNum = 0;
 
 
-    //extended constructor, in the future probably should contain energy
-    public Animal(Vector2d position, MapDirection orientation, AbstractGenome genome) {
-        this.orientation = orientation;
-        this.genome = genome;
+    public Animal(Vector2d position, MapDirection orientation, int energy, AbstractGenome genome) {
         this.position = position;
+        this.orientation = orientation;
+        this.energy = energy;
+        this.genome = genome;
         this.childrenNum = 0;
         this.age = 0;
+        id = curr_id;
+        curr_id += 1;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setDiedOn(Integer diedOn) {
+        this.diedOn = diedOn;
+    }
+
+    public Optional<Integer> getDiedOn() {
+        return Optional.ofNullable(diedOn);
     }
 
     public MapDirection getOrientation() {
@@ -45,7 +67,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
 
     @Override
     public String toString() {
-        return orientation.toString() + "%s".formatted(this.energy);  // todo: undo
+        return orientation.toString();
     }
 
     public void move(Vector2d new_position) {
@@ -56,16 +78,21 @@ public class Animal implements WorldElement, Comparable<Animal> {
         return energy;
     }
 
-    public void setEnergy(int energy) {
-        this.energy = energy;
-    }
-
-    public void increaseEnergy(int value) {
-        energy += value;
+    public void eatPlant(int energyFromPlant) {
+        energy += energyFromPlant;
+        plantsEaten++;
     }
 
     public void decreaseEnergy(int value) {
-        increaseEnergy(-value);
+        energy -= value;
+    }
+
+    public int getPlantsEaten() {
+        return plantsEaten;
+    }
+
+    public int getChildrenNum() {
+        return childrenNum;
     }
 
     public int getAge() {
@@ -82,6 +109,22 @@ public class Animal implements WorldElement, Comparable<Animal> {
 
     public void incrementChildrenNum() {
         childrenNum += 1;
+    }
+
+    public List<Animal> getParents() {
+        return parents;
+    }
+
+    public void addParent(Animal animal) {
+        parents.add(animal);
+    }
+
+    public int getDescendantsNum() {
+        return descendantsNum;
+    }
+
+    public void incrementDescendantsNum() {
+        descendantsNum++;
     }
 
     public Animal breed(Animal other, int minMutations, int maxMutations, int energyForChild) {
@@ -112,8 +155,11 @@ public class Animal implements WorldElement, Comparable<Animal> {
         this.decreaseEnergy(energyForChild);
         other.decreaseEnergy(energyForChild);
 
-        Animal child = new Animal(position, MapDirection.getRandom(), newGenome);
-        child.setEnergy(2 * energyForChild);
+        Animal child = new Animal(position, MapDirection.getRandom(), 2 * energyForChild, newGenome);
+        child.addParent(this);
+        child.addParent(other);
+
+        DescendantCounter.increaseDescendantsNum(child);
         return child;
     }
 
