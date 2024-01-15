@@ -29,12 +29,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.nio.file.StandardOpenOption.APPEND;
-import static java.nio.file.StandardOpenOption.CREATE;
 
 public class SimulationPresenter implements MapChangeListener {
     private AbstractWorldMap map;
@@ -104,7 +102,7 @@ public class SimulationPresenter implements MapChangeListener {
     private boolean highlightPreferredButtonPressed = false;
     private Set<Vector2d> highlightPreferred = new HashSet<>();
     private boolean logging;
-    private static final String LOGGING_PATH = "log.csv";
+    private String logging_path;
 
     @Override
     public void mapChanged(AbstractWorldMap map, String message) {
@@ -137,6 +135,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void setupStats() {
+        logging_path = "log_%s.csv".formatted(simulation.toString().substring(simulation.toString().length() - 7));
         for (Node node : statsPanel.getChildren()) {
             if (node instanceof Label label) {
                 if (GridPane.getColumnIndex(node) == 1)
@@ -149,8 +148,8 @@ public class SimulationPresenter implements MapChangeListener {
             try {
                 List<String> headers = List.of("animals", "plants", "avg life span", "avg energy",
                         "avg number of children");
-                Files.writeString(Path.of(LOGGING_PATH), String.join(",", headers) + System.lineSeparator(),
-                        CREATE);
+                Files.writeString(Path.of(logging_path), String.join(",", headers) + System.lineSeparator(),
+                        StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -179,8 +178,8 @@ public class SimulationPresenter implements MapChangeListener {
             try {
                 var stats = Stream.of(animals.size(), plants.size(), averageLifeSpan, averageEnergy,
                         averageNumberOfChildren).map(Object::toString).collect(Collectors.toList());
-                Files.writeString(Path.of(LOGGING_PATH), String.join(",", stats) + System.lineSeparator(),
-                        APPEND);
+                Files.writeString(Path.of(logging_path), String.join(",", stats) + System.lineSeparator(),
+                        StandardOpenOption.APPEND);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

@@ -300,7 +300,6 @@ public class VegetationTest {
         map2.addPlants(plants);
 
         map2.removeDead();
-        System.out.println(vegetation2.getPreferred(map2).size() + vegetation2.getNotPreferred(map2).size());
 
         vegetation2.vegetate(map2);
 
@@ -311,8 +310,6 @@ public class VegetationTest {
         List<Grass> plants2 = map2.getPlants();
         Set<Vector2d> positions2 = plants2.stream().map(Grass::getPosition).collect(Collectors.toSet());
         preferred2 = preferred2.stream().filter(element -> !positions2.contains(element)).collect(Collectors.toSet());
-
-        System.out.println(positions2.size());
 
         Assertions.assertEquals(preferred2.size(), 0);
         Assertions.assertEquals(map2.getPlants().size(), 25);
