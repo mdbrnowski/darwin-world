@@ -130,6 +130,10 @@ public class Simulation implements Runnable {
             this.sleepTime -= 100;
     }
 
+    public void setSleepTime(int value) {
+        this.sleepTime = value;
+    }
+
     private void sleep() {
         try {
             Thread.sleep(sleepTime);

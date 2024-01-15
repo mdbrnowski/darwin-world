@@ -16,6 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -40,6 +41,8 @@ import static java.nio.file.StandardOpenOption.CREATE;
 
 public class SimulationPresenter implements MapChangeListener {
     private WorldMap map;
+    @FXML
+    public Slider speedSlider;
     @FXML
     public Button speedDownButton;
     @FXML
@@ -361,9 +364,15 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void onSpeedDownClicked() {
         simulation.increaseSleepTime();
+        speedSlider.setValue(speedSlider.getMax() - simulation.getSleepTime());
     }
 
     public void onSpeedUpClicked() {
         simulation.decreaseSleepTime();
+        speedSlider.setValue(speedSlider.getMax() - simulation.getSleepTime());
+    }
+
+    public void onSliderChanged() {
+        simulation.setSleepTime((int) (speedSlider.getMax() + 100 - speedSlider.getValue()));
     }
 }
