@@ -1,4 +1,5 @@
-import agh.ics.oop.Simulation;
+package agh.ics.oop;
+
 import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.EarthGlobe;
 import agh.ics.oop.parameters.*;

@@ -4,29 +4,32 @@ package agh.ics.oop.model;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class VegetationTest {
 
     @Test
     public void ForestEquatorsGetPreferredTest() {
         ForestEquators vegetation1 = new ForestEquators(10, 10, 5);
-        List<Vector2d> correct1 = new ArrayList<>();
+        Set<Vector2d> correct1 = new HashSet<>();
 
-        for (int i = 0; i <= 10; i++) {
+        for (int i = 0; i <= 10; i++)
             correct1.add(new Vector2d(i, 5));
-        }
 
         EarthGlobe map1 = new EarthGlobe(10, 10);
 
         Assertions.assertEquals(vegetation1.getPreferred(map1), correct1);
 
         ForestEquators vegetation2 = new ForestEquators(10, 10, 5);
-        List<Vector2d> correct2 = new ArrayList<>();
+        Set<Vector2d> correct2 = new HashSet<>();
 
-        for (int i = 0; i <= 10; i++) {
+        for (int i = 0; i <= 10; i++)
             if (i != 1 && i != 4) correct2.add(new Vector2d(i, 5));
-        }
 
         EarthGlobe map2 = new EarthGlobe(10, 10);
         Map<Vector2d, Grass> plants = new HashMap<>();
@@ -42,11 +45,10 @@ public class VegetationTest {
     @Test
     public void ForestEquatorsGetNotPreferredTest() {
         ForestEquators vegetation1 = new ForestEquators(5, 5, 5);
-        List<Vector2d> correct1 = new ArrayList<>();
+        Set<Vector2d> correct1 = new HashSet<>();
         for (int i = 0; i <= 5; i++)
-            for (int j = 0; j <= 5; j++) {
+            for (int j = 0; j <= 5; j++)
                 if (j != 2) correct1.add(new Vector2d(i, j));
-            }
         EarthGlobe map1 = new EarthGlobe(5, 5);
 
         Assertions.assertEquals(vegetation1.getNotPreferred(map1), correct1);
@@ -62,11 +64,10 @@ public class VegetationTest {
 
         map2.addPlants(plants);
 
-        List<Vector2d> correct2 = new ArrayList<>();
+        Set<Vector2d> correct2 = new HashSet<>();
         for (int i = 0; i <= 5; i++)
-            for (int j = 0; j <= 5; j++) {
+            for (int j = 0; j <= 5; j++)
                 if (!(j == 2 || (i == 1 && j == 5) || (i == 4 && j == 5))) correct2.add(new Vector2d(i, j));
-            }
 
         Assertions.assertEquals(vegetation2.getNotPreferred(map2), correct2);
     }
@@ -75,27 +76,25 @@ public class VegetationTest {
     public void ForestEquatorsVegetateTest() {
         ForestEquators vegetation1 = new ForestEquators(10, 10, 5);
         EarthGlobe map1 = new EarthGlobe(10, 10);
-        List<Vector2d> preferred1 = new ArrayList<>();
+        Set<Vector2d> preferred1 = new HashSet<>();
 
-        for (int i = 0; i <= 10; i++) {
+        for (int i = 0; i <= 10; i++)
             preferred1.add(new Vector2d(i, 5));
-        }
 
         vegetation1.vegetate(map1);
         Assertions.assertEquals(map1.getPlants().size(), 5);
 
         List<Grass> plants1 = map1.getPlants();
-        List<Vector2d> positions1 = plants1.stream().map(Grass::getPosition).toList();
-        preferred1 = preferred1.stream().filter(element -> !positions1.contains(element)).toList();
+        Set<Vector2d> positions1 = plants1.stream().map(Grass::getPosition).collect(Collectors.toSet());
+        preferred1 = preferred1.stream().filter(element -> !positions1.contains(element)).collect(Collectors.toSet());
 
         Assertions.assertEquals(preferred1.size(), 7);
 
         ForestEquators vegetation2 = new ForestEquators(10, 10, 5);
-        List<Vector2d> preferred2 = new ArrayList<>();
+        Set<Vector2d> preferred2 = new HashSet<>();
 
-        for (int i = 0; i <= 10; i++) {
+        for (int i = 0; i <= 10; i++)
             if (i != 1 && i != 4) preferred2.add(new Vector2d(i, 5));
-        }
 
         EarthGlobe map2 = new EarthGlobe(10, 10);
 
@@ -110,8 +109,8 @@ public class VegetationTest {
         Assertions.assertEquals(map2.getPlants().size(), 8);
 
         List<Grass> plants2 = map2.getPlants();
-        List<Vector2d> positions2 = plants2.stream().map(Grass::getPosition).toList();
-        preferred2 = preferred2.stream().filter(element -> !positions2.contains(element)).toList();
+        Set<Vector2d> positions2 = plants2.stream().map(Grass::getPosition).collect(Collectors.toSet());
+        preferred2 = preferred2.stream().filter(element -> !positions2.contains(element)).collect(Collectors.toSet());
 
         Assertions.assertEquals(preferred2.size(), 5);
     }
@@ -139,7 +138,7 @@ public class VegetationTest {
                 new Vector2d(2, 2), new Vector2d(3, 2), new Vector2d(2, 5), new Vector2d(3, 5),
                 new Vector2d(4, 5), new Vector2d(4, 4), new Vector2d(4, 3));
 
-        Assertions.assertEquals(new HashSet<>(vegetation1.getPreferred(map1)), correct1);
+        Assertions.assertEquals(vegetation1.getPreferred(map1), correct1);
 
         LifeGivingCorpses vegetation2 = new LifeGivingCorpses(10, 10, 5);
 
@@ -170,7 +169,7 @@ public class VegetationTest {
                 new Vector2d(4, 3), new Vector2d(5, 3), new Vector2d(1, 2), new Vector2d(2, 2),
                 new Vector2d(3, 2), new Vector2d(1, 1), new Vector2d(2, 1), new Vector2d(1, 0));
 
-        Assertions.assertEquals(new HashSet<>(vegetation2.getPreferred(map2)), correct2);
+        Assertions.assertEquals(vegetation2.getPreferred(map2), correct2);
     }
 
     @Test
@@ -193,7 +192,7 @@ public class VegetationTest {
 
         Set<Vector2d> correct1 = new HashSet<>();
 
-        List<Vector2d> preferred1 = List.of(new Vector2d(1, 4), new Vector2d(2, 4), new Vector2d(3, 4),
+        Set<Vector2d> preferred1 = Set.of(new Vector2d(1, 4), new Vector2d(2, 4), new Vector2d(3, 4),
                 new Vector2d(1, 3), new Vector2d(2, 3), new Vector2d(3, 3), new Vector2d(1, 2),
                 new Vector2d(2, 2), new Vector2d(3, 2), new Vector2d(2, 5), new Vector2d(3, 5),
                 new Vector2d(4, 5), new Vector2d(4, 4), new Vector2d(4, 3));
@@ -204,7 +203,7 @@ public class VegetationTest {
                 if (!preferred1.contains(newVector)) correct1.add(newVector);
             }
 
-        Assertions.assertEquals(new HashSet<>(vegetation1.getNotPreferred(map1)), correct1);
+        Assertions.assertEquals(vegetation1.getNotPreferred(map1), correct1);
 
         LifeGivingCorpses vegetation2 = new LifeGivingCorpses(10, 10, 5);
 
@@ -233,7 +232,7 @@ public class VegetationTest {
 
         Set<Vector2d> correct2 = new HashSet<>();
 
-        List<Vector2d> preferred2 = List.of(new Vector2d(5, 4), new Vector2d(4, 4),
+        Set<Vector2d> preferred2 = Set.of(new Vector2d(5, 4), new Vector2d(4, 4),
                 new Vector2d(3, 5), new Vector2d(4, 5), new Vector2d(5, 5), new Vector2d(3, 3),
                 new Vector2d(4, 3), new Vector2d(5, 3), new Vector2d(1, 2), new Vector2d(2, 2),
                 new Vector2d(3, 2), new Vector2d(1, 1), new Vector2d(2, 1), new Vector2d(1, 0));
@@ -243,7 +242,7 @@ public class VegetationTest {
                 if (!preferred2.contains(newVector) && !plants.containsKey(newVector)) correct2.add(newVector);
             }
 
-        Assertions.assertEquals(new HashSet<>(vegetation2.getNotPreferred(map2)), correct2);
+        Assertions.assertEquals(vegetation2.getNotPreferred(map2), correct2);
     }
 
     @Test
@@ -265,14 +264,14 @@ public class VegetationTest {
         map1.removeDead();
         vegetation1.vegetate(map1);
 
-        List<Vector2d> preferred1 = List.of(new Vector2d(1, 4), new Vector2d(2, 4), new Vector2d(3, 4),
+        Set<Vector2d> preferred1 = Set.of(new Vector2d(1, 4), new Vector2d(2, 4), new Vector2d(3, 4),
                 new Vector2d(1, 3), new Vector2d(2, 3), new Vector2d(3, 3), new Vector2d(1, 2),
                 new Vector2d(2, 2), new Vector2d(3, 2), new Vector2d(2, 5), new Vector2d(3, 5),
                 new Vector2d(4, 5), new Vector2d(4, 4), new Vector2d(4, 3));
 
         List<Grass> plants1 = map1.getPlants();
-        List<Vector2d> positions1 = plants1.stream().map(Grass::getPosition).toList();
-        preferred1 = preferred1.stream().filter(element -> !positions1.contains(element)).toList();
+        Set<Vector2d> positions1 = plants1.stream().map(Grass::getPosition).collect(Collectors.toSet());
+        preferred1 = preferred1.stream().filter(element -> !positions1.contains(element)).collect(Collectors.toSet());
 
         Assertions.assertEquals(preferred1.size(), 8);
         Assertions.assertEquals(map1.getPlants().size(), 7);
@@ -301,19 +300,16 @@ public class VegetationTest {
         map2.addPlants(plants);
 
         map2.removeDead();
-        System.out.println(vegetation2.getPreferred(map2).size() + vegetation2.getNotPreferred(map2).size());
 
         vegetation2.vegetate(map2);
 
-        List<Vector2d> preferred2 = List.of(new Vector2d(4, 4), new Vector2d(3, 3),
+        Set<Vector2d> preferred2 = Set.of(new Vector2d(4, 4), new Vector2d(3, 3),
                 new Vector2d(4, 3), new Vector2d(1, 2), new Vector2d(2, 2),
                 new Vector2d(3, 2), new Vector2d(1, 1), new Vector2d(2, 1), new Vector2d(1, 0));
 
         List<Grass> plants2 = map2.getPlants();
-        List<Vector2d> positions2 = plants2.stream().map(Grass::getPosition).toList();
-        preferred2 = preferred2.stream().filter(element -> !positions2.contains(element)).toList();
-
-        System.out.println(positions2.size());
+        Set<Vector2d> positions2 = plants2.stream().map(Grass::getPosition).collect(Collectors.toSet());
+        preferred2 = preferred2.stream().filter(element -> !positions2.contains(element)).collect(Collectors.toSet());
 
         Assertions.assertEquals(preferred2.size(), 0);
         Assertions.assertEquals(map2.getPlants().size(), 25);

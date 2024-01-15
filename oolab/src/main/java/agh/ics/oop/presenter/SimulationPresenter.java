@@ -29,15 +29,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.nio.file.StandardOpenOption;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.nio.file.StandardOpenOption.APPEND;
-import static java.nio.file.StandardOpenOption.CREATE;
 
 public class SimulationPresenter implements MapChangeListener {
     private AbstractWorldMap map;
@@ -105,9 +100,9 @@ public class SimulationPresenter implements MapChangeListener {
     private HashMap<Vector2d, Double> highlightGenomePositions = new HashMap<>();
     private boolean highlightGenomeButtonPressed = false;
     private boolean highlightPreferredButtonPressed = false;
-    private List<Vector2d> highlightPreferred = new ArrayList<>();
+    private Set<Vector2d> highlightPreferred = new HashSet<>();
     private boolean logging;
-    private static final String LOGGING_PATH = "log.csv";
+    private String logging_path;
 
     @Override
     public void mapChanged(AbstractWorldMap map, String message) {
@@ -140,6 +135,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void setupStats() {
+        logging_path = "log_%s.csv".formatted(simulation.toString().substring(simulation.toString().length() - 7));
         for (Node node : statsPanel.getChildren()) {
             if (node instanceof Label label) {
                 if (GridPane.getColumnIndex(node) == 1)
@@ -152,8 +148,8 @@ public class SimulationPresenter implements MapChangeListener {
             try {
                 List<String> headers = List.of("animals", "plants", "avg life span", "avg energy",
                         "avg number of children");
-                Files.writeString(Path.of(LOGGING_PATH), String.join(",", headers) + System.lineSeparator(),
-                        CREATE);
+                Files.writeString(Path.of(logging_path), String.join(",", headers) + System.lineSeparator(),
+                        StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -182,8 +178,8 @@ public class SimulationPresenter implements MapChangeListener {
             try {
                 var stats = Stream.of(animals.size(), plants.size(), averageLifeSpan, averageEnergy,
                         averageNumberOfChildren).map(Object::toString).collect(Collectors.toList());
-                Files.writeString(Path.of(LOGGING_PATH), String.join(",", stats) + System.lineSeparator(),
-                        APPEND);
+                Files.writeString(Path.of(logging_path), String.join(",", stats) + System.lineSeparator(),
+                        StandardOpenOption.APPEND);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -226,7 +222,6 @@ public class SimulationPresenter implements MapChangeListener {
         for (int i = 0; i < maxY - minY + 2; i++)
             mapGrid.getRowConstraints().add(new RowConstraints(40));
 
-
         updateStats();
 
         int maxEnergy = map.getAnimals().stream().mapToInt(Animal::getEnergy).max().orElse(1);
@@ -238,6 +233,7 @@ public class SimulationPresenter implements MapChangeListener {
                 label.setPrefWidth(38);
                 label.setAlignment(Pos.CENTER);
 
+
                 if (simulation != null && simulation.isStopped()) {
                     if (!animals.isEmpty()) label.setOnMouseClicked(a ->
                             pause.showAnimalStats(label, animals, stage, map.getDay()));
@@ -245,9 +241,8 @@ public class SimulationPresenter implements MapChangeListener {
                         label.setStyle(String.format("-fx-background-color: rgba(255,240,%.2f,0.8)",
                                 255 - highlightGenomePositions.get(new Vector2d(x, y)) * 255));
                     }
-                    if (highlightPreferred.contains(new Vector2d(x, y))) {
+                    if (highlightPreferred.contains(new Vector2d(x, y)))
                         label.setStyle("-fx-background-color: rgba(20,230,0,0.5)");
-                    }
                 }
 
                 if (pause.isTracked() && pause.getTrackedAnimal().getPosition().equals(new Vector2d(x, y)) &&
@@ -304,7 +299,7 @@ public class SimulationPresenter implements MapChangeListener {
     public void highlightPreferred() {
         if (!highlightPreferredButtonPressed) {
             highlightPreferredButtonPressed = true;
-            highlightPreferred = pause.highlightPreferred(simulation.getVegetation(), map);
+            highlightPreferred = simulation.getVegetation().getPreferred(map);
             highlightPreferredButton.setStyle("-fx-background-color: rgba(20,230,0,0.5);" +
                     "-fx-border-color: lightblue;-fx-border-radius: 5px");
         } else {

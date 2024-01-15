@@ -88,10 +88,6 @@ public class Pause {
         return allPositions;
     }
 
-    public List<Vector2d> highlightPreferred(AbstractVegetation vegetation, AbstractWorldMap map) {
-        return vegetation.getPreferred(map);
-    }
-
     public void showAnimalStats(Label label, List<Animal> animals, Stage stage, int day) {
         String style = label.getStyle();
         BorderStroke borderStroke = new BorderStroke(

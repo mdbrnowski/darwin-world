@@ -6,10 +6,7 @@ import agh.ics.oop.parameters.SimulationParameters;
 import agh.ics.oop.parameters.types.GenomeType;
 import agh.ics.oop.parameters.types.VegetationType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Simulation implements Runnable {
@@ -24,11 +21,10 @@ public class Simulation implements Runnable {
         this.map = map;
         this.parameters = parameters;
 
-        List<Vector2d> mapFields = new ArrayList<>();
+        Set<Vector2d> mapFields = new HashSet<>();
         for (int i = 0; i < map.getCurrentBounds().topRight().x(); i++)
-            for (int j = 0; j < map.getCurrentBounds().topRight().y(); j++) {
+            for (int j = 0; j < map.getCurrentBounds().topRight().y(); j++)
                 mapFields.add(new Vector2d(i, j));
-            }
 
         for (Vector2d position : new RandomPositionGenerator(mapFields,
                 parameters.generalParameters().startAnimalsCount())) {
