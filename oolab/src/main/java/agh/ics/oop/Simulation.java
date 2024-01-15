@@ -33,7 +33,6 @@ public class Simulation implements Runnable {
                     parameters.generalParameters().genome(), parameters.generalParameters().genomeLength());
             map.place(a);
         }
-        map.mapChanged("All animals placed");
 
         setVegetation(parameters.generalParameters().vegetation(), map,
                 parameters.generalParameters().startPlantsCount());
@@ -90,8 +89,8 @@ public class Simulation implements Runnable {
                     }
                 }
             }
-
             vegetation.vegetate(map);
+            map.mapChanged("endOfDay");
             sleep();
         }
     }

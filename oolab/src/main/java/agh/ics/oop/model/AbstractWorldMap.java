@@ -11,12 +11,12 @@ import java.util.*;
 public abstract class AbstractWorldMap implements WorldMap {
     protected final int width;
     protected final int height;
-    private final List<MapChangeListener> listeners = new ArrayList<>();
-    private final UUID id;
     protected Multimap<Vector2d, Animal> animals = Multimaps.synchronizedListMultimap(ArrayListMultimap.create());
     protected Map<Vector2d, Grass> plants = new HashMap<>();
     protected List<Animal> deadAnimals = new ArrayList<>();
     protected Set<Vector2d> recentlyDead = new HashSet<>();
+    private final List<MapChangeListener> listeners = new ArrayList<>();
+    private final UUID id;
     protected int day = 0;
 
     public AbstractWorldMap(int width, int height) {
@@ -32,7 +32,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public synchronized void place(Animal animal) {
         animals.put(animal.getPosition(), animal);
-        mapChanged("Added a new animal at %s".formatted(animal.getPosition()));
     }
 
     @Override
@@ -41,7 +40,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         animal.move(animal.getPosition().add(animal.getOrientation().toUnitVector()));
         animals.remove(oldPosition, animal);
         animals.put(animal.getPosition(), animal);
-        mapChanged("Moved an animal to %s".formatted(animal.getPosition()));
     }
 
     @Override
@@ -113,8 +111,6 @@ public abstract class AbstractWorldMap implements WorldMap {
 
         animals = Multimaps.synchronizedMultimap(ArrayListMultimap.create(Multimaps.filterEntries(animals,
                 e -> e.getValue().getEnergy() > 0)));
-
-        mapChanged("Dead animals removed");
     }
 
     @Override
