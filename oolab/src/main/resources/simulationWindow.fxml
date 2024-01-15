@@ -72,8 +72,7 @@
                 <Label GridPane.columnIndex="2" GridPane.rowIndex="3" fx:id="animalEnergyLabel"/>
                 <Label GridPane.columnIndex="1" GridPane.rowIndex="4" text="Children Number:"/>
                 <Label GridPane.columnIndex="2" GridPane.rowIndex="4" fx:id="animalChildrenNumLabel"/>
-                <Label GridPane.columnIndex="1" GridPane.rowIndex="5" fx:id="descendantsNumLabelTitle"
-                       text="Descendants Number:"/>
+                <Label GridPane.columnIndex="1" GridPane.rowIndex="5" text="Descendants Number:"/>
                 <Label GridPane.columnIndex="2" GridPane.rowIndex="5" fx:id="descendantsNumLabel"/>
                 <Label GridPane.columnIndex="1" GridPane.rowIndex="6" text="Plants eaten:"/>
                 <Label GridPane.columnIndex="2" GridPane.rowIndex="6" fx:id="plantsEatenLabel"/>

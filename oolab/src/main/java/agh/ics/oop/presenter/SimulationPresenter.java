@@ -40,8 +40,6 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     public Label descendantsNumLabel;
     @FXML
-    public Label descendantsNumLabelTitle;
-    @FXML
     public ScrollPane mapScrollPane;
     @FXML
     public Button highlightPreferredButton;
@@ -195,7 +193,6 @@ public class SimulationPresenter implements MapChangeListener {
         animalChildrenNumLabel.setText(String.format("%d", trackedAnimal.getChildrenNum()));
         plantsEatenLabel.setText(String.format("%d", trackedAnimal.getPlantsEaten()));
         descendantsNumLabel.setText(String.format("%d", trackedAnimal.getDescendantsNum()));
-
     }
 
     public void drawMap() {
