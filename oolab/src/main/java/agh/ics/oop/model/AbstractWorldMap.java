@@ -32,7 +32,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public synchronized void place(Animal animal) {
         animals.put(animal.getPosition(), animal);
-        mapChanged("Added a new animal at %s".formatted(animal.getPosition()));
     }
 
     @Override
@@ -41,7 +40,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         animal.move(animal.getPosition().add(animal.getOrientation().toUnitVector()));
         animals.remove(oldPosition, animal);
         animals.put(animal.getPosition(), animal);
-        mapChanged("Moved an animal to %s".formatted(animal.getPosition()));
     }
 
     @Override
@@ -94,10 +92,8 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public void mapChanged(String message) {
-        for (MapChangeListener listener : listeners) {
+        for (MapChangeListener listener : listeners)
             listener.mapChanged(this, message);
-        }
-        System.out.println("Listener: " + message);  // todo: it's only for debug
     }
 
     @Override
@@ -113,8 +109,6 @@ public abstract class AbstractWorldMap implements WorldMap {
 
         animals = Multimaps.synchronizedMultimap(ArrayListMultimap.create(Multimaps.filterEntries(animals,
                 e -> e.getValue().getEnergy() > 0)));
-
-        mapChanged("Dead animals removed");
     }
 
     @Override

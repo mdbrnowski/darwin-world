@@ -118,13 +118,17 @@
             <HBox>
                 <Label fx:id="errorLabel" textAlignment="CENTER" style="-fx-text-fill: #BB2222; -fx-font-weight: bold;"/>
             </HBox>
-            <HBox spacing="250">
-                <Button onAction="#onSimulationStartClicked" text="Start"/>
-                <HBox alignment="BASELINE_LEFT">
-                    <Label text="Do you want to save the configuration? " textAlignment="CENTER"/>
-                    <Button onAction="#onSaveClicked" text="Save"/>
-                </HBox>
-            </HBox>
+            <BorderPane>
+                <left>
+                    <HBox spacing="20" alignment="BASELINE_CENTER">
+                        <Button onAction="#onSimulationStartClicked" text="Start"/>
+                        <CheckBox fx:id="saveLogCheck" text="save log"/>
+                    </HBox>
+                </left>
+                <right>
+                    <Button onAction="#onSaveClicked" text="Save configuration"/>
+                </right>
+            </BorderPane>
         </VBox>
     </bottom>
 

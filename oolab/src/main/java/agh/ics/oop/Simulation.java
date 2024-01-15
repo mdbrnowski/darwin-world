@@ -92,6 +92,7 @@ public class Simulation implements Runnable {
             }
 
             vegetation.vegetate(map);
+            map.mapChanged("Day %d".formatted(map.getDay()));
             sleep();
         }
     }

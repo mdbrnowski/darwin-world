@@ -25,8 +25,15 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.CREATE;
 
 public class SimulationPresenter implements MapChangeListener {
     private WorldMap map;
@@ -87,6 +94,8 @@ public class SimulationPresenter implements MapChangeListener {
     private boolean highlightGenomeButtonPressed = false;
     private boolean highlightPreferredButtonPressed = false;
     private List<Vector2d> highlightPreferred = new ArrayList<>();
+    private boolean logging;
+    private static final String LOGGING_PATH = "log.csv";
 
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
@@ -117,13 +126,25 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void setupStats() {
-        for (Node node : statsPanel.getChildren())
+        for (Node node : statsPanel.getChildren()) {
             if (node instanceof Label label) {
                 if (GridPane.getColumnIndex(node) == 1)
                     label.setFont(new Font(14));
                 else
                     label.setFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 15));
             }
+        }
+        if (logging) {
+            try {
+                List<String> headers = List.of("animals", "plants", "avg life span", "avg energy",
+                        "avg number of children");
+                Files.writeString(Path.of(LOGGING_PATH), String.join(",", headers) + System.lineSeparator(),
+                        CREATE);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
     }
 
     public void updateStats() {
@@ -135,14 +156,24 @@ public class SimulationPresenter implements MapChangeListener {
         numberOfEmptyFieldsLabel.setText(String.valueOf(map.getNumberOfEmptyFields()));
         double averageLifeSpan = deadAnimals.stream().collect(Collectors.averagingDouble(Animal::getAge));
         averageLifeSpanLabel.setText(averageLifeSpan > 0 ? String.format("%.1f", averageLifeSpan) : "N/A");
-        averageEnergyLabel.setText(String.format("%.1f",
-                animals.stream().collect(Collectors.averagingDouble(Animal::getEnergy))));
-        averageNumberOfChildrenLabel.setText(String.format("%.1f",
-                animals.stream().collect(Collectors.averagingDouble(Animal::getChildrenNum))));
+        double averageEnergy = animals.stream().collect(Collectors.averagingDouble(Animal::getEnergy));
+        averageEnergyLabel.setText(String.format("%.1f", averageEnergy));
+        double averageNumberOfChildren = animals.stream().collect(Collectors.averagingDouble(Animal::getChildrenNum));
+        averageNumberOfChildrenLabel.setText(String.format("%.1f", averageNumberOfChildren));
         mostPopularGenotypeLabel.setText(
                 PopularityCounter.getMostPopularAsString(animals.stream()
                         .map(a -> a.getGenome().toString())
                         .collect(Collectors.toList()), 3));
+        if (logging) {
+            try {
+                var stats = Stream.of(animals.size(), plants.size(), averageLifeSpan, averageEnergy,
+                        averageNumberOfChildren).map(Object::toString).collect(Collectors.toList());
+                Files.writeString(Path.of(LOGGING_PATH), String.join(",", stats) + System.lineSeparator(),
+                        APPEND);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public void updateTrackedAnimal(Animal trackedAnimal) {
@@ -183,6 +214,7 @@ public class SimulationPresenter implements MapChangeListener {
 
 
         updateStats();
+
         int maxEnergy = map.getAnimals().stream().mapToInt(Animal::getEnergy).max().orElse(1);
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
@@ -274,11 +306,12 @@ public class SimulationPresenter implements MapChangeListener {
         mapGrid.getRowConstraints().clear();
     }
 
-    public void runSimulation(MapParameters mapParameters, SimulationParameters simulationParameters) {
+    public void runSimulation(MapParameters mapParameters, SimulationParameters simulationParameters, boolean logging) {
         AbstractWorldMap map = mapParameters.mapType().getEquivalentObject(mapParameters.mapWidth(),
                 mapParameters.mapHeight());
         setWorldMap(map);
         map.addObserver(this);
+        this.logging = logging;
         simulation = new Simulation(map, simulationParameters, 500);
         simulationEngine = new SimulationEngine(List.of(simulation));
         simulationEngine.runAsync();

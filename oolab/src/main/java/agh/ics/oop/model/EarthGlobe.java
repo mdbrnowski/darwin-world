@@ -26,7 +26,6 @@ public class EarthGlobe extends AbstractWorldMap {
 
         animals.remove(oldPosition, animal);
         animals.put(animal.getPosition(), animal);
-        mapChanged("Moved an animal to %s".formatted(animal.getPosition()));
     }
 
     @Override
