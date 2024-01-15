@@ -101,7 +101,7 @@ public class StartWindowPresenter {
 
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
 
         for (MapType mapEnum : MapType.values())
