@@ -2,12 +2,12 @@ package agh.ics.oop.presenter;
 
 import agh.ics.oop.Simulation;
 import agh.ics.oop.SimulationEngine;
-import agh.ics.oop.onActionControls.Pause;
-import agh.ics.oop.parameters.SimulationParameters;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.PopularityCounter;
+import agh.ics.oop.onActionControls.Pause;
 import agh.ics.oop.parameters.MapParameters;
+import agh.ics.oop.parameters.SimulationParameters;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -28,7 +28,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,6 +40,10 @@ import static java.nio.file.StandardOpenOption.CREATE;
 
 public class SimulationPresenter implements MapChangeListener {
     private WorldMap map;
+    @FXML
+    public Button speedDownButton;
+    @FXML
+    public Button speedUpButton;
     @FXML
     public Label descendantsNumLabel;
     @FXML
@@ -111,6 +118,16 @@ public class SimulationPresenter implements MapChangeListener {
             } else {
                 trackPanel.setVisible(false);
                 trackPanel.setManaged(false);
+            }
+            if (simulation.getSleepTime() <= 100) {
+                speedUpButton.setDisable(true);
+            } else {
+                speedUpButton.setDisable(false);
+            }
+            if (simulation.getSleepTime() >= 2000) {
+                speedDownButton.setDisable(true);
+            } else {
+                speedDownButton.setDisable(false);
             }
             moveDescriptionLabel.setText(message);
         });
@@ -340,5 +357,13 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public void onSpeedDownClicked() {
+        simulation.increaseSleepTime();
+    }
+
+    public void onSpeedUpClicked() {
+        simulation.decreaseSleepTime();
     }
 }
