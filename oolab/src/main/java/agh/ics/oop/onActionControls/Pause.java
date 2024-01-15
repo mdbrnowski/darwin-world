@@ -23,6 +23,7 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Pause {
@@ -88,7 +89,7 @@ public class Pause {
         return allPositions;
     }
 
-    public List<Vector2d> highlightPreferred(AbstractVegetation vegetation, AbstractWorldMap map) {
+    public Set<Vector2d> highlightPreferred(AbstractVegetation vegetation, AbstractWorldMap map) {
         return vegetation.getPreferred(map);
     }
 

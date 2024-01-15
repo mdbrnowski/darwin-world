@@ -29,10 +29,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -105,7 +102,7 @@ public class SimulationPresenter implements MapChangeListener {
     private HashMap<Vector2d, Double> highlightGenomePositions = new HashMap<>();
     private boolean highlightGenomeButtonPressed = false;
     private boolean highlightPreferredButtonPressed = false;
-    private List<Vector2d> highlightPreferred = new ArrayList<>();
+    private Set<Vector2d> highlightPreferred = new HashSet<>();
     private boolean logging;
     private static final String LOGGING_PATH = "log.csv";
 
@@ -226,7 +223,6 @@ public class SimulationPresenter implements MapChangeListener {
         for (int i = 0; i < maxY - minY + 2; i++)
             mapGrid.getRowConstraints().add(new RowConstraints(40));
 
-
         updateStats();
 
         int maxEnergy = map.getAnimals().stream().mapToInt(Animal::getEnergy).max().orElse(1);
@@ -238,6 +234,7 @@ public class SimulationPresenter implements MapChangeListener {
                 label.setPrefWidth(38);
                 label.setAlignment(Pos.CENTER);
 
+
                 if (simulation != null && simulation.isStopped()) {
                     if (!animals.isEmpty()) label.setOnMouseClicked(a ->
                             pause.showAnimalStats(label, animals, stage, map.getDay()));
@@ -245,9 +242,8 @@ public class SimulationPresenter implements MapChangeListener {
                         label.setStyle(String.format("-fx-background-color: rgba(255,240,%.2f,0.8)",
                                 255 - highlightGenomePositions.get(new Vector2d(x, y)) * 255));
                     }
-                    if (highlightPreferred.contains(new Vector2d(x, y))) {
+                    if (highlightPreferred.contains(new Vector2d(x, y)))
                         label.setStyle("-fx-background-color: rgba(20,230,0,0.5)");
-                    }
                 }
 
                 if (pause.isTracked() && pause.getTrackedAnimal().getPosition().equals(new Vector2d(x, y)) &&

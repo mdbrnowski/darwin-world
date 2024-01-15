@@ -8,20 +8,9 @@ public class RandomPositionGenerator implements Iterable<Vector2d> {
     private final List<Vector2d> vectors;
     private int n;
 
-    public RandomPositionGenerator(int min, int max, int n) {
-        this.n = n;
-        this.vectors = new ArrayList<>();
-        for (int i = min; i <= max; i++) {
-            for (int j = min; j <= max; j++) {
-                vectors.add(new Vector2d(i, j));
-            }
-        }
-        Collections.shuffle(vectors);
-    }
-
-    public RandomPositionGenerator(List<Vector2d> choice, int n) {
+    public RandomPositionGenerator(Set<Vector2d> choice, int n) {
         this.n = Math.min(n, choice.size());
-        this.vectors = choice;
+        this.vectors = new ArrayList<>(choice);
         Collections.shuffle(vectors);
     }
 
