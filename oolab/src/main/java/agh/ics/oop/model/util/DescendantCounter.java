@@ -18,11 +18,10 @@ public class DescendantCounter {
             for (Animal parent : currAnimal.getParents()) {
                 if (visited.get(parent) == null) {
                     visited.put(parent, true);
-                    parent.increaseDescendantsNum(1);
+                    parent.incrementDescendantsNum();
                     queue.addLast(parent);
                 }
             }
-
         }
     }
 }

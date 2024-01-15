@@ -20,7 +20,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
     private static int curr_id = 0;
     private Integer diedOn = null;
     public final static String MULTIPLE_ANIMALS_TO_STRING = "⚤";
-    private List<Animal> parents = new ArrayList<>();
+    private final List<Animal> parents = new ArrayList<>();
     private int descendantsNum = 0;
 
 
@@ -123,8 +123,8 @@ public class Animal implements WorldElement, Comparable<Animal> {
         return descendantsNum;
     }
 
-    public void increaseDescendantsNum(int value) {
-        descendantsNum += value;
+    public void incrementDescendantsNum() {
+        descendantsNum++;
     }
 
     public Animal breed(Animal other, int minMutations, int maxMutations, int energyForChild) {
