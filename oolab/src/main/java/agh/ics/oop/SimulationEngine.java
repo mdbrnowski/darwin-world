@@ -5,7 +5,6 @@ import java.util.List;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class SimulationEngine {
     private final List<Simulation> simulations;
@@ -37,19 +36,6 @@ public class SimulationEngine {
             executorService.submit(simulationThread);
         }
         executorService.shutdown();
-    }
-
-    public void awaitSimulationEnd() throws InterruptedException {
-        // for runAsync()
-        if (simulationThreads != null) {
-            for (Thread simulationThread : simulationThreads)
-                simulationThread.join();
-        }
-        // for runAsyncInThreadPool
-        if (executorService != null) {
-            if (!executorService.awaitTermination(10, TimeUnit.SECONDS))
-                executorService.shutdownNow();
-        }
     }
 
     public void shutdown() {

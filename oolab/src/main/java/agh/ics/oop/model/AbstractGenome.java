@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public abstract class AbstractGenome {
-    protected List<Integer> genome;
+    protected final List<Integer> genome;
 
     public AbstractGenome(List<Integer> genome) {
         this.genome = genome;

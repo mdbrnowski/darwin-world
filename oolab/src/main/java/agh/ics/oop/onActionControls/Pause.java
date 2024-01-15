@@ -108,7 +108,7 @@ public class Pause {
 
         VBox dialogVbox = new VBox(10);
         Label titleLabel = new Label(String.format("Animals on field (%d,%d):",
-                animals.get(0).getPosition().getX(), animals.get(0).getPosition().getY()));
+                animals.get(0).getPosition().x(), animals.get(0).getPosition().y()));
         titleLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 20));
         Label promptLabel = new Label("You can choose an animal to track");
         promptLabel.setFont(Font.font("Arial", FontPosture.REGULAR, 13));

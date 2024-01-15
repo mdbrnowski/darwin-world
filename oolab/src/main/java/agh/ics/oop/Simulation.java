@@ -22,8 +22,8 @@ public class Simulation implements Runnable {
         this.parameters = parameters;
 
         List<Vector2d> mapFields = new ArrayList<>();
-        for (int i = 0; i < map.getCurrentBounds().topRight().getX(); i++)
-            for (int j = 0; j < map.getCurrentBounds().topRight().getY(); j++) {
+        for (int i = 0; i < map.getCurrentBounds().topRight().x(); i++)
+            for (int j = 0; j < map.getCurrentBounds().topRight().y(); j++) {
                 mapFields.add(new Vector2d(i, j));
             }
 
@@ -33,6 +33,7 @@ public class Simulation implements Runnable {
                     parameters.generalParameters().genome(), parameters.generalParameters().genomeLength());
             map.place(a);
         }
+        map.mapChanged("All animals placed");
 
         setVegetation(parameters.generalParameters().vegetation(), map,
                 parameters.generalParameters().startPlantsCount());
@@ -89,8 +90,9 @@ public class Simulation implements Runnable {
                     }
                 }
             }
+
             vegetation.vegetate(map);
-            map.mapChanged("endOfDay");
+            map.mapChanged("Day %d".formatted(map.getDay()));
             sleep();
         }
     }
@@ -137,7 +139,7 @@ public class Simulation implements Runnable {
     }
 
     private void setVegetation(VegetationType vegetationType, AbstractWorldMap map, int plantsCount) {
-        this.vegetation = vegetationType.getEquivalentObject(map.getCurrentBounds().topRight().getX(),
-                map.getCurrentBounds().topRight().getY(), plantsCount);
+        this.vegetation = vegetationType.getEquivalentObject(map.getCurrentBounds().topRight().x(),
+                map.getCurrentBounds().topRight().y(), plantsCount);
     }
 }

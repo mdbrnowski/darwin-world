@@ -1,13 +1,12 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.model.util.InvalidParametersException;
+import agh.ics.oop.parameters.InvalidParametersException;
 import agh.ics.oop.parameters.*;
 import agh.ics.oop.parameters.types.GenomeType;
 import agh.ics.oop.parameters.types.MapType;
 import agh.ics.oop.parameters.types.VegetationType;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -67,7 +66,9 @@ public class StartWindowPresenter {
     public ComboBox<String> csvCombo;
     @FXML
     public Label errorLabel;
-    private static final String PATH = "configurations.csv";
+    @FXML
+    public CheckBox saveLogCheck;
+    private static final String CONFIGURATIONS_PATH = "configurations.csv";
     private final Multimap<String, String> configurations = ArrayListMultimap.create();
     private List<Control> paramControls;
     private Stage primaryStage;
@@ -78,7 +79,7 @@ public class StartWindowPresenter {
                 minimumBreedSpinner, childEnergySpinner, mutationTypeCombo, minMutationSpinner, maxMutationSpinner);
         String firstConf = null;
 
-        try (Scanner scanner = new Scanner(Path.of(PATH))) {
+        try (Scanner scanner = new Scanner(Path.of(CONFIGURATIONS_PATH))) {
             if (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] params = line.split(";");
@@ -127,14 +128,12 @@ public class StartWindowPresenter {
         for (Control control : paramControls) {
             if (control instanceof ComboBox) {
                 ComboBox<String> combo = (ComboBox<String>) control;
-                combo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-                    csvCombo.getSelectionModel().select(null);
-                });
+                combo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) ->
+                        csvCombo.getSelectionModel().select(null));
             } else if (control instanceof Spinner) {
                 Spinner<Integer> spinner = (Spinner<Integer>) control;
-                spinner.valueProperty().addListener((observable, oldValue, newValue) -> {
-                    csvCombo.getSelectionModel().select(null);
-                });
+                spinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                        csvCombo.getSelectionModel().select(null));
             }
         }
     }
@@ -156,38 +155,11 @@ public class StartWindowPresenter {
         }
     }
 
-    private MapType getMapTypeByDisplayValue(String displayValue) {
-        for (MapType mapEnum : MapType.values()) {
-            if (mapEnum.toString().equals(displayValue)) {
-                return mapEnum;
-            }
-        }
-        throw new IllegalArgumentException();
-    }
-
-    private VegetationType getVegetationTypeByDisplayValue(String displayValue) {
-        for (VegetationType vegetation : VegetationType.values()) {
-            if (vegetation.toString().equals(displayValue)) {
-                return vegetation;
-            }
-        }
-        throw new IllegalArgumentException();
-    }
-
-    private GenomeType getGenomeTypeByDisplayValue(String displayValue) {
-        for (GenomeType genome : GenomeType.values()) {
-            if (genome.toString().equals(displayValue)) {
-                return genome;
-            }
-        }
-        throw new IllegalArgumentException();
-    }
-
     public void onSimulationStartClicked() throws IOException {
         try {
-            MapParameters mapParameters = new MapParameters(getMapTypeByDisplayValue(mapCombo.getValue()),
-                    widthSpinner.getValue(), heightSpinner.getValue());
-            SimulationParameters simulationParameters = getSimulationParameters();
+            var parametersHandler = new ParametersHandler(this);
+            MapParameters mapParameters = parametersHandler.getMapParameters();
+            SimulationParameters simulationParameters = parametersHandler.getSimulationParameters();
 
             errorLabel.setText("");
             Stage newWindowStage = new Stage();
@@ -203,29 +175,12 @@ public class StartWindowPresenter {
             configureStage(newWindowStage, viewRoot);
             newWindowStage.show();
 
-            presenter.runSimulation(mapParameters, simulationParameters);
+            presenter.runSimulation(mapParameters, simulationParameters, saveLogCheck.isSelected());
 
             newWindowStage.setOnCloseRequest(event -> presenter.shutdown());
         } catch (InvalidParametersException e) {
             errorLabel.setText(e.getMessage());
         }
-    }
-
-    private SimulationParameters getSimulationParameters() throws InvalidParametersException {
-        GeneralParameters generalParameters = new GeneralParameters(
-                getGenomeTypeByDisplayValue(genomeCombo.getValue()), genomeLengthSpinner.getValue(),
-                getVegetationTypeByDisplayValue(vegetationCombo.getValue()), plantsCountSpinner.getValue(),
-                animalsCountSpinner.getValue());
-
-        EnergyParameters energyParameters = new EnergyParameters(plantsEnergySpinner.getValue(),
-                initialEnergySpinner.getValue(), minimumBreedSpinner.getValue(), childEnergySpinner.getValue());
-
-        MutationParameters mutationParameters = new MutationParameters(mutationTypeCombo.getValue(),
-                minMutationSpinner.getValue(), maxMutationSpinner.getValue());
-
-        ParametersValidator.validate(generalParameters, energyParameters, mutationParameters);
-
-        return new SimulationParameters(generalParameters, energyParameters, mutationParameters);
     }
 
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
@@ -237,7 +192,7 @@ public class StartWindowPresenter {
         primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
     }
 
-    public void onSaveClicked(ActionEvent actionEvent) {
+    public void onSaveClicked() {
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(primaryStage);
@@ -265,9 +220,7 @@ public class StartWindowPresenter {
         Button cancel = new Button("Cancel");
         Button save = new Button("Save");
 
-        cancel.setOnAction(event -> {
-            dialog.hide();
-        });
+        cancel.setOnAction(event -> dialog.hide());
 
         save.setOnAction(event -> {
             String name = textField.getText();
@@ -322,7 +275,7 @@ public class StartWindowPresenter {
 
         String csvData = name + ";" + String.join(";", configurations.get(name));
         try {
-            Files.writeString(Path.of(PATH), csvData + System.lineSeparator(), CREATE, APPEND);
+            Files.writeString(Path.of(CONFIGURATIONS_PATH), csvData + System.lineSeparator(), CREATE, APPEND);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

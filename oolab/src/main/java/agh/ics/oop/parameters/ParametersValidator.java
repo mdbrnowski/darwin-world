@@ -1,7 +1,5 @@
 package agh.ics.oop.parameters;
 
-import agh.ics.oop.model.util.InvalidParametersException;
-
 public class ParametersValidator {
     public static void validate(GeneralParameters generalParameters, EnergyParameters energyParameters,
                                 MutationParameters mutationParameters) throws InvalidParametersException {
