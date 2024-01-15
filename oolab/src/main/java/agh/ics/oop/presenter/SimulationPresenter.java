@@ -2,12 +2,12 @@ package agh.ics.oop.presenter;
 
 import agh.ics.oop.Simulation;
 import agh.ics.oop.SimulationEngine;
-import agh.ics.oop.onActionControls.Pause;
-import agh.ics.oop.parameters.SimulationParameters;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.PopularityCounter;
+import agh.ics.oop.onActionControls.Pause;
 import agh.ics.oop.parameters.MapParameters;
+import agh.ics.oop.parameters.SimulationParameters;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -16,6 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -28,7 +29,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,6 +41,12 @@ import static java.nio.file.StandardOpenOption.CREATE;
 
 public class SimulationPresenter implements MapChangeListener {
     private WorldMap map;
+    @FXML
+    public Slider speedSlider;
+    @FXML
+    public Button speedDownButton;
+    @FXML
+    public Button speedUpButton;
     @FXML
     public Label descendantsNumLabel;
     @FXML
@@ -112,6 +122,8 @@ public class SimulationPresenter implements MapChangeListener {
                 trackPanel.setVisible(false);
                 trackPanel.setManaged(false);
             }
+            speedUpButton.setDisable(simulation.getSleepTime() <= 100);
+            speedDownButton.setDisable(simulation.getSleepTime() >= 2000);
             moveDescriptionLabel.setText(message);
         });
     }
@@ -315,7 +327,7 @@ public class SimulationPresenter implements MapChangeListener {
         setWorldMap(map);
         map.addObserver(this);
         this.logging = logging;
-        simulation = new Simulation(map, simulationParameters, 500);
+        simulation = new Simulation(map, simulationParameters, (int) (speedSlider.getMax() + 100 - speedSlider.getValue()));
         simulationEngine = new SimulationEngine(List.of(simulation));
         simulationEngine.runAsync();
         setupStats();
@@ -340,5 +352,19 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public void onSpeedDownClicked() {
+        simulation.increaseSleepTime();
+        speedSlider.setValue(speedSlider.getMax() - simulation.getSleepTime());
+    }
+
+    public void onSpeedUpClicked() {
+        simulation.decreaseSleepTime();
+        speedSlider.setValue(speedSlider.getMax() - simulation.getSleepTime());
+    }
+
+    public void onSliderChanged() {
+        simulation.setSleepTime((int) (speedSlider.getMax() + 100 - speedSlider.getValue()));
     }
 }

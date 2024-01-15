@@ -6,7 +6,10 @@ import agh.ics.oop.parameters.SimulationParameters;
 import agh.ics.oop.parameters.types.GenomeType;
 import agh.ics.oop.parameters.types.VegetationType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class Simulation implements Runnable {
@@ -111,6 +114,24 @@ public class Simulation implements Runnable {
 
     public void end() {
         ended = true;
+    }
+
+    public long getSleepTime() {
+        return sleepTime;
+    }
+
+    public void increaseSleepTime() {
+        if (sleepTime < 2000)
+            this.sleepTime += 100;
+    }
+
+    public void decreaseSleepTime() {
+        if (sleepTime > 100)
+            this.sleepTime -= 100;
+    }
+
+    public void setSleepTime(int value) {
+        this.sleepTime = value;
     }
 
     private void sleep() {
