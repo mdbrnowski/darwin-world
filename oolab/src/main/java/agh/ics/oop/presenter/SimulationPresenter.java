@@ -299,7 +299,7 @@ public class SimulationPresenter implements MapChangeListener {
     public void highlightPreferred() {
         if (!highlightPreferredButtonPressed) {
             highlightPreferredButtonPressed = true;
-            highlightPreferred = pause.highlightPreferred(simulation.getVegetation(), map);
+            highlightPreferred = simulation.getVegetation().getPreferred(map);
             highlightPreferredButton.setStyle("-fx-background-color: rgba(20,230,0,0.5);" +
                     "-fx-border-color: lightblue;-fx-border-radius: 5px");
         } else {

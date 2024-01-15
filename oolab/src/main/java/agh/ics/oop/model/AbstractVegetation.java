@@ -7,8 +7,8 @@ import java.util.*;
 import static java.lang.Math.*;
 
 public abstract class AbstractVegetation {
-    protected Set<Vector2d> preferredFields = new HashSet<>();
-    protected Set<Vector2d> notPreferredFields = new HashSet<>();
+    protected final Set<Vector2d> preferredFields = new HashSet<>();
+    protected final Set<Vector2d> notPreferredFields = new HashSet<>();
 
     private final int numberOfElements; // number of plants to plant on a particular day
 

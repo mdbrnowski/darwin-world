@@ -1,6 +1,5 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.parameters.InvalidParametersException;
 import agh.ics.oop.parameters.*;
 import agh.ics.oop.parameters.types.GenomeType;
 import agh.ics.oop.parameters.types.MapType;
