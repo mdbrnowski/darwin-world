@@ -335,7 +335,7 @@ public class SimulationPresenter implements MapChangeListener {
         setWorldMap(map);
         map.addObserver(this);
         this.logging = logging;
-        simulation = new Simulation(map, simulationParameters, 500);
+        simulation = new Simulation(map, simulationParameters, (int) (speedSlider.getMax() + 100 - speedSlider.getValue()));
         simulationEngine = new SimulationEngine(List.of(simulation));
         simulationEngine.runAsync();
         setupStats();

@@ -45,7 +45,7 @@
                     </graphic>
                 </Button>
                 <Slider min="0" max="2000" fx:id="speedSlider" blockIncrement="100" onMouseDragged="#onSliderChanged"
-                        onMouseClicked="#onSliderChanged"/>
+                        onMouseClicked="#onSliderChanged" value="1500"/>
 
             </HBox>
 
