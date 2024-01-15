@@ -2,8 +2,6 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.DescendantCounter;
 import agh.ics.oop.model.util.RandomGenerator;
-import javafx.util.Pair;
-
 import java.util.*;
 
 public class Animal implements WorldElement, Comparable<Animal> {
