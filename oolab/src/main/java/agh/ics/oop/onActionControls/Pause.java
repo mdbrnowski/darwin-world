@@ -51,7 +51,7 @@ public class Pause {
         }
     }
 
-    public HashMap<Vector2d, Double> highlightGenomes(WorldMap map) {
+    public HashMap<Vector2d, Double> highlightGenomes(AbstractWorldMap map) {
         var animals = map.getAnimals();
         List<Pair<String, Integer>> mostPopular = PopularityCounter.getMostPopular(animals.stream()
                 .map(animal -> animal.getGenome().toString())
@@ -88,8 +88,8 @@ public class Pause {
         return allPositions;
     }
 
-    public List<Vector2d> highlightPreferred(AbstractVegetation vegetation, WorldMap map) {
-        return vegetation.getPreferred((AbstractWorldMap) map);
+    public List<Vector2d> highlightPreferred(AbstractVegetation vegetation, AbstractWorldMap map) {
+        return vegetation.getPreferred(map);
     }
 
     public void showAnimalStats(Label label, List<Animal> animals, Stage stage, int day) {

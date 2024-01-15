@@ -8,7 +8,7 @@ import com.google.common.collect.Multimaps;
 
 import java.util.*;
 
-public abstract class AbstractWorldMap implements WorldMap {
+public abstract class AbstractWorldMap {
     protected final int width;
     protected final int height;
     protected Multimap<Vector2d, Animal> animals = Multimaps.synchronizedListMultimap(ArrayListMultimap.create());
@@ -29,12 +29,10 @@ public abstract class AbstractWorldMap implements WorldMap {
         day += 1;
     }
 
-    @Override
     public synchronized void place(Animal animal) {
         animals.put(animal.getPosition(), animal);
     }
 
-    @Override
     public synchronized void move(Animal animal) {
         Vector2d oldPosition = animal.getPosition();
         animal.move(animal.getPosition().add(animal.getOrientation().toUnitVector()));
@@ -42,32 +40,30 @@ public abstract class AbstractWorldMap implements WorldMap {
         animals.put(animal.getPosition(), animal);
     }
 
-    @Override
     public List<Animal> getAnimalsAt(Vector2d position) {
         return new ArrayList<>(animals.get(position));
     }
 
-    @Override
     public List<Animal> getAnimals() {
         return new ArrayList<>(animals.values());
     }
 
-    @Override
     public int getDay() {
         return day;
     }
 
-    @Override
     public List<Animal> getDeadAnimals() {
         return deadAnimals;
     }
 
-    @Override
+    public Set<Vector2d> getRecentlyDead() {
+        return recentlyDead;
+    }
+
     public Grass getPlantAt(Vector2d position) {
         return plants.get(position);
     }
 
-    @Override
     public List<Grass> getPlants() {
         return new ArrayList<>(plants.values());
     }
@@ -80,23 +76,19 @@ public abstract class AbstractWorldMap implements WorldMap {
         plants.remove(plant.getPosition());
     }
 
-    @Override
     public Boundary getCurrentBounds() {
         return new Boundary(new Vector2d(0, 0), new Vector2d(width, height));
     }
 
-    @Override
     public UUID getId() {
         return id;
     }
 
-    @Override
     public void mapChanged(String message) {
         for (MapChangeListener listener : listeners)
             listener.mapChanged(this, message);
     }
 
-    @Override
     public synchronized void removeDead() {
         recentlyDead = new HashSet<>(Multimaps.filterEntries(animals,
                 e -> e.getValue().getEnergy() == 0).keySet());
@@ -111,7 +103,6 @@ public abstract class AbstractWorldMap implements WorldMap {
                 e -> e.getValue().getEnergy() > 0)));
     }
 
-    @Override
     public int getNumberOfEmptyFields() {
         int result = 0;
         for (int i = 0; i <= width; i++)
@@ -129,10 +120,6 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public void addObserver(MapChangeListener listener) {
         listeners.add(listener);
-    }
-
-    public Set<Vector2d> getRecentlyDead() {
-        return recentlyDead;
     }
 
     public abstract Vector2d getNextPosition(Vector2d position, Vector2d move);

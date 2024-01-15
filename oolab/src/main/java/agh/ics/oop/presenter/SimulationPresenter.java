@@ -40,7 +40,7 @@ import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.CREATE;
 
 public class SimulationPresenter implements MapChangeListener {
-    private WorldMap map;
+    private AbstractWorldMap map;
     @FXML
     public Slider speedSlider;
     @FXML
@@ -110,7 +110,7 @@ public class SimulationPresenter implements MapChangeListener {
     private static final String LOGGING_PATH = "log.csv";
 
     @Override
-    public void mapChanged(WorldMap worldMap, String message) {
+    public void mapChanged(AbstractWorldMap map, String message) {
         Platform.runLater(() -> {
             updateStats();
             drawMap();
@@ -134,7 +134,7 @@ public class SimulationPresenter implements MapChangeListener {
         trackPanel.setManaged(false);
     }
 
-    private void setWorldMap(WorldMap map) {
+    private void setWorldMap(AbstractWorldMap map) {
         this.map = map;
         drawMap();
     }
