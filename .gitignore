@@ -4,4 +4,4 @@
 .gradle
 build/
 
-log.csv
+log*.csv
