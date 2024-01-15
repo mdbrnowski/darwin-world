@@ -122,16 +122,8 @@ public class SimulationPresenter implements MapChangeListener {
                 trackPanel.setVisible(false);
                 trackPanel.setManaged(false);
             }
-            if (simulation.getSleepTime() <= 100) {
-                speedUpButton.setDisable(true);
-            } else {
-                speedUpButton.setDisable(false);
-            }
-            if (simulation.getSleepTime() >= 2000) {
-                speedDownButton.setDisable(true);
-            } else {
-                speedDownButton.setDisable(false);
-            }
+            speedUpButton.setDisable(simulation.getSleepTime() <= 100);
+            speedDownButton.setDisable(simulation.getSleepTime() >= 2000);
             moveDescriptionLabel.setText(message);
         });
     }

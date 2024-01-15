@@ -28,15 +28,8 @@
                     </GridPane>
                 </ScrollPane>
             </HBox>
-            <HBox>
+            <HBox alignment="BASELINE_LEFT" spacing="10" style="-fx-padding: 10px">
                 <Label text="Simulation speed: "/>
-                <Button fx:id="speedUpButton" onAction="#onSpeedUpClicked">
-                    <graphic>
-                        <ImageView fitHeight="13" preserveRatio="true">
-                            <Image url="speedUp.png"/>
-                        </ImageView>
-                    </graphic>
-                </Button>
                 <Button fx:id="speedDownButton" onAction="#onSpeedDownClicked">
                     <graphic>
                         <ImageView fitHeight="13" preserveRatio="true">
@@ -44,13 +37,17 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Slider min="0" max="2000" fx:id="speedSlider" blockIncrement="100" onMouseDragged="#onSliderChanged"
+                <Button fx:id="speedUpButton" onAction="#onSpeedUpClicked">
+                    <graphic>
+                        <ImageView fitHeight="13" preserveRatio="true">
+                            <Image url="speedUp.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Slider max="2000" fx:id="speedSlider" blockIncrement="100" onMouseDragged="#onSliderChanged"
                         onMouseClicked="#onSliderChanged" value="1500"/>
-
             </HBox>
-
         </VBox>
-
     </center>
 
     <top>
