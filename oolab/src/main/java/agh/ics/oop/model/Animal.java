@@ -2,7 +2,11 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.DescendantCounter;
 import agh.ics.oop.model.util.RandomGenerator;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 public class Animal implements WorldElement, Comparable<Animal> {
     private MapDirection orientation;
@@ -16,8 +20,8 @@ public class Animal implements WorldElement, Comparable<Animal> {
     private static int curr_id = 0;
     private Integer diedOn = null;
     public final static String MULTIPLE_ANIMALS_TO_STRING = "⚤";
-    private List<Animal> parents=new ArrayList<>();
-    private int descendantsNum=0;
+    private List<Animal> parents = new ArrayList<>();
+    private int descendantsNum = 0;
 
 
     public Animal(Vector2d position, MapDirection orientation, int energy, AbstractGenome genome) {
@@ -106,16 +110,21 @@ public class Animal implements WorldElement, Comparable<Animal> {
     public void incrementChildrenNum() {
         childrenNum += 1;
     }
-    public List<Animal> getParents(){return parents;}
-    public void addParent(Animal animal){
+
+    public List<Animal> getParents() {
+        return parents;
+    }
+
+    public void addParent(Animal animal) {
         parents.add(animal);
     }
 
     public int getDescendantsNum() {
         return descendantsNum;
     }
-    public void increaseDescendantsNum(int value){
-        descendantsNum+=value;
+
+    public void increaseDescendantsNum(int value) {
+        descendantsNum += value;
     }
 
     public Animal breed(Animal other, int minMutations, int maxMutations, int energyForChild) {
@@ -146,7 +155,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
         this.decreaseEnergy(energyForChild);
         other.decreaseEnergy(energyForChild);
 
-        Animal child=new Animal(position, MapDirection.getRandom(), 2 * energyForChild, newGenome);
+        Animal child = new Animal(position, MapDirection.getRandom(), 2 * energyForChild, newGenome);
         child.addParent(this);
         child.addParent(other);
 

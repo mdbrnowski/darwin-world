@@ -20,7 +20,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Pause {
@@ -130,8 +132,8 @@ public class Pause {
             Label childrenValueLabel = new Label(String.format("%d", animals.get(i).getChildrenNum()));
             Label ageLabel = new Label("Age:");
             Label ageValueLabel = new Label(String.format(" %s", animals.get(i).getAge()));
-            Label descendantsNumLabel=new Label("Descendants number:");
-            Label descendantsNumValueLabel=new Label(String.format(" %s", animals.get(i).getDescendantsNum()));
+            Label descendantsNumLabel = new Label("Descendants number:");
+            Label descendantsNumValueLabel = new Label(String.format(" %s", animals.get(i).getDescendantsNum()));
             Label plantsEatenLabel = new Label("Plants eaten: ");
             Label plantsEatenValueLabel = new Label(String.format(" %s", animals.get(i).getPlantsEaten()));
             Button trackButton = new Button("Track");
