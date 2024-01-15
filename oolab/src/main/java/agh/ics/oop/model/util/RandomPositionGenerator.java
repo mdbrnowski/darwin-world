@@ -5,8 +5,8 @@ import agh.ics.oop.model.Vector2d;
 import java.util.*;
 
 public class RandomPositionGenerator implements Iterable<Vector2d> {
-    private int n;
     private final List<Vector2d> vectors;
+    private int n;
 
     public RandomPositionGenerator(int min, int max, int n) {
         this.n = n;

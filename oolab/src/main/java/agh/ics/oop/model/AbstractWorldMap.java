@@ -14,8 +14,8 @@ public abstract class AbstractWorldMap implements WorldMap {
     private final List<MapChangeListener> listeners = new ArrayList<>();
     private final UUID id;
     protected Multimap<Vector2d, Animal> animals = Multimaps.synchronizedListMultimap(ArrayListMultimap.create());
-    protected Map<Vector2d, Grass> plants = new HashMap<>();
-    protected List<Animal> deadAnimals = new ArrayList<>();
+    protected final Map<Vector2d, Grass> plants = new HashMap<>();
+    protected final List<Animal> deadAnimals = new ArrayList<>();
     protected Set<Vector2d> recentlyDead = new HashSet<>();
     protected int day = 0;
 
@@ -105,7 +105,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
         List<Animal> recDeadAnimals = getAnimals().stream().filter(e -> e.getEnergy() <= 0).toList();
         for (Animal animal : recDeadAnimals)
-            animal.setDiedOn(Optional.of(day));
+            animal.setDiedOn(day);
 
         animals = Multimaps.synchronizedMultimap(ArrayListMultimap.create(Multimaps.filterEntries(animals,
                 e -> e.getValue().getEnergy() > 0)));

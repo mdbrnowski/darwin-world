@@ -1,6 +1,6 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.model.util.InvalidParametersException;
+import agh.ics.oop.parameters.InvalidParametersException;
 import agh.ics.oop.parameters.*;
 import agh.ics.oop.parameters.types.GenomeType;
 import agh.ics.oop.parameters.types.MapType;
@@ -155,38 +155,11 @@ public class StartWindowPresenter {
         }
     }
 
-    private MapType getMapTypeByDisplayValue(String displayValue) {
-        for (MapType mapEnum : MapType.values()) {
-            if (mapEnum.toString().equals(displayValue)) {
-                return mapEnum;
-            }
-        }
-        throw new IllegalArgumentException();
-    }
-
-    private VegetationType getVegetationTypeByDisplayValue(String displayValue) {
-        for (VegetationType vegetation : VegetationType.values()) {
-            if (vegetation.toString().equals(displayValue)) {
-                return vegetation;
-            }
-        }
-        throw new IllegalArgumentException();
-    }
-
-    private GenomeType getGenomeTypeByDisplayValue(String displayValue) {
-        for (GenomeType genome : GenomeType.values()) {
-            if (genome.toString().equals(displayValue)) {
-                return genome;
-            }
-        }
-        throw new IllegalArgumentException();
-    }
-
     public void onSimulationStartClicked() throws IOException {
         try {
-            MapParameters mapParameters = new MapParameters(getMapTypeByDisplayValue(mapCombo.getValue()),
-                    widthSpinner.getValue(), heightSpinner.getValue());
-            SimulationParameters simulationParameters = getSimulationParameters();
+            var parametersHandler = new ParametersHandler(this);
+            MapParameters mapParameters = parametersHandler.getMapParameters();
+            SimulationParameters simulationParameters = parametersHandler.getSimulationParameters();
 
             errorLabel.setText("");
             Stage newWindowStage = new Stage();
@@ -208,23 +181,6 @@ public class StartWindowPresenter {
         } catch (InvalidParametersException e) {
             errorLabel.setText(e.getMessage());
         }
-    }
-
-    private SimulationParameters getSimulationParameters() throws InvalidParametersException {
-        GeneralParameters generalParameters = new GeneralParameters(
-                getGenomeTypeByDisplayValue(genomeCombo.getValue()), genomeLengthSpinner.getValue(),
-                getVegetationTypeByDisplayValue(vegetationCombo.getValue()), plantsCountSpinner.getValue(),
-                animalsCountSpinner.getValue());
-
-        EnergyParameters energyParameters = new EnergyParameters(plantsEnergySpinner.getValue(),
-                initialEnergySpinner.getValue(), minimumBreedSpinner.getValue(), childEnergySpinner.getValue());
-
-        MutationParameters mutationParameters = new MutationParameters(mutationTypeCombo.getValue(),
-                minMutationSpinner.getValue(), maxMutationSpinner.getValue());
-
-        ParametersValidator.validate(generalParameters, energyParameters, mutationParameters);
-
-        return new SimulationParameters(generalParameters, energyParameters, mutationParameters);
     }
 
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {

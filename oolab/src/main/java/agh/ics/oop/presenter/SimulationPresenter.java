@@ -177,7 +177,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void updateTrackedAnimal(Animal trackedAnimal) {
-        if (trackedAnimal.getEnergy() <= 0 && trackedAnimal.getDiedOn().isPresent()) {
+        if (trackedAnimal.getDiedOn().isPresent()) {
             animalAgeLabelTitle.setText("Died on day: ");
             animalAgeLabel.setText(String.format("%d", trackedAnimal.getDiedOn().get()));
         } else {
@@ -197,8 +197,8 @@ public class SimulationPresenter implements MapChangeListener {
         clearGrid();
 
         Boundary boundary = map.getCurrentBounds();
-        int minX = boundary.bottomLeft().getX(), minY = boundary.bottomLeft().getY();
-        int maxX = boundary.topRight().getX(), maxY = boundary.topRight().getY();
+        int minX = boundary.bottomLeft().x(), minY = boundary.bottomLeft().y();
+        int maxX = boundary.topRight().x(), maxY = boundary.topRight().y();
         mapScrollPane.setMinWidth(Math.min((maxX - minX + 2) * 40 + 50, Screen.getPrimary().getBounds().getWidth() - 150));
         mapScrollPane.setPrefHeight(Math.min((maxY - minY + 2) * 40 + 50, Screen.getPrimary().getBounds().getHeight() - 150));
         mapGrid.add(new Label("y\\x"), 0, 0);
@@ -236,7 +236,8 @@ public class SimulationPresenter implements MapChangeListener {
                     }
                 }
 
-                if (pause.isTracked() && pause.getTrackedAnimal().getPosition().equals(new Vector2d(x, y)) && pause.getTrackedAnimal().getDiedOn().isEmpty()) {
+                if (pause.isTracked() && pause.getTrackedAnimal().getPosition().equals(new Vector2d(x, y)) &&
+                        pause.getTrackedAnimal().getDiedOn().isEmpty()) {
                     BorderStroke borderStroke = new BorderStroke(
                             Color.BLUE,
                             BorderStrokeStyle.SOLID,

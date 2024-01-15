@@ -16,11 +16,11 @@ public class EarthGlobe extends AbstractWorldMap {
         Vector2d newCandidate = animal.getPosition().add(animal.getOrientation().toUnitVector());
 
         Vector2d newPosition;
-        if (newCandidate.getY() > height || newCandidate.getY() < 0) {
+        if (newCandidate.y() > height || newCandidate.y() < 0) {
             animal.setOrientation(animal.getOrientation().reverse());
-            newPosition = new Vector2d(Math.floorMod(newCandidate.getX(), width + 1), oldPosition.getY());
+            newPosition = new Vector2d(Math.floorMod(newCandidate.x(), width + 1), oldPosition.y());
         } else {
-            newPosition = new Vector2d(Math.floorMod(newCandidate.getX(), width + 1), newCandidate.getY());
+            newPosition = new Vector2d(Math.floorMod(newCandidate.x(), width + 1), newCandidate.y());
         }
         animal.move(newPosition);
 
@@ -31,9 +31,9 @@ public class EarthGlobe extends AbstractWorldMap {
     @Override
     public Vector2d getNextPosition(Vector2d position, Vector2d move) {
         Vector2d newCandidate = position.add(move);
-        if (newCandidate.getY() > height || newCandidate.getY() < 0)
-            return new Vector2d(Math.floorMod(newCandidate.getX(), width + 1), position.getY());
+        if (newCandidate.y() > height || newCandidate.y() < 0)
+            return new Vector2d(Math.floorMod(newCandidate.x(), width + 1), position.y());
         else
-            return new Vector2d(Math.floorMod(newCandidate.getX(), width + 1), newCandidate.getY());
+            return new Vector2d(Math.floorMod(newCandidate.x(), width + 1), newCandidate.y());
     }
 }
