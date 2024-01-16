@@ -2,7 +2,10 @@ package agh.ics.oop.presenter;
 
 import agh.ics.oop.Simulation;
 import agh.ics.oop.SimulationEngine;
-import agh.ics.oop.model.*;
+import agh.ics.oop.model.AbstractWorldMap;
+import agh.ics.oop.model.Animal;
+import agh.ics.oop.model.MapChangeListener;
+import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.PopularityCounter;
 import agh.ics.oop.onActionControls.Pause;
@@ -18,10 +21,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -135,7 +139,8 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void setupStats() {
-        logging_path = "log_%s.csv".formatted(simulation.toString().substring(simulation.toString().length() - 7));
+        logging_path = "log_%s.csv".formatted(simulation.toString().substring(
+                simulation.toString().length() - 7));
         for (Node node : statsPanel.getChildren()) {
             if (node instanceof Label label) {
                 if (GridPane.getColumnIndex(node) == 1)
@@ -205,10 +210,51 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void drawMap() {
         clearGrid();
-
         Boundary boundary = map.getCurrentBounds();
         int minX = boundary.bottomLeft().x(), minY = boundary.bottomLeft().y();
         int maxX = boundary.topRight().x(), maxY = boundary.topRight().y();
+
+        configureMapGrid(minX, maxX, minY, maxY);
+        fillMapGridWithElements(minX, maxX, minY, maxY);
+
+        for (Node label : mapGrid.getChildren())
+            GridPane.setHalignment(label, HPos.CENTER);
+
+    }
+
+    public void fillMapGridWithElements(int minX, int maxX, int minY, int maxY) {
+        int maxEnergy = map.getAnimals().stream().mapToInt(Animal::getEnergy).max().orElse(1);
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                var label = new Label();
+                var animals = map.getAnimalsAt(new Vector2d(x, y));
+                label.setPrefHeight(38);
+                label.setPrefWidth(38);
+                label.setAlignment(Pos.CENTER);
+
+                specialFieldAppearance(label, animals, x, y);
+
+                if (animals.size() > 1) {
+                    var animal = Collections.max(animals);
+                    label.setText(Animal.MULTIPLE_ANIMALS_TO_STRING);
+                    label.setTextFill(Color.color((double) animal.getEnergy() / maxEnergy, 0, 0));
+                    label.getStyleClass().add("mapAnimalLabel");
+                } else if (animals.size() == 1) {
+                    var animal = animals.get(0);
+                    label.setText(animal.toString());
+                    label.setTextFill(Color.color((double) animal.getEnergy() / maxEnergy, 0, 0));
+                    label.getStyleClass().add("mapAnimalLabel");
+                } else if (map.getPlantAt(new Vector2d(x, y)) != null) {
+                    label.setText(map.getPlantAt(new Vector2d(x, y)).toString());
+                    label.setTextFill(Color.color(0.2, 0.6, 0.3));
+                    label.getStyleClass().add("mapGrassLabel");
+                }
+                mapGrid.add(label, x - minX + 1, maxY - y + 1);
+            }
+        }
+    }
+
+    public void configureMapGrid(int minX, int maxX, int minY, int maxY) {
         mapScrollPane.setMinWidth(Math.min((maxX - minX + 2) * 40 + 50, Screen.getPrimary().getBounds().getWidth() - 150));
         mapScrollPane.setPrefHeight(Math.min((maxY - minY + 2) * 40 + 50, Screen.getPrimary().getBounds().getHeight() - 150));
         mapGrid.add(new Label("y\\x"), 0, 0);
@@ -221,77 +267,43 @@ public class SimulationPresenter implements MapChangeListener {
             mapGrid.getColumnConstraints().add(new ColumnConstraints(40));
         for (int i = 0; i < maxY - minY + 2; i++)
             mapGrid.getRowConstraints().add(new RowConstraints(40));
+    }
 
-        updateStats();
+    private void clearGrid() {
+        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
+        mapGrid.getColumnConstraints().clear();
+        mapGrid.getRowConstraints().clear();
+    }
 
-        int maxEnergy = map.getAnimals().stream().mapToInt(Animal::getEnergy).max().orElse(1);
-        for (int x = minX; x <= maxX; x++) {
-            for (int y = minY; y <= maxY; y++) {
-                var label = new Label();
-                var animals = map.getAnimalsAt(new Vector2d(x, y));
-                label.setPrefHeight(38);
-                label.setPrefWidth(38);
-                label.setAlignment(Pos.CENTER);
-
-
-                if (simulation != null && simulation.isStopped()) {
-                    if (!animals.isEmpty()) label.setOnMouseClicked(a ->
-                            pause.showAnimalStats(label, animals, stage, map.getDay()));
-                    if (highlightGenomePositions.get(new Vector2d(x, y)) != null) {
-                        label.setStyle(String.format("-fx-background-color: rgba(255,240,%.2f,0.8)",
-                                255 - highlightGenomePositions.get(new Vector2d(x, y)) * 255));
-                    }
-                    if (highlightPreferred.contains(new Vector2d(x, y)))
-                        label.setStyle("-fx-background-color: rgba(20,230,0,0.5)");
-                }
-
-                if (pause.isTracked() && pause.getTrackedAnimal().getPosition().equals(new Vector2d(x, y)) &&
-                        pause.getTrackedAnimal().getDiedOn().isEmpty()) {
-                    BorderStroke borderStroke = new BorderStroke(
-                            Color.BLUE,
-                            BorderStrokeStyle.SOLID,
-                            null,
-                            new BorderWidths(2)
-                    );
-
-                    Border border = new Border(borderStroke);
-                    label.setBorder(border);
-                }
-                if (animals.size() > 1) {
-                    var animal = Collections.max(animals);
-                    label.setText(Animal.MULTIPLE_ANIMALS_TO_STRING);
-                    label.setTextFill(Color.color((double) animal.getEnergy() / maxEnergy, 0, 0));
-                    label.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 24));
-                } else if (animals.size() == 1) {
-                    var animal = animals.get(0);
-                    label.setText(animal.toString());
-                    label.setTextFill(Color.color((double) animal.getEnergy() / maxEnergy, 0, 0));
-                    label.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 24));
-                } else if (map.getPlantAt(new Vector2d(x, y)) != null) {
-                    label.setText(map.getPlantAt(new Vector2d(x, y)).toString());
-                    label.setTextFill(Color.color(0.2, 0.6, 0.3));
-                    label.setFont(Font.font("Arial", FontWeight.EXTRA_LIGHT, FontPosture.REGULAR, 16));
-                }
-                mapGrid.add(label, x - minX + 1, maxY - y + 1);
+    public void specialFieldAppearance(Label label, List<Animal> animals, int x, int y) {
+        if (simulation != null && simulation.isStopped()) {
+            if (!animals.isEmpty()) label.setOnMouseClicked(a ->
+                    pause.showAnimalStats(label, animals, stage, map.getDay()));
+            if (highlightGenomePositions.get(new Vector2d(x, y)) != null) {
+                label.setStyle(String.format("-fx-background-color: rgba(255,240,%.2f,0.8)",
+                        255 - highlightGenomePositions.get(new Vector2d(x, y)) * 255));
             }
+            if (highlightPreferred.contains(new Vector2d(x, y)))
+                label.getStyleClass().add("preferredMapLabel");
         }
 
-
-        for (Node label : mapGrid.getChildren())
-            GridPane.setHalignment(label, HPos.CENTER);
-
+        if (pause.isTracked() && pause.getTrackedAnimal().getPosition().equals(new Vector2d(x, y)) &&
+                pause.getTrackedAnimal().getDiedOn().isEmpty()) {
+            label.getStyleClass().add("trackBoarder");
+        }
     }
 
     public void highlightGenome() {
         if (!highlightGenomeButtonPressed) {
             highlightGenomeButtonPressed = true;
             highlightGenomePositions = pause.highlightGenomes(map);
-            highlightGenomeButton.setStyle("-fx-background-color: rgba(245,204,27,0.63);" +
-                    "-fx-border-color: lightblue;-fx-border-radius: 5px");
+            highlightGenomeButton.getStyleClass().remove("buttonNotClicked");
+            highlightGenomeButton.getStyleClass().add("highlightGenomeClicked");
         } else {
             highlightGenomeButtonPressed = false;
             highlightGenomePositions.clear();
-            highlightGenomeButton.setStyle(null);
+            highlightGenomeButton.getStyleClass().remove("highlightGenomeClicked");
+            highlightGenomeButton.getStyleClass().add("buttonNotClicked");
         }
         drawMap();
     }
@@ -300,20 +312,15 @@ public class SimulationPresenter implements MapChangeListener {
         if (!highlightPreferredButtonPressed) {
             highlightPreferredButtonPressed = true;
             highlightPreferred = simulation.getVegetation().getPreferred(map);
-            highlightPreferredButton.setStyle("-fx-background-color: rgba(20,230,0,0.5);" +
-                    "-fx-border-color: lightblue;-fx-border-radius: 5px");
+            highlightPreferredButton.getStyleClass().remove("buttonNotClicked");
+            highlightPreferredButton.getStyleClass().add("highlightPreferredClicked");
         } else {
             highlightPreferredButtonPressed = false;
             highlightPreferred.clear();
-            highlightPreferredButton.setStyle(null);
+            highlightPreferredButton.getStyleClass().remove("highlightPreferredClicked");
+            highlightPreferredButton.getStyleClass().add("buttonNotClicked");
         }
         drawMap();
-    }
-
-    private void clearGrid() {
-        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
-        mapGrid.getColumnConstraints().clear();
-        mapGrid.getRowConstraints().clear();
     }
 
     public void runSimulation(MapParameters mapParameters, SimulationParameters simulationParameters, boolean logging) {
@@ -332,22 +339,16 @@ public class SimulationPresenter implements MapChangeListener {
     public void onPauseButtonClicked() {
         highlightGenomePositions.clear();
         highlightPreferred.clear();
-        highlightGenomeButton.setStyle(null);
-        highlightPreferredButton.setStyle(null);
+        highlightGenomeButton.getStyleClass().remove("highlightGenomeClicked");
+        highlightGenomeButton.getStyleClass().add("buttonNotClicked");
+        highlightPreferredButton.getStyleClass().remove("highlightPreferredClicked");
+        highlightPreferredButton.getStyleClass().add("buttonNotClicked");
         highlightGenomeButtonPressed = false;
         highlightPreferredButtonPressed = false;
         Pause.pause(simulation, pauseButtonImageView, highlightGenomeButton, highlightPreferredButton);
         drawMap();
     }
 
-    public void shutdown() {
-        simulationEngine.shutdown();
-    }
-
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
 
     public void onSpeedDownClicked() {
         simulation.increaseSleepTime();
@@ -361,5 +362,13 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void onSliderChanged() {
         simulation.setSleepTime((int) (speedSlider.getMax() + 100 - speedSlider.getValue()));
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public void shutdown() {
+        simulationEngine.shutdown();
     }
 }

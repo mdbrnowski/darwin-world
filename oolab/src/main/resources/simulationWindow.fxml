@@ -11,16 +11,17 @@
             style="-fx-padding: 25;">
     <center>
         <VBox fx:id="pauseAndMap" spacing="5">
-            <HBox alignment="CENTER_RIGHT" spacing="5">
-                <Button fx:id="pauseButton" onAction="#onPauseButtonClicked">
-                    <graphic>
-                        <ImageView fx:id="pauseButtonImageView" fitWidth="30" preserveRatio="true">
-                            <Image url="pause.png"/>
-                        </ImageView>
-                    </graphic>
-                </Button>
-
-            </HBox>
+            <BorderPane fx:id="topOfMapBorderPane">
+                <right>
+                    <Button fx:id="pauseButton" onAction="#onPauseButtonClicked">
+                        <graphic>
+                            <ImageView fx:id="pauseButtonImageView" fitWidth="30" preserveRatio="true">
+                                <Image url="pause.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </right>
+            </BorderPane>
             <HBox alignment="CENTER">
                 <ScrollPane fx:id="mapScrollPane" style="-fx-padding: 20px">
                     <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true">
@@ -93,10 +94,12 @@
                 <Button GridPane.columnIndex="1" GridPane.rowIndex="8" text="Stop tracking" onAction="#stopTracking"/>
             </GridPane>
             <VBox spacing="10" alignment="CENTER">
-                <Button fx:id="highlightGenomeButton" text="Most popular genomes" alignment="CENTER"
-                        onAction="#highlightGenome" visible="false" managed="false"/>
-                <Button fx:id="highlightPreferredButton" text="Highlight preferred fields" alignment="CENTER"
-                        onAction="#highlightPreferred" visible="false" managed="false"/>
+                <Button fx:id="highlightGenomeButton" styleClass="onResumeDisappear" text="Most popular genomes"
+                        alignment="CENTER"
+                        onAction="#highlightGenome"/>
+                <Button fx:id="highlightPreferredButton" styleClass="onResumeDisappear"
+                        text="Highlight preferred fields" alignment="CENTER"
+                        onAction="#highlightPreferred"/>
             </VBox>
 
         </VBox>
