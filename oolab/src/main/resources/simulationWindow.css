@@ -23,7 +23,7 @@
 }
 
 .trackBoarder {
-    -fx-border-color: BLUE;
+    -fx-border-color: rgb(0, 0, 210);
     -fx-border-width: 2;
     -fx-border-style: SOLID;
 }

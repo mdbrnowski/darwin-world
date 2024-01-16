@@ -159,11 +159,13 @@ public class Pause {
         }
         ScrollPane scrollAnimalInfo = new ScrollPane(animalInfoGridPane);
         scrollAnimalInfo.setMinWidth(animalInfoGridPane.getPrefWidth());
-        scrollAnimalInfo.setPrefWidth(220);
-        scrollAnimalInfo.setPrefHeight(200);
+        scrollAnimalInfo.setPrefWidth(250);
+        scrollAnimalInfo.setPrefHeight(210);
         HBox scrollHBox = new HBox(scrollAnimalInfo);
         animalInfoGridPane.setAlignment(Pos.CENTER);
-        scrollAnimalInfo.setStyle("-fx-padding: 20px, 20px, 20px,20px");
+        animalInfoGridPane.setHgap(8);
+        animalInfoGridPane.setVgap(4);
+        scrollAnimalInfo.setStyle("-fx-padding: 20px");
         scrollHBox.setAlignment(Pos.CENTER);
         dialogVbox.getChildren().add(scrollHBox);
 
