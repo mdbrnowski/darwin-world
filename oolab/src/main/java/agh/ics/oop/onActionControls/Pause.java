@@ -1,7 +1,9 @@
 package agh.ics.oop.onActionControls;
 
 import agh.ics.oop.Simulation;
-import agh.ics.oop.model.*;
+import agh.ics.oop.model.AbstractWorldMap;
+import agh.ics.oop.model.Animal;
+import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.util.PopularityCounter;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -10,7 +12,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -37,17 +41,19 @@ public class Pause {
         if (simulation.isStopped()) {
             simulation.resume();
             pauseButtonImageView.setImage(pauseImage);
-            highlightGenomeButton.setVisible(false);
-            highlightGenomeButton.setManaged(false);
-            highlightPreferredButton.setVisible(false);
-            highlightPreferredButton.setManaged(false);
+            highlightGenomeButton.getStyleClass().remove("onPauseAppear");
+            highlightGenomeButton.getStyleClass().add("onResumeDisappear");
+
+            highlightPreferredButton.getStyleClass().remove("onPauseAppear");
+            highlightPreferredButton.getStyleClass().add("onResumeDisappear");
         } else {
             simulation.stop();
             pauseButtonImageView.setImage(resumeImage);
-            highlightGenomeButton.setVisible(true);
-            highlightGenomeButton.setManaged(true);
-            highlightPreferredButton.setVisible(true);
-            highlightPreferredButton.setManaged(true);
+            highlightGenomeButton.getStyleClass().remove("onResumeDisappear");
+            highlightGenomeButton.getStyleClass().add("onPauseAppear");
+
+            highlightPreferredButton.getStyleClass().remove("onResumeDisappear");
+            highlightPreferredButton.getStyleClass().add("onPauseAppear");
         }
     }
 
@@ -90,27 +96,24 @@ public class Pause {
 
     public void showAnimalStats(Label label, List<Animal> animals, Stage stage, int day) {
         String style = label.getStyle();
-        BorderStroke borderStroke = new BorderStroke(
-                Color.BLUE,
-                BorderStrokeStyle.SOLID,
-                null,
-                new BorderWidths(2)
-        );
 
-        Border border = new Border(borderStroke);
-        label.setBorder(border);
+        label.getStyleClass().add("trackBoarder");
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(stage);
         dialog.setTitle("Animal Info");
 
         VBox dialogVbox = new VBox(10);
+        Scene dialogScene = new Scene(dialogVbox, 350, 290);
+        dialogScene.getStylesheets().add("simulationWindow.css");
+
         Label titleLabel = new Label(String.format("Animals on field (%d,%d):",
                 animals.get(0).getPosition().x(), animals.get(0).getPosition().y()));
-        titleLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 20));
+        titleLabel.getStyleClass().add("titleLabel");
         Label promptLabel = new Label("You can choose an animal to track");
-        promptLabel.setFont(Font.font("Arial", FontPosture.REGULAR, 13));
+        promptLabel.getStyleClass().add("promptLabel");
         dialogVbox.getChildren().add(titleLabel);
+        dialogVbox.getChildren().add(promptLabel);
 
         GridPane animalInfoGridPane = new GridPane();
 
@@ -156,17 +159,18 @@ public class Pause {
         }
         ScrollPane scrollAnimalInfo = new ScrollPane(animalInfoGridPane);
         scrollAnimalInfo.setMinWidth(animalInfoGridPane.getPrefWidth());
-        scrollAnimalInfo.setPrefWidth(220);
-        scrollAnimalInfo.setPrefHeight(200);
+        scrollAnimalInfo.setPrefWidth(250);
+        scrollAnimalInfo.setPrefHeight(210);
         HBox scrollHBox = new HBox(scrollAnimalInfo);
         animalInfoGridPane.setAlignment(Pos.CENTER);
-        scrollAnimalInfo.setStyle("-fx-padding: 20px, 20px, 20px,20px");
+        animalInfoGridPane.setHgap(8);
+        animalInfoGridPane.setVgap(4);
+        scrollAnimalInfo.setStyle("-fx-padding: 20px");
         scrollHBox.setAlignment(Pos.CENTER);
         dialogVbox.getChildren().add(scrollHBox);
 
         dialogVbox.setAlignment(Pos.CENTER);
 
-        Scene dialogScene = new Scene(dialogVbox, 350, 270);
         dialog.setScene(dialogScene);
         dialog.setOnCloseRequest(a -> {
             label.setStyle(style);
